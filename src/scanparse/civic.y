@@ -29,13 +29,20 @@ static int yyerror( char *errname);
  node               *node;
 }
 
-%token BRACKET_L BRACKET_R COMMA SEMICOLON
+%token BRACKET_L BRACKET_R BRACE_L BRACE_R COMMA SEMICOLON
 %token MINUS PLUS STAR SLASH PERCENT LE LT GE GT EQ NE OR AND
-%token TRUEVAL FALSEVAL LET
+%token TRUEVAL FALSEVAL LET NEG
+%token TYPE_BOOL TYPE_INT TYPE_FLOAT TYPE_VOID
+%token DO WHILE FOR IF ELSE RETURN EXTERN EXPORT
 
 %token <cint> NUM
 %token <cflt> FLOAT
 %token <id> ID
+
+%type <node> declarations declaration
+%type <node>fundec fundef globaldec globaldef
+
+/* All types above is new, all types below are example code */
 
 %type <node> intval floatval boolval constant expr
 %type <node> stmts stmt assign varlet program
@@ -45,7 +52,41 @@ static int yyerror( char *errname);
 
 %%
 
-program: stmts 
+program: declarations
+          {
+            parseresult = $1
+          }
+          ;
+
+declarations: declaration declarations
+          {
+            $$ = TBmakeDeclarations($1, $2);
+          }
+          |   declaration
+          {
+            $$ = TBmakeDeclarations($1, NULL);
+          }
+          ;
+
+declaration:  fundec
+          { $$ = $1; }
+          |   fundef
+          { $$ = $1; }
+          | globaldec
+          { $$ = $1; }
+          | globaldef
+          { $$ = $1; }
+          ;
+
+fundec:   EXTERN funheader
+          {
+            $$ = TBmakeFunDec($1)
+          }
+          ;
+
+/* Everything above is new, everything below is example code */
+
+program: stmts
          {
            parseresult = $1;
          }
@@ -143,12 +184,12 @@ binop: PLUS      { $$ = BO_add; }
      | OR        { $$ = BO_or; }
      | AND       { $$ = BO_and; }
      ;
-      
+
 %%
 
 static int yyerror( char *error)
 {
-  CTIabort( "line %d, col %d\nError parsing source code: %s\n", 
+  CTIabort( "line %d, col %d\nError parsing source code: %s\n",
             global.line, global.col, error);
 
   return( 0);
@@ -162,4 +203,3 @@ node *YYparseTree( void)
 
   DBUG_RETURN( parseresult);
 }
-
