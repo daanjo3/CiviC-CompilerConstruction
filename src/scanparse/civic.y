@@ -65,9 +65,9 @@ program: declarations
           }
           ;
 
-declarations: declaration declarations
+declarations: declarations declaration
           {
-            $$ = TBmakeDeclarations($1, $2);
+            $$ = TBmakeDeclarations($2, $1);
           }
           |   declaration
           {
@@ -101,9 +101,9 @@ globaldec:  EXTERN type ID SEMICOLON
           }
           ;
 
-globaldef:  EXPORT type ID LET expr
-          { $$ = TBmakeGlobaldef($2, $1, $3, $4); }
-          | EXPORT type ID
+globaldef:  EXPORT type ID LET expr SEMICOLON
+          { $$ = TBmakeGlobaldef($2, $1, $3, $5); }
+          | EXPORT type ID SEMICOLON
           { $$ = TBmakeGlobaldef($2, $1, $3, NULL); }
           ;
 
@@ -141,32 +141,49 @@ export:   EXPORT
           { $$ = FALSE; }
           ;
 
-/* STATEMENT LANGUAGE */
+/* --------------------- STATEMENT LANGUAGE ------------------------------- */
 
+funbody:  vardecs localfundefs stmts
+          { $$ = TBmakeFunbBody($1, $2, $3); }
+          ;
 
-/* Everything above is new, everything below is example code */
+vardecs:  vardec vardecs
+          { $$ = TBmakeVardecs($1, $2); }
+          | vardec
+          { $$ = TBmakeVardecs($1, NULL); }
+          | %empty
+          { $$ = NULL; }
+          ;
 
-program: stmts
-         {
-           parseresult = $1;
-         }
-         ;
+localfundefs: localfundef localfundefs
+          { $$ = TBmakeLocalfundefs($1, $2); }
+          | localfundef
+          { $$ = TBmakeLocalfundefs($1, NULL); }
+          | %empty
+          { $$ = NULL; }
+          ;
 
-stmts: stmt stmts
-        {
-          $$ = TBmakeStmts( $1, $2);
-        }
-      | stmt
-        {
-          $$ = TBmakeStmts( $1, NULL);
-        }
-        ;
+stmts:    stmt stmts
+          { $$ = TBmakeStmts( $1, $2); }
+          | stmt
+          { $$ = TBmakeStmts( $1, NULL); }
+          | %empty
+          { $$ = NULL; }
+          ;
+
+vardec:   type ID LET expr SEMICOLON
+          { $$ = TBmakeVardec($1, $2, $4); }
+          | type ID SEMICOLON
+          { $$ = TBmakeVardec($1, $2, NULL); }
+          ;
 
 stmt: assign
        {
          $$ = $1;
        }
        ;
+
+/* Everything above is new, everything below is example code */
 
 assign: varlet LET expr SEMICOLON
         {
