@@ -75,6 +75,10 @@
 "true"                     { FILTER( TRUEVAL); }
 "false"                    { FILTER( FALSEVAL); }
 
+\/\/.$                    { FILTER (COMMENT_SINGLE); }
+
+\/\*.*?\*\/               { FILTER (COMMENT_MULT); }
+
 [-+]?[0-9]*\.?[0-9]+       { yylval.cflt = atof(yytext);
                              FILTER(FLOAT);
                            }

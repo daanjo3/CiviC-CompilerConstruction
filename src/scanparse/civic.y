@@ -27,13 +27,18 @@ static int yyerror( char *errname);
  float               cflt;
  binop               cbinop;
  node               *node;
+ basictype          basictype;
 }
 
 %token BRACKET_L BRACKET_R BRACE_L BRACE_R COMMA SEMICOLON
 %token MINUS PLUS STAR SLASH PERCENT LE LT GE GT EQ NE OR AND
 %token TRUEVAL FALSEVAL LET NEG
-%token TYPE_BOOL TYPE_INT TYPE_FLOAT TYPE_VOID
 %token DO WHILE FOR IF ELSE RETURN EXTERN EXPORT
+
+%token <basictype> TYPE_BOOL
+%token <basictype> TYPE_INT
+%token <basictype> TYPE_FLOAT
+%token <basictype> TYPE_VOID
 
 %token <cint> NUM
 %token <cflt> FLOAT
@@ -52,9 +57,11 @@ static int yyerror( char *errname);
 
 %%
 
+/* TOP LEVEL SYNTAX */
+
 program: declarations
           {
-            parseresult = $1
+            parseresult = $1;
           }
           ;
 
@@ -78,11 +85,64 @@ declaration:  fundec
           { $$ = $1; }
           ;
 
-fundec:   EXTERN funheader
+fundec:   EXTERN funheader SEMICOLON
           {
-            $$ = TBmakeFunDec($1)
+            $$ = TBmakeFundec($2);
           }
           ;
+
+fundef:    export funheader BRACE_L funbody BRACE_R
+          { $$ = TBmakeFundef(TRUE, $2, $4); }
+          ;
+
+globaldec:  EXTERN type ID SEMICOLON
+          {
+            $$ = TBmakeGlobaldec($2, $3);
+          }
+          ;
+
+globaldef:  EXPORT type ID LET expr
+          { $$ = TBmakeGlobaldef($2, $1, $3, $4); }
+          | EXPORT type ID
+          { $$ = TBmakeGlobaldef($2, $1, $3, NULL); }
+          ;
+
+funheader:  rettype ID BRACKET_L BRACKET_R
+          { $$ = TBmakeFunheader($1, NULL, $2); }
+          | rettype ID BRACKET_L params BRACKET_R
+          { $$ = TBmakeFunheader($1, $4, $2); }
+          ;
+
+params:     param COMMA params
+          { $$ = TBmakeParams($1, $3); }
+          | param
+          { $$ = TBmakeParams($1, NULL); }
+
+param:     type ID
+          { $$ = TBmakeParam($1, $2); }
+
+rettype:  TYPE_VOID
+          { $$ = $1; }
+          | type
+          { $$ = $1; }
+          ;
+
+type:     TYPE_INT
+          { $$ = $1; }
+          | TYPE_FLOAT
+          { $$ = $1; }
+          | TYPE_BOOL
+          { $$ = $1; }
+          ;
+
+export:   EXPORT
+          { $$ = TRUE; }
+          | %empty
+          { $$ = FALSE; }
+          ;
+
+/* STATEMENT LANGUAGE */
+
 
 /* Everything above is new, everything below is example code */
 
