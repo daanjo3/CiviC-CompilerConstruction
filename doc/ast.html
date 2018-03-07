@@ -127,12 +127,6 @@
                       <li>
                         <a href="#Declaration">{Declaration}</a>
                       </li>
-                      <li>
-                        <a href="#LocalFunDef">{LocalFunDef}</a>
-                      </li>
-                      <li>
-                        <a href="#DoWhile">{DoWhile}</a>
-                      </li>
                     </ul>
                   </td>
                 </tr>
@@ -160,6 +154,9 @@
                       </li>
                       <li>
                         <a href="#Declarations">N_declarations</a>
+                      </li>
+                      <li>
+                        <a href="#DoWhile">N_dowhile</a>
                       </li>
                       <li>
                         <a href="#Error">N_error</a>
@@ -199,6 +196,9 @@
                       </li>
                       <li>
                         <a href="#If">N_if</a>
+                      </li>
+                      <li>
+                        <a href="#LocalFunDef">N_localfundef</a>
                       </li>
                       <li>
                         <a href="#LocalFunDefs">N_localfundefs</a>
@@ -269,10 +269,10 @@
         General Traversals
       </a><ul><li><a href="#TR_PRT">Print Syntax Tree</a></li><li><a href="#TR_COPY">Copy Syntax Tree</a></li><li><a href="#TR_FREE">Free Syntax Tree</a></li><li><a href="#TR_CHK">Check Syntax Tree</a></li><li><a href="#TR_RI">Rename identifiers</a></li><li><a href="#TR_SI">Sum ins</a></li><li><a href="#TR_OS">Optimise subtraction</a></li></ul></li></ul></li>
         <li> Nodesets
-      <ul><li><a href="#Expr">{Expr}</a></li><li><a href="#Const">{Const}</a></li><li><a href="#Stmt">{Stmt}</a></li><li><a href="#Declaration">{Declaration}</a></li><li><a href="#LocalFunDef">{LocalFunDef}</a></li><li><a href="#DoWhile">{DoWhile}</a></li></ul></li>
+      <ul><li><a href="#Expr">{Expr}</a></li><li><a href="#Const">{Const}</a></li><li><a href="#Stmt">{Stmt}</a></li><li><a href="#Declaration">{Declaration}</a></li></ul></li>
         <li>
       Nodes
-      <ul><li><a href="#Assign">N_assign</a></li><li><a href="#BinOp">N_binop</a></li><li><a href="#Bool">N_bool</a></li><li><a href="#Cast">N_cast</a></li><li><a href="#Declarations">N_declarations</a></li><li><a href="#Error">N_error</a></li><li><a href="#Exprs">N_exprs</a></li><li><a href="#Float">N_float</a></li><li><a href="#For">N_for</a></li><li><a href="#FunBody">N_funbody</a></li><li><a href="#FunCall">N_funcall</a></li><li><a href="#FunDec">N_fundec</a></li><li><a href="#FunDef">N_fundef</a></li><li><a href="#FunHeader">N_funheader</a></li><li><a href="#GlobalDec">N_globaldec</a></li><li><a href="#GlobalDef">N_globaldef</a></li><li><a href="#Id">N_id</a></li><li><a href="#If">N_if</a></li><li><a href="#LocalFunDefs">N_localfundefs</a></li><li><a href="#MonOp">N_monop</a></li><li><a href="#Num">N_num</a></li><li><a href="#Param">N_param</a></li><li><a href="#Params">N_params</a></li><li><a href="#Return">N_return</a></li><li><a href="#Stmts">N_stmts</a></li><li><a href="#VarDec">N_vardec</a></li><li><a href="#VarDecs">N_vardecs</a></li><li><a href="#While">N_while</a></li></ul></li>
+      <ul><li><a href="#Assign">N_assign</a></li><li><a href="#BinOp">N_binop</a></li><li><a href="#Bool">N_bool</a></li><li><a href="#Cast">N_cast</a></li><li><a href="#Declarations">N_declarations</a></li><li><a href="#DoWhile">N_dowhile</a></li><li><a href="#Error">N_error</a></li><li><a href="#Exprs">N_exprs</a></li><li><a href="#Float">N_float</a></li><li><a href="#For">N_for</a></li><li><a href="#FunBody">N_funbody</a></li><li><a href="#FunCall">N_funcall</a></li><li><a href="#FunDec">N_fundec</a></li><li><a href="#FunDef">N_fundef</a></li><li><a href="#FunHeader">N_funheader</a></li><li><a href="#GlobalDec">N_globaldec</a></li><li><a href="#GlobalDef">N_globaldef</a></li><li><a href="#Id">N_id</a></li><li><a href="#If">N_if</a></li><li><a href="#LocalFunDef">N_localfundef</a></li><li><a href="#LocalFunDefs">N_localfundefs</a></li><li><a href="#MonOp">N_monop</a></li><li><a href="#Num">N_num</a></li><li><a href="#Param">N_param</a></li><li><a href="#Params">N_params</a></li><li><a href="#Return">N_return</a></li><li><a href="#Stmts">N_stmts</a></li><li><a href="#VarDec">N_vardec</a></li><li><a href="#VarDecs">N_vardecs</a></li><li><a href="#While">N_while</a></li></ul></li>
       </ul>
       <h1>Tables</h1>
     </div>
@@ -464,7 +464,7 @@
           Stmt</td>
       </tr>
       <tr>
-        <td> <a href="#Assign">N_assign</a> <a href="#While">N_while</a> <a href="#If">N_if</a> <a href="#For">N_for</a> <a href="#Return">N_return</a> <a href="#DoWhile">N_dowhile</a></td>
+        <td> <a href="#Assign">N_assign</a> <a href="#While">N_while</a> <a href="#DoWhile">N_dowhile</a> <a href="#If">N_if</a> <a href="#For">N_for</a> <a href="#Return">N_return</a> <a href="#DoWhile">N_dowhile</a></td>
       </tr>
       <tr>
         <td class="toclink">
@@ -480,36 +480,6 @@
       </tr>
       <tr>
         <td> <a href="#FunDec">N_fundec</a> <a href="#FunDef">N_fundef</a> <a href="#GlobalDec">N_globaldec</a> <a href="#GlobalDef">N_globaldef</a></td>
-      </tr>
-      <tr>
-        <td class="toclink">
-          <a href="#toc" class="toclink">top</a>
-        </td>
-      </tr>
-    </table>
-    <a name="LocalFunDef" id="LocalFunDef"></a>
-    <table>
-      <tr>
-        <td class="title">Nodeset 
-          LocalFunDef</td>
-      </tr>
-      <tr>
-        <td> <a href="#FunDef">N_fundef</a></td>
-      </tr>
-      <tr>
-        <td class="toclink">
-          <a href="#toc" class="toclink">top</a>
-        </td>
-      </tr>
-    </table>
-    <a name="DoWhile" id="DoWhile"></a>
-    <table>
-      <tr>
-        <td class="title">Nodeset 
-          DoWhile</td>
-      </tr>
-      <tr>
-        <td> <a href="#While">N_while</a></td>
       </tr>
       <tr>
         <td class="toclink">
@@ -781,6 +751,54 @@
               <td> <a href="#Declarations">N_declarations</a></td>
               <td class="ccode"></td>
               <td>remaining declarations in sequence</td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+      <tr>
+        <td class="toclink">
+          <a href="#toc" class="toclink">top</a>
+        </td>
+      </tr>
+    </table>
+    <a name="DoWhile" id="DoWhile"></a>
+    <table>
+      <tr>
+        <td class="title">N_dowhile<div class="description">DoWhile statement node</div></td>
+      </tr>
+      <tr>
+        <td class="heading">
+          Make Function
+        </td>
+      </tr>
+      <tr>
+        <td class="ccode">node *TBmakeDowhile( node * Expr ,node * Block)</td>
+      </tr>
+      <tr>
+        <td class="heading">Sons</td>
+      </tr>
+      <tr>
+        <td>
+          <table class="hidden">
+            <tr>
+              <td class="subheading">Name</td>
+              <td class="subheading">Possible Target Nodes</td>
+              <td class="subheading">Default</td>
+              <td class="subheading">Comment</td>
+            </tr>
+            <tr>
+              <td>Expr</td>
+              <td>
+                <a href="#Expr">{Expr}</a>
+              </td>
+              <td class="ccode"></td>
+              <td>Expression of the while-statement</td>
+            </tr>
+            <tr>
+              <td>Block</td>
+              <td> <a href="#Stmts">N_stmts</a></td>
+              <td class="ccode"></td>
+              <td>Block of code in while-statement</td>
             </tr>
           </table>
         </td>
@@ -1362,7 +1380,7 @@
         </td>
       </tr>
       <tr>
-        <td class="ccode">node *TBmakeGlobaldef( basictype Type ,bool Export ,node * Id ,node * Assign)</td>
+        <td class="ccode">node *TBmakeGlobaldef( basictype Type ,bool Export ,node * Id ,node * Expr)</td>
       </tr>
       <tr>
         <td class="heading">Sons</td>
@@ -1383,8 +1401,10 @@
               <td>Identifier of the declarated</td>
             </tr>
             <tr>
-              <td>Assign</td>
-              <td> <a href="#Assign">N_assign</a></td>
+              <td>Expr</td>
+              <td>
+                <a href="#Expr">{Expr}</a>
+              </td>
               <td class="ccode"></td>
               <td>Assignment of variable</td>
             </tr>
@@ -1528,6 +1548,52 @@
         </td>
       </tr>
     </table>
+    <a name="LocalFunDef" id="LocalFunDef"></a>
+    <table>
+      <tr>
+        <td class="title">N_localfundef<div class="description">A local function definition</div></td>
+      </tr>
+      <tr>
+        <td class="heading">
+          Make Function
+        </td>
+      </tr>
+      <tr>
+        <td class="ccode">node *TBmakeLocalfundef( node * Header ,node * Body)</td>
+      </tr>
+      <tr>
+        <td class="heading">Sons</td>
+      </tr>
+      <tr>
+        <td>
+          <table class="hidden">
+            <tr>
+              <td class="subheading">Name</td>
+              <td class="subheading">Possible Target Nodes</td>
+              <td class="subheading">Default</td>
+              <td class="subheading">Comment</td>
+            </tr>
+            <tr>
+              <td>Header</td>
+              <td> <a href="#FunHeader">N_funheader</a></td>
+              <td class="ccode"></td>
+              <td>Header of the definition</td>
+            </tr>
+            <tr>
+              <td>Body</td>
+              <td> <a href="#FunBody">N_funbody</a></td>
+              <td class="ccode"></td>
+              <td>Body of the definition</td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+      <tr>
+        <td class="toclink">
+          <a href="#toc" class="toclink">top</a>
+        </td>
+      </tr>
+    </table>
     <a name="LocalFunDefs" id="LocalFunDefs"></a>
     <table>
       <tr>
@@ -1555,9 +1621,7 @@
             </tr>
             <tr>
               <td>First</td>
-              <td>
-                <a href="#LocalFunDef">{LocalFunDef}</a>
-              </td>
+              <td> <a href="#LocalFunDef">N_localfundef</a></td>
               <td class="ccode"></td>
               <td>Link to the first node of definitions</td>
             </tr>
@@ -1891,7 +1955,7 @@
         </td>
       </tr>
       <tr>
-        <td class="ccode">node *TBmakeVardec( basictype Type ,node * Id ,node * Assign)</td>
+        <td class="ccode">node *TBmakeVardec( basictype Type ,node * Id ,node * Expr)</td>
       </tr>
       <tr>
         <td class="heading">Sons</td>
@@ -1912,9 +1976,9 @@
               <td>Identifier of the parameter</td>
             </tr>
             <tr>
-              <td>Assign</td>
+              <td>Expr</td>
               <td>
-                <a href="#Assign">{Assign}</a>
+                <a href="#Expr">{Expr}</a>
               </td>
               <td class="ccode"></td>
               <td>right hand side expression</td>

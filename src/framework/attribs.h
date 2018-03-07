@@ -40,6 +40,9 @@ struct ATTRIBS_N_CAST
 struct ATTRIBS_N_DECLARATIONS
 {
 };
+struct ATTRIBS_N_DOWHILE
+{
+};
 struct ATTRIBS_N_ERROR
 {
   char *message;
@@ -88,6 +91,9 @@ struct ATTRIBS_N_ID
 struct ATTRIBS_N_IF
 {
 };
+struct ATTRIBS_N_LOCALFUNDEF
+{
+};
 struct ATTRIBS_N_LOCALFUNDEFS
 {
 };
@@ -133,6 +139,7 @@ struct ATTRIBUNION
   struct ATTRIBS_N_BOOL *N_bool;
   struct ATTRIBS_N_CAST *N_cast;
   struct ATTRIBS_N_DECLARATIONS *N_declarations;
+  struct ATTRIBS_N_DOWHILE *N_dowhile;
   struct ATTRIBS_N_ERROR *N_error;
   struct ATTRIBS_N_EXPRS *N_exprs;
   struct ATTRIBS_N_FLOAT *N_float;
@@ -146,6 +153,7 @@ struct ATTRIBUNION
   struct ATTRIBS_N_GLOBALDEF *N_globaldef;
   struct ATTRIBS_N_ID *N_id;
   struct ATTRIBS_N_IF *N_if;
+  struct ATTRIBS_N_LOCALFUNDEF *N_localfundef;
   struct ATTRIBS_N_LOCALFUNDEFS *N_localfundefs;
   struct ATTRIBS_N_MONOP *N_monop;
   struct ATTRIBS_N_NUM *N_num;

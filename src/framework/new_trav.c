@@ -128,6 +128,26 @@ EVALdeclarations (node * arg_node, info * arg_info)
 
 /** <!--******************************************************************-->
  *
+ * @fn EVALdowhile
+ *
+ * @brief Frees the node and its sons/attributes
+ *
+ * @param arg_node DoWhile node to process
+ * @param arg_info pointer to info structure
+ *
+ * @return processed node
+ *
+ ***************************************************************************/
+node *
+EVALdowhile (node * arg_node, info * arg_info)
+{
+  DBUG_ENTER ("EVALdowhile");
+  arg_node = TRAVcont (arg_node, arg_info);
+  DBUG_RETURN (arg_node);
+}
+
+/** <!--******************************************************************-->
+ *
  * @fn EVALerror
  *
  * @brief Frees the node and its sons/attributes
@@ -382,6 +402,26 @@ node *
 EVALif (node * arg_node, info * arg_info)
 {
   DBUG_ENTER ("EVALif");
+  arg_node = TRAVcont (arg_node, arg_info);
+  DBUG_RETURN (arg_node);
+}
+
+/** <!--******************************************************************-->
+ *
+ * @fn EVALlocalfundef
+ *
+ * @brief Frees the node and its sons/attributes
+ *
+ * @param arg_node LocalFunDef node to process
+ * @param arg_info pointer to info structure
+ *
+ * @return processed node
+ *
+ ***************************************************************************/
+node *
+EVALlocalfundef (node * arg_node, info * arg_info)
+{
+  DBUG_ENTER ("EVALlocalfundef");
   arg_node = TRAVcont (arg_node, arg_info);
   DBUG_RETURN (arg_node);
 }

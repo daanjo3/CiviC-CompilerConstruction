@@ -94,6 +94,7 @@
       <target>
         <node name="Assign" />
         <node name="While"/>
+        <node name="DoWhile"/>
         <node name="If"/>
         <node name="For"/>
         <node name="Return"/>
@@ -107,18 +108,6 @@
         <node name="FunDef"/>
         <node name="GlobalDec"/>
         <node name="GlobalDef"/>
-      </target>
-    </nodeset>
-
-    <nodeset name="LocalFunDef">
-      <target>
-        <node name="FunDef"/>
-      </target>
-    </nodeset>
-
-    <nodeset name="DoWhile">
-      <target>
-        <node name="While"/>
       </target>
     </nodeset>
   </nodesets>
@@ -351,11 +340,11 @@
             </target>
           </targets>
         </son>
-        <son name="Assign">
+        <son name="Expr">
           <description>right hand side expression</description>
           <targets>
             <target mandatory="no">
-              <set name="Assign" />
+              <set name="Expr" />
                 <phases>
                   <all />
                 </phases>
@@ -387,7 +376,7 @@
           <description>Link to the first node of definitions</description>
           <targets>
             <target mandatory="yes">
-              <set name="LocalFunDef"/>
+              <node name="LocalFunDef"/>
               <phases>
                 <all/>
               </phases>
@@ -410,6 +399,35 @@
       </attributes>
     </node>
 
+    <node name="LocalFunDef">
+      <description>A local function definition</description>
+      <sons>
+        <son name="Header">
+          <description>Header of the definition</description>
+          <targets>
+            <target mandatory="yes">
+              <node name="FunHeader"/>
+              <phases>
+                <all/>
+              </phases>
+            </target>
+          </targets>
+        </son>
+        <son name="Body">
+          <description>Body of the definition</description>
+          <targets>
+            <target mandatory="yes">
+              <node name="FunBody"/>
+              <phases>
+                <all/>
+              </phases>
+            </target>
+          </targets>
+        </son>
+      </sons>
+      <attribute>
+      </attribute>
+    </node>
 
     <node name="GlobalDec">
       <description>A global declarator</description>
@@ -457,11 +475,11 @@
             </target>
           </targets>
         </son>
-        <son name="Assign">
+        <son name="Expr">
           <description>Assignment of variable</description>
           <targets>
             <target mandatory="no">
-              <node name="Assign"/>
+              <set name="Expr"/>
                 <phases>
                   <all/>
                 </phases>
@@ -716,6 +734,36 @@
 
     <node name="While">
       <description>While statement node</description>
+      <sons>
+        <son name="Expr">
+          <description>Expression of the while-statement</description>
+          <targets>
+            <target mandatory="yes">
+              <set name="Expr"/>
+              <phases>
+                <all/>
+              </phases>
+            </target>
+          </targets>
+        </son>
+        <son name="Block">
+          <description>Block of code in while-statement</description>
+          <targets>
+            <target mandatory="yes">
+              <node name="Stmts"/>
+              <phases>
+                <all/>
+              </phases>
+            </target>
+          </targets>
+        </son>
+      </sons>
+      <attributes>
+      </attributes>
+    </node>
+
+    <node name="DoWhile">
+      <description>DoWhile statement node</description>
       <sons>
         <son name="Expr">
           <description>Expression of the while-statement</description>

@@ -77,9 +77,9 @@ extern node *TBmakeVardecs (node * First, node * Next);
  *****************************************************************************/
 
 #define VARDEC_ID( n) ((n)->sons.N_vardec->Id)
-#define VARDEC_ASSIGN( n) ((n)->sons.N_vardec->Assign)
+#define VARDEC_EXPR( n) ((n)->sons.N_vardec->Expr)
 #define VARDEC_TYPE( n) ((n)->attribs.N_vardec->Type)
-extern node *TBmakeVardec (basictype Type, node * Id, node * Assign);
+extern node *TBmakeVardec (basictype Type, node * Id, node * Expr);
 
 /*****************************************************************************
  * macros and functions for N_localfundefs
@@ -88,6 +88,14 @@ extern node *TBmakeVardec (basictype Type, node * Id, node * Assign);
 #define LOCALFUNDEFS_FIRST( n) ((n)->sons.N_localfundefs->First)
 #define LOCALFUNDEFS_NEXT( n) ((n)->sons.N_localfundefs->Next)
 extern node *TBmakeLocalfundefs (node * First, node * Next);
+
+/*****************************************************************************
+ * macros and functions for N_localfundef
+ *****************************************************************************/
+
+#define LOCALFUNDEF_HEADER( n) ((n)->sons.N_localfundef->Header)
+#define LOCALFUNDEF_BODY( n) ((n)->sons.N_localfundef->Body)
+extern node *TBmakeLocalfundef (node * Header, node * Body);
 
 /*****************************************************************************
  * macros and functions for N_globaldec
@@ -102,11 +110,11 @@ extern node *TBmakeGlobaldec (basictype Type, node * Id);
  *****************************************************************************/
 
 #define GLOBALDEF_ID( n) ((n)->sons.N_globaldef->Id)
-#define GLOBALDEF_ASSIGN( n) ((n)->sons.N_globaldef->Assign)
+#define GLOBALDEF_EXPR( n) ((n)->sons.N_globaldef->Expr)
 #define GLOBALDEF_TYPE( n) ((n)->attribs.N_globaldef->Type)
 #define GLOBALDEF_EXPORT( n) ((n)->attribs.N_globaldef->Export)
 extern node *TBmakeGlobaldef (basictype Type, bool Export, node * Id,
-			      node * Assign);
+			      node * Expr);
 
 /*****************************************************************************
  * macros and functions for N_params
@@ -171,6 +179,14 @@ extern node *TBmakeIf (node * Expr, node * Block, node * ElseBlock);
 #define WHILE_EXPR( n) ((n)->sons.N_while->Expr)
 #define WHILE_BLOCK( n) ((n)->sons.N_while->Block)
 extern node *TBmakeWhile (node * Expr, node * Block);
+
+/*****************************************************************************
+ * macros and functions for N_dowhile
+ *****************************************************************************/
+
+#define DOWHILE_EXPR( n) ((n)->sons.N_dowhile->Expr)
+#define DOWHILE_BLOCK( n) ((n)->sons.N_dowhile->Block)
+extern node *TBmakeDowhile (node * Expr, node * Block);
 
 /*****************************************************************************
  * macros and functions for N_for

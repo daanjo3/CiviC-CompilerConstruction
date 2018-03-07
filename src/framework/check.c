@@ -73,13 +73,6 @@ isDeclaration (node * arg_node)
 }
 
 static bool
-isDoWhile (node * arg_node)
-{
-  bool res = ((NODE_TYPE (arg_node) == N_while));
-  return (res);
-}
-
-static bool
 isExpr (node * arg_node)
 {
   bool res = ((NODE_TYPE (arg_node) == N_binop) ||
@@ -92,16 +85,10 @@ isExpr (node * arg_node)
 }
 
 static bool
-isLocalFunDef (node * arg_node)
-{
-  bool res = ((NODE_TYPE (arg_node) == N_fundef));
-  return (res);
-}
-
-static bool
 isStmt (node * arg_node)
 {
   bool res = ((NODE_TYPE (arg_node) == N_assign) ||
+	      (NODE_TYPE (arg_node) == N_dowhile) ||
 	      (NODE_TYPE (arg_node) == N_dowhile) ||
 	      (NODE_TYPE (arg_node) == N_for) ||
 	      (NODE_TYPE (arg_node) == N_if) ||
@@ -115,9 +102,7 @@ isDummy ()
 {
   isConst (NULL);
   isDeclaration (NULL);
-  isDoWhile (NULL);
   isExpr (NULL);
-  isLocalFunDef (NULL);
   isStmt (NULL);
 }
 
@@ -435,6 +420,87 @@ CHKdeclarations (node * arg_node, info * arg_info)
     {
       DECLARATIONS_NEXT (arg_node) =
 	TRAVdo (DECLARATIONS_NEXT (arg_node), arg_info);
+    }
+  DBUG_RETURN (arg_node);
+}
+
+/** <!--******************************************************************-->
+ *
+ * @fn CHKdowhile
+ *
+ * @brief Check the node and its sons/attributes
+ *
+ * @param arg_node DoWhile node to process
+ * @param arg_info pointer to info structure
+ *
+ * @return processed node
+ *
+ ***************************************************************************/
+node *
+CHKdowhile (node * arg_node, info * arg_info)
+{
+  DBUG_ENTER ("CHKdowhile");
+
+/*
+ * Son check: DOWHILE_BLOCK 
+ */
+  if ((FALSE) || (TRUE))
+    {
+      CHKexistSon (DOWHILE_BLOCK (arg_node), arg_node,
+		   "mandatory son DOWHILE_BLOCK is NULL");
+      if (DOWHILE_BLOCK (arg_node) != NULL)
+	{
+	  if (!((FALSE) || (NODE_TYPE (DOWHILE_BLOCK (arg_node)) == N_stmts)))
+	    {
+	      CHKcorrectTypeInsertError (arg_node,
+					 "DOWHILE_BLOCK hasnt the right type."
+					 " It should be: " "N_stmts");
+	    }
+	}
+    }
+  else
+    {
+      CHKnotExist (DOWHILE_BLOCK (arg_node), arg_node,
+		   "attribute DOWHILE_BLOCK must be NULL");
+    }
+
+/*
+ * Son check: DOWHILE_EXPR 
+ */
+  if ((FALSE) || (TRUE))
+    {
+      CHKexistSon (DOWHILE_EXPR (arg_node), arg_node,
+		   "mandatory son DOWHILE_EXPR is NULL");
+      if (DOWHILE_EXPR (arg_node) != NULL)
+	{
+	  if (!((FALSE) || (isExpr (DOWHILE_EXPR (arg_node)))))
+	    {
+	      CHKcorrectTypeInsertError (arg_node,
+					 "DOWHILE_EXPR hasnt the right type."
+					 " It should be: " "Nodeset: Expr");
+	    }
+	}
+    }
+  else
+    {
+      CHKnotExist (DOWHILE_EXPR (arg_node), arg_node,
+		   "attribute DOWHILE_EXPR must be NULL");
+    }
+
+/*
+ * trav functions: to get all sons
+ */
+  if (DOWHILE_BLOCK (arg_node) != NULL)
+    {
+      DOWHILE_BLOCK (arg_node) = TRAVdo (DOWHILE_BLOCK (arg_node), arg_info);
+    }
+
+/*
+ * trav functions: to get all sons
+ */
+  if (DOWHILE_EXPR (arg_node) != NULL)
+    {
+      DOWHILE_EXPR (arg_node) = TRAVdo (DOWHILE_EXPR (arg_node), arg_info);
     }
   DBUG_RETURN (arg_node);
 }
@@ -1235,26 +1301,24 @@ CHKglobaldef (node * arg_node, info * arg_info)
   DBUG_ENTER ("CHKglobaldef");
 
 /*
- * Son check: GLOBALDEF_ASSIGN 
+ * Son check: GLOBALDEF_EXPR 
  */
   if ((FALSE) || (TRUE))
     {
-      if (GLOBALDEF_ASSIGN (arg_node) != NULL)
+      if (GLOBALDEF_EXPR (arg_node) != NULL)
 	{
-	  if (!
-	      ((FALSE)
-	       || (NODE_TYPE (GLOBALDEF_ASSIGN (arg_node)) == N_assign)))
+	  if (!((FALSE) || (isExpr (GLOBALDEF_EXPR (arg_node)))))
 	    {
 	      CHKcorrectTypeInsertError (arg_node,
-					 "GLOBALDEF_ASSIGN hasnt the right type."
-					 " It should be: " "N_assign");
+					 "GLOBALDEF_EXPR hasnt the right type."
+					 " It should be: " "Nodeset: Expr");
 	    }
 	}
     }
   else
     {
-      CHKnotExist (GLOBALDEF_ASSIGN (arg_node), arg_node,
-		   "attribute GLOBALDEF_ASSIGN must be NULL");
+      CHKnotExist (GLOBALDEF_EXPR (arg_node), arg_node,
+		   "attribute GLOBALDEF_EXPR must be NULL");
     }
 
 /*
@@ -1283,10 +1347,10 @@ CHKglobaldef (node * arg_node, info * arg_info)
 /*
  * trav functions: to get all sons
  */
-  if (GLOBALDEF_ASSIGN (arg_node) != NULL)
+  if (GLOBALDEF_EXPR (arg_node) != NULL)
     {
-      GLOBALDEF_ASSIGN (arg_node) =
-	TRAVdo (GLOBALDEF_ASSIGN (arg_node), arg_info);
+      GLOBALDEF_EXPR (arg_node) =
+	TRAVdo (GLOBALDEF_EXPR (arg_node), arg_info);
     }
 
 /*
@@ -1438,6 +1502,93 @@ CHKif (node * arg_node, info * arg_info)
 
 /** <!--******************************************************************-->
  *
+ * @fn CHKlocalfundef
+ *
+ * @brief Check the node and its sons/attributes
+ *
+ * @param arg_node LocalFunDef node to process
+ * @param arg_info pointer to info structure
+ *
+ * @return processed node
+ *
+ ***************************************************************************/
+node *
+CHKlocalfundef (node * arg_node, info * arg_info)
+{
+  DBUG_ENTER ("CHKlocalfundef");
+
+/*
+ * Son check: LOCALFUNDEF_BODY 
+ */
+  if ((FALSE) || (TRUE))
+    {
+      CHKexistSon (LOCALFUNDEF_BODY (arg_node), arg_node,
+		   "mandatory son LOCALFUNDEF_BODY is NULL");
+      if (LOCALFUNDEF_BODY (arg_node) != NULL)
+	{
+	  if (!
+	      ((FALSE)
+	       || (NODE_TYPE (LOCALFUNDEF_BODY (arg_node)) == N_funbody)))
+	    {
+	      CHKcorrectTypeInsertError (arg_node,
+					 "LOCALFUNDEF_BODY hasnt the right type."
+					 " It should be: " "N_funbody");
+	    }
+	}
+    }
+  else
+    {
+      CHKnotExist (LOCALFUNDEF_BODY (arg_node), arg_node,
+		   "attribute LOCALFUNDEF_BODY must be NULL");
+    }
+
+/*
+ * Son check: LOCALFUNDEF_HEADER 
+ */
+  if ((FALSE) || (TRUE))
+    {
+      CHKexistSon (LOCALFUNDEF_HEADER (arg_node), arg_node,
+		   "mandatory son LOCALFUNDEF_HEADER is NULL");
+      if (LOCALFUNDEF_HEADER (arg_node) != NULL)
+	{
+	  if (!
+	      ((FALSE)
+	       || (NODE_TYPE (LOCALFUNDEF_HEADER (arg_node)) == N_funheader)))
+	    {
+	      CHKcorrectTypeInsertError (arg_node,
+					 "LOCALFUNDEF_HEADER hasnt the right type."
+					 " It should be: " "N_funheader");
+	    }
+	}
+    }
+  else
+    {
+      CHKnotExist (LOCALFUNDEF_HEADER (arg_node), arg_node,
+		   "attribute LOCALFUNDEF_HEADER must be NULL");
+    }
+
+/*
+ * trav functions: to get all sons
+ */
+  if (LOCALFUNDEF_BODY (arg_node) != NULL)
+    {
+      LOCALFUNDEF_BODY (arg_node) =
+	TRAVdo (LOCALFUNDEF_BODY (arg_node), arg_info);
+    }
+
+/*
+ * trav functions: to get all sons
+ */
+  if (LOCALFUNDEF_HEADER (arg_node) != NULL)
+    {
+      LOCALFUNDEF_HEADER (arg_node) =
+	TRAVdo (LOCALFUNDEF_HEADER (arg_node), arg_info);
+    }
+  DBUG_RETURN (arg_node);
+}
+
+/** <!--******************************************************************-->
+ *
  * @fn CHKlocalfundefs
  *
  * @brief Check the node and its sons/attributes
@@ -1462,12 +1613,14 @@ CHKlocalfundefs (node * arg_node, info * arg_info)
 		   "mandatory son LOCALFUNDEFS_FIRST is NULL");
       if (LOCALFUNDEFS_FIRST (arg_node) != NULL)
 	{
-	  if (!((FALSE) || (isLocalFunDef (LOCALFUNDEFS_FIRST (arg_node)))))
+	  if (!
+	      ((FALSE)
+	       || (NODE_TYPE (LOCALFUNDEFS_FIRST (arg_node)) ==
+		   N_localfundef)))
 	    {
 	      CHKcorrectTypeInsertError (arg_node,
 					 "LOCALFUNDEFS_FIRST hasnt the right type."
-					 " It should be: "
-					 "Nodeset: LocalFunDef");
+					 " It should be: " "N_localfundef");
 	    }
 	}
     }
@@ -1878,24 +2031,24 @@ CHKvardec (node * arg_node, info * arg_info)
   DBUG_ENTER ("CHKvardec");
 
 /*
- * Son check: VARDEC_ASSIGN 
+ * Son check: VARDEC_EXPR 
  */
   if ((FALSE) || (TRUE))
     {
-      if (VARDEC_ASSIGN (arg_node) != NULL)
+      if (VARDEC_EXPR (arg_node) != NULL)
 	{
-	  if (!((FALSE) || (isAssign (VARDEC_ASSIGN (arg_node)))))
+	  if (!((FALSE) || (isExpr (VARDEC_EXPR (arg_node)))))
 	    {
 	      CHKcorrectTypeInsertError (arg_node,
-					 "VARDEC_ASSIGN hasnt the right type."
-					 " It should be: " "Nodeset: Assign");
+					 "VARDEC_EXPR hasnt the right type."
+					 " It should be: " "Nodeset: Expr");
 	    }
 	}
     }
   else
     {
-      CHKnotExist (VARDEC_ASSIGN (arg_node), arg_node,
-		   "attribute VARDEC_ASSIGN must be NULL");
+      CHKnotExist (VARDEC_EXPR (arg_node), arg_node,
+		   "attribute VARDEC_EXPR must be NULL");
     }
 
 /*
@@ -1924,9 +2077,9 @@ CHKvardec (node * arg_node, info * arg_info)
 /*
  * trav functions: to get all sons
  */
-  if (VARDEC_ASSIGN (arg_node) != NULL)
+  if (VARDEC_EXPR (arg_node) != NULL)
     {
-      VARDEC_ASSIGN (arg_node) = TRAVdo (VARDEC_ASSIGN (arg_node), arg_info);
+      VARDEC_EXPR (arg_node) = TRAVdo (VARDEC_EXPR (arg_node), arg_info);
     }
 
 /*

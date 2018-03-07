@@ -164,6 +164,31 @@ COPYdeclarations (node * arg_node, info * arg_info)
 
 /** <!--******************************************************************-->
  *
+ * @fn COPYdowhile
+ *
+ * @brief Copies the node and its sons/attributes
+ *
+ * @param arg_node DoWhile node to process
+ * @param arg_info pointer to info structure
+ *
+ * @return processed node
+ *
+ ***************************************************************************/
+node *
+COPYdowhile (node * arg_node, info * arg_info)
+{
+  node *result = TBmakeDowhile (NULL, NULL);
+  DBUG_ENTER ("COPYdowhile");
+  LUTinsertIntoLutP (INFO_LUT (arg_info), arg_node, result);
+  /* Copy sons */
+  DOWHILE_EXPR (result) = COPYTRAV (DOWHILE_EXPR (arg_node), arg_info);
+  DOWHILE_BLOCK (result) = COPYTRAV (DOWHILE_BLOCK (arg_node), arg_info);
+  /* Return value */
+  DBUG_RETURN (result);
+}
+
+/** <!--******************************************************************-->
+ *
  * @fn COPYerror
  *
  * @brief Copies the node and its sons/attributes
@@ -447,8 +472,7 @@ COPYglobaldef (node * arg_node, info * arg_info)
   GLOBALDEF_EXPORT (result) = GLOBALDEF_EXPORT (arg_node);
   /* Copy sons */
   GLOBALDEF_ID (result) = COPYTRAV (GLOBALDEF_ID (arg_node), arg_info);
-  GLOBALDEF_ASSIGN (result) =
-    COPYTRAV (GLOBALDEF_ASSIGN (arg_node), arg_info);
+  GLOBALDEF_EXPR (result) = COPYTRAV (GLOBALDEF_EXPR (arg_node), arg_info);
   /* Return value */
   DBUG_RETURN (result);
 }
@@ -499,6 +523,33 @@ COPYif (node * arg_node, info * arg_info)
   IF_EXPR (result) = COPYTRAV (IF_EXPR (arg_node), arg_info);
   IF_BLOCK (result) = COPYTRAV (IF_BLOCK (arg_node), arg_info);
   IF_ELSEBLOCK (result) = COPYTRAV (IF_ELSEBLOCK (arg_node), arg_info);
+  /* Return value */
+  DBUG_RETURN (result);
+}
+
+/** <!--******************************************************************-->
+ *
+ * @fn COPYlocalfundef
+ *
+ * @brief Copies the node and its sons/attributes
+ *
+ * @param arg_node LocalFunDef node to process
+ * @param arg_info pointer to info structure
+ *
+ * @return processed node
+ *
+ ***************************************************************************/
+node *
+COPYlocalfundef (node * arg_node, info * arg_info)
+{
+  node *result = TBmakeLocalfundef (NULL, NULL);
+  DBUG_ENTER ("COPYlocalfundef");
+  LUTinsertIntoLutP (INFO_LUT (arg_info), arg_node, result);
+  /* Copy sons */
+  LOCALFUNDEF_HEADER (result) =
+    COPYTRAV (LOCALFUNDEF_HEADER (arg_node), arg_info);
+  LOCALFUNDEF_BODY (result) =
+    COPYTRAV (LOCALFUNDEF_BODY (arg_node), arg_info);
   /* Return value */
   DBUG_RETURN (result);
 }
@@ -702,7 +753,7 @@ COPYvardec (node * arg_node, info * arg_info)
   VARDEC_TYPE (result) = VARDEC_TYPE (arg_node);
   /* Copy sons */
   VARDEC_ID (result) = COPYTRAV (VARDEC_ID (arg_node), arg_info);
-  VARDEC_ASSIGN (result) = COPYTRAV (VARDEC_ASSIGN (arg_node), arg_info);
+  VARDEC_EXPR (result) = COPYTRAV (VARDEC_EXPR (arg_node), arg_info);
   /* Return value */
   DBUG_RETURN (result);
 }

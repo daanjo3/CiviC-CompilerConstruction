@@ -65,18 +65,22 @@ TRAVsons (node * arg_node, info * arg_info)
       break;
     case N_vardec:
       TRAV (VARDEC_ID (arg_node), arg_info);
-      TRAV (VARDEC_ASSIGN (arg_node), arg_info);
+      TRAV (VARDEC_EXPR (arg_node), arg_info);
       break;
     case N_localfundefs:
       TRAV (LOCALFUNDEFS_FIRST (arg_node), arg_info);
       TRAV (LOCALFUNDEFS_NEXT (arg_node), arg_info);
+      break;
+    case N_localfundef:
+      TRAV (LOCALFUNDEF_HEADER (arg_node), arg_info);
+      TRAV (LOCALFUNDEF_BODY (arg_node), arg_info);
       break;
     case N_globaldec:
       TRAV (GLOBALDEC_ID (arg_node), arg_info);
       break;
     case N_globaldef:
       TRAV (GLOBALDEF_ID (arg_node), arg_info);
-      TRAV (GLOBALDEF_ASSIGN (arg_node), arg_info);
+      TRAV (GLOBALDEF_EXPR (arg_node), arg_info);
       break;
     case N_params:
       TRAV (PARAMS_FIRST (arg_node), arg_info);
@@ -107,6 +111,10 @@ TRAVsons (node * arg_node, info * arg_info)
     case N_while:
       TRAV (WHILE_EXPR (arg_node), arg_info);
       TRAV (WHILE_BLOCK (arg_node), arg_info);
+      break;
+    case N_dowhile:
+      TRAV (DOWHILE_EXPR (arg_node), arg_info);
+      TRAV (DOWHILE_BLOCK (arg_node), arg_info);
       break;
     case N_for:
       TRAV (FOR_ASSIGN (arg_node), arg_info);
@@ -181,6 +189,9 @@ TRAVnumSons (node * node)
     case N_localfundefs:
       result = 2;
       break;
+    case N_localfundef:
+      result = 2;
+      break;
     case N_globaldec:
       result = 1;
       break;
@@ -209,6 +220,9 @@ TRAVnumSons (node * node)
       result = 3;
       break;
     case N_while:
+      result = 2;
+      break;
+    case N_dowhile:
       result = 2;
       break;
     case N_for:
@@ -349,7 +363,7 @@ TRAVgetSon (int no, node * parent)
 	  result = VARDEC_ID (parent);
 	  break;
 	case 1:
-	  result = VARDEC_ASSIGN (parent);
+	  result = VARDEC_EXPR (parent);
 	  break;
 	default:
 	  DBUG_ASSERT ((FALSE), "index out of range!");
@@ -364,6 +378,20 @@ TRAVgetSon (int no, node * parent)
 	  break;
 	case 1:
 	  result = LOCALFUNDEFS_NEXT (parent);
+	  break;
+	default:
+	  DBUG_ASSERT ((FALSE), "index out of range!");
+	  break;
+	}
+      break;
+    case N_localfundef:
+      switch (no)
+	{
+	case 0:
+	  result = LOCALFUNDEF_HEADER (parent);
+	  break;
+	case 1:
+	  result = LOCALFUNDEF_BODY (parent);
 	  break;
 	default:
 	  DBUG_ASSERT ((FALSE), "index out of range!");
@@ -388,7 +416,7 @@ TRAVgetSon (int no, node * parent)
 	  result = GLOBALDEF_ID (parent);
 	  break;
 	case 1:
-	  result = GLOBALDEF_ASSIGN (parent);
+	  result = GLOBALDEF_EXPR (parent);
 	  break;
 	default:
 	  DBUG_ASSERT ((FALSE), "index out of range!");
@@ -495,6 +523,20 @@ TRAVgetSon (int no, node * parent)
 	  break;
 	case 1:
 	  result = WHILE_BLOCK (parent);
+	  break;
+	default:
+	  DBUG_ASSERT ((FALSE), "index out of range!");
+	  break;
+	}
+      break;
+    case N_dowhile:
+      switch (no)
+	{
+	case 0:
+	  result = DOWHILE_EXPR (parent);
+	  break;
+	case 1:
+	  result = DOWHILE_BLOCK (parent);
 	  break;
 	default:
 	  DBUG_ASSERT ((FALSE), "index out of range!");

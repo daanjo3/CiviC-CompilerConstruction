@@ -160,6 +160,28 @@ CHKMdeclarations (node * arg_node, info * arg_info)
 
 /** <!--******************************************************************-->
  *
+ * @fn CHKMdowhile
+ *
+ * @brief Touched the node and its sons/attributes
+ *
+ * @param arg_node DoWhile node to process
+ * @param arg_info pointer to info structure
+ *
+ * @return processed node
+ *
+ ***************************************************************************/
+node *
+CHKMdowhile (node * arg_node, info * arg_info)
+{
+  DBUG_ENTER ("CHKMdowhile");
+  NODE_ERROR (arg_node) = CHKMTRAV (NODE_ERROR (arg_node), arg_info);
+  DOWHILE_EXPR (arg_node) = CHKMTRAV (DOWHILE_EXPR (arg_node), arg_info);
+  DOWHILE_BLOCK (arg_node) = CHKMTRAV (DOWHILE_BLOCK (arg_node), arg_info);
+  DBUG_RETURN (arg_node);
+}
+
+/** <!--******************************************************************-->
+ *
  * @fn CHKMerror
  *
  * @brief Touched the node and its sons/attributes
@@ -403,8 +425,7 @@ CHKMglobaldef (node * arg_node, info * arg_info)
   DBUG_ENTER ("CHKMglobaldef");
   NODE_ERROR (arg_node) = CHKMTRAV (NODE_ERROR (arg_node), arg_info);
   GLOBALDEF_ID (arg_node) = CHKMTRAV (GLOBALDEF_ID (arg_node), arg_info);
-  GLOBALDEF_ASSIGN (arg_node) =
-    CHKMTRAV (GLOBALDEF_ASSIGN (arg_node), arg_info);
+  GLOBALDEF_EXPR (arg_node) = CHKMTRAV (GLOBALDEF_EXPR (arg_node), arg_info);
   DBUG_RETURN (arg_node);
 }
 
@@ -449,6 +470,30 @@ CHKMif (node * arg_node, info * arg_info)
   IF_EXPR (arg_node) = CHKMTRAV (IF_EXPR (arg_node), arg_info);
   IF_BLOCK (arg_node) = CHKMTRAV (IF_BLOCK (arg_node), arg_info);
   IF_ELSEBLOCK (arg_node) = CHKMTRAV (IF_ELSEBLOCK (arg_node), arg_info);
+  DBUG_RETURN (arg_node);
+}
+
+/** <!--******************************************************************-->
+ *
+ * @fn CHKMlocalfundef
+ *
+ * @brief Touched the node and its sons/attributes
+ *
+ * @param arg_node LocalFunDef node to process
+ * @param arg_info pointer to info structure
+ *
+ * @return processed node
+ *
+ ***************************************************************************/
+node *
+CHKMlocalfundef (node * arg_node, info * arg_info)
+{
+  DBUG_ENTER ("CHKMlocalfundef");
+  NODE_ERROR (arg_node) = CHKMTRAV (NODE_ERROR (arg_node), arg_info);
+  LOCALFUNDEF_HEADER (arg_node) =
+    CHKMTRAV (LOCALFUNDEF_HEADER (arg_node), arg_info);
+  LOCALFUNDEF_BODY (arg_node) =
+    CHKMTRAV (LOCALFUNDEF_BODY (arg_node), arg_info);
   DBUG_RETURN (arg_node);
 }
 
@@ -622,7 +667,7 @@ CHKMvardec (node * arg_node, info * arg_info)
   DBUG_ENTER ("CHKMvardec");
   NODE_ERROR (arg_node) = CHKMTRAV (NODE_ERROR (arg_node), arg_info);
   VARDEC_ID (arg_node) = CHKMTRAV (VARDEC_ID (arg_node), arg_info);
-  VARDEC_ASSIGN (arg_node) = CHKMTRAV (VARDEC_ASSIGN (arg_node), arg_info);
+  VARDEC_EXPR (arg_node) = CHKMTRAV (VARDEC_EXPR (arg_node), arg_info);
   DBUG_RETURN (arg_node);
 }
 

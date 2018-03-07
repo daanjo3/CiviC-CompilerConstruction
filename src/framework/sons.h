@@ -44,6 +44,11 @@ struct SONS_N_DECLARATIONS
   node *Declaration;
   node *Next;
 };
+struct SONS_N_DOWHILE
+{
+  node *Expr;
+  node *Block;
+};
 struct SONS_N_ERROR
 {
   node *Next;
@@ -95,7 +100,7 @@ struct SONS_N_GLOBALDEC
 struct SONS_N_GLOBALDEF
 {
   node *Id;
-  node *Assign;
+  node *Expr;
 };
 struct SONS_N_ID
 {
@@ -105,6 +110,11 @@ struct SONS_N_IF
   node *Expr;
   node *Block;
   node *ElseBlock;
+};
+struct SONS_N_LOCALFUNDEF
+{
+  node *Header;
+  node *Body;
 };
 struct SONS_N_LOCALFUNDEFS
 {
@@ -139,7 +149,7 @@ struct SONS_N_STMTS
 struct SONS_N_VARDEC
 {
   node *Id;
-  node *Assign;
+  node *Expr;
 };
 struct SONS_N_VARDECS
 {
@@ -162,6 +172,7 @@ struct SONUNION
   struct SONS_N_BOOL *N_bool;
   struct SONS_N_CAST *N_cast;
   struct SONS_N_DECLARATIONS *N_declarations;
+  struct SONS_N_DOWHILE *N_dowhile;
   struct SONS_N_ERROR *N_error;
   struct SONS_N_EXPRS *N_exprs;
   struct SONS_N_FLOAT *N_float;
@@ -175,6 +186,7 @@ struct SONUNION
   struct SONS_N_GLOBALDEF *N_globaldef;
   struct SONS_N_ID *N_id;
   struct SONS_N_IF *N_if;
+  struct SONS_N_LOCALFUNDEF *N_localfundef;
   struct SONS_N_LOCALFUNDEFS *N_localfundefs;
   struct SONS_N_MONOP *N_monop;
   struct SONS_N_NUM *N_num;

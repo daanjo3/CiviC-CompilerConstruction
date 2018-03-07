@@ -29,58 +29,63 @@ travtables_t travtables = {
    &TRAVerror, &TRAVerror, &TRAVerror, &TRAVerror, &TRAVerror, &TRAVerror,
    &TRAVerror, &TRAVerror, &TRAVerror, &TRAVerror, &TRAVerror, &TRAVerror,
    &TRAVerror, &TRAVerror, &TRAVerror, &TRAVerror, &TRAVerror, &TRAVerror,
-   &TRAVerror, &TRAVerror, &TRAVerror, &TRAVerror, &TRAVerror}
+   &TRAVerror, &TRAVerror, &TRAVerror, &TRAVerror, &TRAVerror, &TRAVerror,
+   &TRAVerror}
 
   /* TR_prt */
   , {&TRAVerror, &PRTdeclarations, &PRTfundec, &PRTfundef, &PRTfunheader,
-     &PRTfunbody, &PRTvardecs, &PRTvardec, &PRTlocalfundefs, &PRTglobaldec,
-     &PRTglobaldef, &PRTparams, &PRTparam, &PRTid, &PRTstmts, &PRTassign,
-     &PRTfuncall, &PRTif, &PRTwhile, &PRTfor, &PRTreturn, &PRTexprs,
-     &PRTbinop, &PRTmonop, &PRTcast, &PRTnum, &PRTfloat, &PRTbool, &PRTerror}
+     &PRTfunbody, &PRTvardecs, &PRTvardec, &PRTlocalfundefs, &PRTlocalfundef,
+     &PRTglobaldec, &PRTglobaldef, &PRTparams, &PRTparam, &PRTid, &PRTstmts,
+     &PRTassign, &PRTfuncall, &PRTif, &PRTwhile, &PRTdowhile, &PRTfor,
+     &PRTreturn, &PRTexprs, &PRTbinop, &PRTmonop, &PRTcast, &PRTnum,
+     &PRTfloat, &PRTbool, &PRTerror}
 
   /* TR_copy */
   , {&TRAVerror, &COPYdeclarations, &COPYfundec, &COPYfundef, &COPYfunheader,
      &COPYfunbody, &COPYvardecs, &COPYvardec, &COPYlocalfundefs,
-     &COPYglobaldec, &COPYglobaldef, &COPYparams, &COPYparam, &COPYid,
-     &COPYstmts, &COPYassign, &COPYfuncall, &COPYif, &COPYwhile, &COPYfor,
-     &COPYreturn, &COPYexprs, &COPYbinop, &COPYmonop, &COPYcast, &COPYnum,
-     &COPYfloat, &COPYbool, &COPYerror}
+     &COPYlocalfundef, &COPYglobaldec, &COPYglobaldef, &COPYparams,
+     &COPYparam, &COPYid, &COPYstmts, &COPYassign, &COPYfuncall, &COPYif,
+     &COPYwhile, &COPYdowhile, &COPYfor, &COPYreturn, &COPYexprs, &COPYbinop,
+     &COPYmonop, &COPYcast, &COPYnum, &COPYfloat, &COPYbool, &COPYerror}
 
   /* TR_free */
   , {&TRAVerror, &FREEdeclarations, &FREEfundec, &FREEfundef, &FREEfunheader,
      &FREEfunbody, &FREEvardecs, &FREEvardec, &FREElocalfundefs,
-     &FREEglobaldec, &FREEglobaldef, &FREEparams, &FREEparam, &FREEid,
-     &FREEstmts, &FREEassign, &FREEfuncall, &FREEif, &FREEwhile, &FREEfor,
-     &FREEreturn, &FREEexprs, &FREEbinop, &FREEmonop, &FREEcast, &FREEnum,
-     &FREEfloat, &FREEbool, &FREEerror}
+     &FREElocalfundef, &FREEglobaldec, &FREEglobaldef, &FREEparams,
+     &FREEparam, &FREEid, &FREEstmts, &FREEassign, &FREEfuncall, &FREEif,
+     &FREEwhile, &FREEdowhile, &FREEfor, &FREEreturn, &FREEexprs, &FREEbinop,
+     &FREEmonop, &FREEcast, &FREEnum, &FREEfloat, &FREEbool, &FREEerror}
 
   /* TR_chk */
   , {&TRAVerror, &CHKdeclarations, &CHKfundec, &CHKfundef, &CHKfunheader,
-     &CHKfunbody, &CHKvardecs, &CHKvardec, &CHKlocalfundefs, &CHKglobaldec,
-     &CHKglobaldef, &CHKparams, &CHKparam, &CHKid, &CHKstmts, &CHKassign,
-     &CHKfuncall, &CHKif, &CHKwhile, &CHKfor, &CHKreturn, &CHKexprs,
-     &CHKbinop, &CHKmonop, &CHKcast, &CHKnum, &CHKfloat, &CHKbool, &CHKerror}
+     &CHKfunbody, &CHKvardecs, &CHKvardec, &CHKlocalfundefs, &CHKlocalfundef,
+     &CHKglobaldec, &CHKglobaldef, &CHKparams, &CHKparam, &CHKid, &CHKstmts,
+     &CHKassign, &CHKfuncall, &CHKif, &CHKwhile, &CHKdowhile, &CHKfor,
+     &CHKreturn, &CHKexprs, &CHKbinop, &CHKmonop, &CHKcast, &CHKnum,
+     &CHKfloat, &CHKbool, &CHKerror}
 
   /* TR_ri */
   , {&TRAVerror, &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons,
      &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons,
      &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons,
      &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons,
-     &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons}
+     &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons,
+     &TRAVsons}
 
   /* TR_si */
   , {&TRAVerror, &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons,
      &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons,
      &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons,
      &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons,
-     &TRAVsons, &SInum, &TRAVsons, &TRAVsons, &TRAVsons}
+     &TRAVsons, &TRAVsons, &TRAVsons, &SInum, &TRAVsons, &TRAVsons, &TRAVsons}
 
   /* TR_os */
   , {&TRAVerror, &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons,
      &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons,
      &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons,
-     &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons, &OSbinop, &TRAVsons,
-     &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons}
+     &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons,
+     &OSbinop, &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons,
+     &TRAVsons}
 };
 
 preposttable_t pretable = {
