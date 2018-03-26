@@ -39,7 +39,6 @@ extern node *FREEmonop (node * arg_node, info * arg_info);
 extern node *FREEnum (node * arg_node, info * arg_info);
 extern node *FREEparam (node * arg_node, info * arg_info);
 extern node *FREEreturn (node * arg_node, info * arg_info);
-extern node *FREEstefuntype (node * arg_node, info * arg_info);
 extern node *FREEstmts (node * arg_node, info * arg_info);
 extern node *FREEsymboltable (node * arg_node, info * arg_info);
 extern node *FREEsymboltableentry (node * arg_node, info * arg_info);

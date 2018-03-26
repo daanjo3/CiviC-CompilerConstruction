@@ -27,15 +27,14 @@ travtables_t travtables = {
    &TRAVerror, &TRAVerror, &TRAVerror, &TRAVerror, &TRAVerror, &TRAVerror,
    &TRAVerror, &TRAVerror, &TRAVerror, &TRAVerror, &TRAVerror, &TRAVerror,
    &TRAVerror, &TRAVerror, &TRAVerror, &TRAVerror, &TRAVerror, &TRAVerror,
-   &TRAVerror, &TRAVerror, &TRAVerror, &TRAVerror, &TRAVerror}
+   &TRAVerror, &TRAVerror, &TRAVerror, &TRAVerror}
 
   /* TR_prt */
   , {&TRAVerror, &PRTdeclarations, &PRTfundefdec, &PRTfunbody, &PRTvardec,
      &PRTlocalfundefs, &PRTglobaldec, &PRTglobaldef, &PRTparam, &PRTid,
      &PRTstmts, &PRTassign, &PRTfuncall, &PRTif, &PRTwhile, &PRTdowhile,
      &PRTfor, &PRTreturn, &PRTexprs, &PRTbinop, &PRTmonop, &PRTcast, &PRTnum,
-     &PRTfloat, &PRTbool, &PRTsymboltable, &PRTsymboltableentry,
-     &PRTstefuntype, &PRTerror}
+     &PRTfloat, &PRTbool, &PRTsymboltable, &PRTsymboltableentry, &PRTerror}
 
   /* TR_copy */
   , {&TRAVerror, &COPYdeclarations, &COPYfundefdec, &COPYfunbody, &COPYvardec,
@@ -43,7 +42,7 @@ travtables_t travtables = {
      &COPYstmts, &COPYassign, &COPYfuncall, &COPYif, &COPYwhile, &COPYdowhile,
      &COPYfor, &COPYreturn, &COPYexprs, &COPYbinop, &COPYmonop, &COPYcast,
      &COPYnum, &COPYfloat, &COPYbool, &COPYsymboltable, &COPYsymboltableentry,
-     &COPYstefuntype, &COPYerror}
+     &COPYerror}
 
   /* TR_free */
   , {&TRAVerror, &FREEdeclarations, &FREEfundefdec, &FREEfunbody, &FREEvardec,
@@ -51,22 +50,21 @@ travtables_t travtables = {
      &FREEstmts, &FREEassign, &FREEfuncall, &FREEif, &FREEwhile, &FREEdowhile,
      &FREEfor, &FREEreturn, &FREEexprs, &FREEbinop, &FREEmonop, &FREEcast,
      &FREEnum, &FREEfloat, &FREEbool, &FREEsymboltable, &FREEsymboltableentry,
-     &FREEstefuntype, &FREEerror}
+     &FREEerror}
 
   /* TR_chk */
   , {&TRAVerror, &CHKdeclarations, &CHKfundefdec, &CHKfunbody, &CHKvardec,
      &CHKlocalfundefs, &CHKglobaldec, &CHKglobaldef, &CHKparam, &CHKid,
      &CHKstmts, &CHKassign, &CHKfuncall, &CHKif, &CHKwhile, &CHKdowhile,
      &CHKfor, &CHKreturn, &CHKexprs, &CHKbinop, &CHKmonop, &CHKcast, &CHKnum,
-     &CHKfloat, &CHKbool, &CHKsymboltable, &CHKsymboltableentry,
-     &CHKstefuntype, &CHKerror}
+     &CHKfloat, &CHKbool, &CHKsymboltable, &CHKsymboltableentry, &CHKerror}
 
   /* TR_ms */
   , {&TRAVerror, &TRAVsons, &MSfundefdec, &TRAVsons, &TRAVsons, &TRAVsons,
      &MSglobaldec, &MSglobaldef, &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons,
      &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons, &MSfor, &TRAVsons, &TRAVsons,
      &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons,
-     &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons}
+     &TRAVsons, &TRAVsons, &TRAVsons}
 };
 
 preposttable_t pretable = {

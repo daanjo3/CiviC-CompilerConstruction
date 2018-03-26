@@ -42,7 +42,6 @@ extern node *CHKmonop (node * arg_node, info * arg_info);
 extern node *CHKnum (node * arg_node, info * arg_info);
 extern node *CHKparam (node * arg_node, info * arg_info);
 extern node *CHKreturn (node * arg_node, info * arg_info);
-extern node *CHKstefuntype (node * arg_node, info * arg_info);
 extern node *CHKstmts (node * arg_node, info * arg_info);
 extern node *CHKsymboltable (node * arg_node, info * arg_info);
 extern node *CHKsymboltableentry (node * arg_node, info * arg_info);

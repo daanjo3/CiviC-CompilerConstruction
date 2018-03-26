@@ -249,14 +249,6 @@ extern node *TBmakeSymboltableentry (char *Name, basictype Type,
 				     node * FunTypes);
 
 /*****************************************************************************
- * macros and functions for N_stefuntype
- *****************************************************************************/
-
-#define STEFUNTYPE_NEXT( n) ((n)->sons.N_stefuntype->Next)
-#define STEFUNTYPE_TYPE( n) ((n)->attribs.N_stefuntype->Type)
-extern node *TBmakeStefuntype (basictype Type, node * Next);
-
-/*****************************************************************************
  * macros and functions for N_error
  *****************************************************************************/
 

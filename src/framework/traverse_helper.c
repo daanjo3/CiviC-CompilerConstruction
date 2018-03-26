@@ -132,9 +132,6 @@ TRAVsons (node * arg_node, info * arg_info)
       TRAV (SYMBOLTABLEENTRY_NEXT (arg_node), arg_info);
       TRAV (SYMBOLTABLEENTRY_FUNTYPES (arg_node), arg_info);
       break;
-    case N_stefuntype:
-      TRAV (STEFUNTYPE_NEXT (arg_node), arg_info);
-      break;
     case N_error:
       TRAV (ERROR_NEXT (arg_node), arg_info);
       break;
@@ -232,9 +229,6 @@ TRAVnumSons (node * node)
       break;
     case N_symboltableentry:
       result = 2;
-      break;
-    case N_stefuntype:
-      result = 1;
       break;
     case N_error:
       result = 1;
@@ -581,17 +575,6 @@ TRAVgetSon (int no, node * parent)
 	  break;
 	case 1:
 	  result = SYMBOLTABLEENTRY_FUNTYPES (parent);
-	  break;
-	default:
-	  DBUG_ASSERT ((FALSE), "index out of range!");
-	  break;
-	}
-      break;
-    case N_stefuntype:
-      switch (no)
-	{
-	case 0:
-	  result = STEFUNTYPE_NEXT (parent);
 	  break;
 	default:
 	  DBUG_ASSERT ((FALSE), "index out of range!");

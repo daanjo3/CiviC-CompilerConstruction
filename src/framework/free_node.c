@@ -664,34 +664,6 @@ FREEreturn (node * arg_node, info * arg_info)
 
 /** <!--******************************************************************-->
  *
- * @fn FREEstefuntype
- *
- * @brief Frees the node and its sons/attributes
- *
- * @param arg_node STEFunType node to process
- * @param arg_info pointer to info structure
- *
- * @return processed node
- *
- ***************************************************************************/
-node *
-FREEstefuntype (node * arg_node, info * arg_info)
-{
-  node *result = NULL;
-  DBUG_ENTER ("FREEstefuntype");
-  DBUG_PRINT ("FREE", ("Processing node N_stefuntype at " F_PTR, arg_node));
-  STEFUNTYPE_NEXT (arg_node) =
-    FREECOND (STEFUNTYPE_NEXT (arg_node), arg_info);
-  result = STEFUNTYPE_NEXT (arg_node);
-  arg_node->sons.N_stefuntype = MEMfree (arg_node->sons.N_stefuntype);
-  arg_node->attribs.N_stefuntype = MEMfree (arg_node->attribs.N_stefuntype);
-  DBUG_PRINT ("FREE", ("Processing node N_stefuntype at " F_PTR, arg_node));
-  arg_node = MEMfree (arg_node);
-  DBUG_RETURN (result);
-}
-
-/** <!--******************************************************************-->
- *
  * @fn FREEstmts
  *
  * @brief Frees the node and its sons/attributes

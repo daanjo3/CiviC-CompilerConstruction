@@ -49,15 +49,9 @@ bool checkEntry(info *arg_info, char* name, bool is_function) {
     return TRUE;
 }
 
-// Add an entry in the table
-void addEntry(info *arg_info, char* name, basictype type, bool is_function) {
-    if (!(checkEntry(arg_info, name, is_function))) {
-        CTIerror("Syntax Error: Variable already declared");
-        return;
-    }
 
-    node *new_entry = TBmakeSymboltableentry(name, type, is_function, NULL);
-
+// Insert a new entry in the table
+void insertEntry(info *arg_info, node *new_entry) {
     node *table = INFO_CURRENT_TABLE(arg_info);
     node *entry = SYMBOLTABLE_HEAD(table);
 
@@ -67,78 +61,52 @@ void addEntry(info *arg_info, char* name, basictype type, bool is_function) {
         while (SYMBOLTABLEENTRY_NEXT(entry)) {
             entry = SYMBOLTABLEENTRY_NEXT(entry);
         }
-
-        node *new_entry = TBmakeSymboltableentry(name, type, is_function, NULL);
         SYMBOLTABLEENTRY_NEXT(entry) = new_entry;
     }
+}
+
+// Add an entry in the table
+void addEntry(info *arg_info, char* name, basictype type, bool is_function, node *params) {
+    if (!(checkEntry(arg_info, name, is_function))) {
+        CTIerror("Syntax Error: Variable already declared");
+        return;
+    }
+    node *new_entry = TBmakeSymboltableentry(name, type, is_function, NULL, params);
+    insertEntry(arg_info, new_entry);
 }
 
 node *MSfundefdec(node *arg_node, info *arg_info) {
     DBUG_ENTER("MSfundefdec");
     
     // Store the function in the current table
-    char* name = ID_NAME(FUNDEFDEC_ID(header));
-    basictype type = FUNDEFDEC_RETTYPE(header);
-    addEntry(arg_info, name, type, TRUE);
+    char* name = FUNDEFDEC_ID(arg_node);
+    basictype type = FUNDEFDEC_RETTYPE(arg_node);
+    node *param = FUNDEFDEC_PARAM(arg_node);
+    addEntry(arg_info, name, type, TRUE, param);
 
-    info *block_info = MakeInfo();
+    info *body_info = MakeInfo();
 
     // Add the params to the block symbol table
-    node *param = FUNDEFDEC_PARAM(header);
     if (param) {
         do {
-            name = ID_NAME(PARAM_ID(param));
+            name = PARAM_ID(param);
             type = PARAM_TYPE(param);
-            addEntry(block_info, name, type, FALSE);
-            param = PARAM_NEXT(param)
+            addEntry(body_info, name, type, FALSE, NULL);
+            param = PARAM_NEXT(param);
         } while (param);
     }
 
     // Traverse through the block
     if(FUNDEFDEC_BODY(arg_node)) {
-        FUNDEFDEC_BODY(arg_node) = TRAVdo(FUNDEFDEC_BODY(arg_node), block_info);
+        FUNDEFDEC_BODY(arg_node) = TRAVdo(FUNDEFDEC_BODY(arg_node), body_info);
     }
 
     // Make the current table the parent of the block symbol table
-    node *block_table = INFO_CURRENT_TABLE(block_info);
-    SYMBOLTABLE_PARENT(block_table) = INFO_CURRENT_TABLE(arg_info);
+    node *body_table = INFO_CURRENT_TABLE(body_info);
+    SYMBOLTABLE_PARENT(body_table) = INFO_CURRENT_TABLE(arg_info);
 
-    block_info = FreeInfo(block_info);
+    body_info = FreeInfo(body_info);
 
-    DBUG_RETURN(arg_node);
-}
-
-node *MSlocalfundef(node *arg_node, info *arg_info) {
-    DBUG_ENTER("MSfundef");
-    
-    // Store the function in the current table
-    node *header = LOCALFUNDEF_HEADER(arg_node);
-    char* name = ID_NAME(FUNHEADER_ID(header));
-    basictype type = FUNHEADER_RETTYPE(header);
-    addEntry(arg_info, name, type, TRUE);
-
-    info *block_info = MakeInfo();
-
-    // Add the params to the block symbol table
-    node *param;
-    node *params = FUNHEADER_PARAMS(header);
-    while (PARAMS_FIRST(params)) {
-        param = PARAMS_FIRST(params);
-        name = ID_NAME(PARAM_ID(param));
-        type = PARAM_TYPE(param);
-        addEntry(block_info, name, type, FALSE);
-
-        params = PARAMS_NEXT(params);
-    }
-
-    // Traverse through the block
-    LOCALFUNDEF_BODY(arg_node) = TRAVdo(LOCALFUNDEF_BODY(arg_node), block_info);
-
-    // Make the current table the parent of the block symbol table
-    node *block_table = INFO_CURRENT_TABLE(block_info);
-    SYMBOLTABLE_PARENT(block_table) = INFO_CURRENT_TABLE(arg_info);
-
-    block_info = FreeInfo(block_info);
     DBUG_RETURN(arg_node);
 }
 
@@ -150,7 +118,7 @@ node *MSfor(node *arg_node, info *arg_info) {
     info *block_info = MakeInfo();
 
     // Add the parameters to the new symbol table
-    addEntry(block_info, name, BT_int, FALSE);
+    addEntry(block_info, name, BT_int, FALSE, NULL);
     
     // Traverse over the block node to fill the symbol table
     FOR_BLOCK(arg_node) = TRAVdo(FOR_BLOCK(arg_node), block_info);
@@ -168,9 +136,9 @@ node *MSfor(node *arg_node, info *arg_info) {
 node *MSvardec(node *arg_node, info *arg_info) {
     DBUG_ENTER("MSvardec");
 
-    char* name = ID_NAME(VARDEC_ID(arg_node));
+    char* name = VARDEC_ID(arg_node);
     basictype type = VARDEC_TYPE(arg_node);
-    addEntry(arg_info, name, type, FALSE);
+    addEntry(arg_info, name, type, FALSE, NULL);
 
     DBUG_RETURN(arg_node);
 }
@@ -179,9 +147,9 @@ node *MSvardec(node *arg_node, info *arg_info) {
 node *MSglobaldef(node *arg_node, info *arg_info) {
     DBUG_ENTER("MSglobaldef");
 
-    char* name = ID_NAME(GLOBALDEF_ID(arg_node));
+    char* name = GLOBALDEF_ID(arg_node);
     basictype type = GLOBALDEF_TYPE(arg_node);
-    addEntry(arg_info, name, type, FALSE);
+    addEntry(arg_info, name, type, FALSE, NULL);
     
     DBUG_RETURN(arg_node);
 }
@@ -190,9 +158,9 @@ node *MSglobaldef(node *arg_node, info *arg_info) {
 node *MSglobaldec(node *arg_node, info *arg_info) {
     DBUG_ENTER("MSglobaldec");
 
-    char* name = ID_NAME(GLOBALDEC_ID(arg_node));
+    char* name = GLOBALDEC_ID(arg_node);
     basictype type = GLOBALDEC_TYPE(arg_node);
-    addEntry(arg_info, name, type, FALSE);
+    addEntry(arg_info, name, type, FALSE, NULL);
 
     DBUG_RETURN(arg_node);
 }

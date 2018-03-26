@@ -541,28 +541,6 @@ CHKMreturn (node * arg_node, info * arg_info)
 
 /** <!--******************************************************************-->
  *
- * @fn CHKMstefuntype
- *
- * @brief Touched the node and its sons/attributes
- *
- * @param arg_node STEFunType node to process
- * @param arg_info pointer to info structure
- *
- * @return processed node
- *
- ***************************************************************************/
-node *
-CHKMstefuntype (node * arg_node, info * arg_info)
-{
-  DBUG_ENTER ("CHKMstefuntype");
-  NODE_ERROR (arg_node) = CHKMTRAV (NODE_ERROR (arg_node), arg_info);
-  STEFUNTYPE_NEXT (arg_node) =
-    CHKMTRAV (STEFUNTYPE_NEXT (arg_node), arg_info);
-  DBUG_RETURN (arg_node);
-}
-
-/** <!--******************************************************************-->
- *
  * @fn CHKMstmts
  *
  * @brief Touched the node and its sons/attributes

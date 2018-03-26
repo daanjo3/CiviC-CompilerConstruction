@@ -1120,45 +1120,10 @@ TBmakeSymboltableentry (char *Name, basictype Type, bool Function,
 	("Field Next of node N_SymbolTableEntry has non-allowed target node.");
     }
   if ((SYMBOLTABLEENTRY_FUNTYPES (this) != NULL)
-      && (NODE_TYPE (SYMBOLTABLEENTRY_FUNTYPES (this)) != N_stefuntype))
+      && (NODE_TYPE (SYMBOLTABLEENTRY_FUNTYPES (this)) != N_param))
     {
       CTIwarn
 	("Field FunTypes of node N_SymbolTableEntry has non-allowed target node.");
-    }
-#endif /* DBUG_OFF */
-  DBUG_RETURN (this);
-}
-
-/*****************************************************************************
- * N_STEFunType :
- *****************************************************************************/
-
-node *
-TBmakeStefuntype (basictype Type, node * Next)
-{
-  node *this;
-  DBUG_ENTER ("TBmakeStefuntype");
-  DBUG_PRINT ("MAKE", ("allocating node structure"));
-  this = MakeEmptyNode ();
-  NODE_TYPE (this) = N_stefuntype;
-  DBUG_PRINT ("MAKE", ("address: %s ", this));
-  DBUG_PRINT ("MAKE", ("allocating sons structure"));
-  this->sons.N_stefuntype = MEMmalloc (sizeof (struct SONS_N_STEFUNTYPE));
-  DBUG_PRINT ("MAKE", ("allocating attrib structure"));
-  this->attribs.N_stefuntype =
-    MEMmalloc (sizeof (struct ATTRIBS_N_STEFUNTYPE));
-  DBUG_PRINT ("MAKE", ("setting node type"));
-  NODE_TYPE (this) = N_stefuntype;
-  DBUG_PRINT ("MAKE", ("assigning son Next initial value: %s ", Next));
-  STEFUNTYPE_NEXT (this) = Next;
-  STEFUNTYPE_TYPE (this) = Type;
-#ifndef DBUG_OFF
-  DBUG_PRINT ("MAKE", ("doing son target checks"));
-  if ((STEFUNTYPE_NEXT (this) != NULL)
-      && (NODE_TYPE (STEFUNTYPE_NEXT (this)) != N_stefuntype))
-    {
-      CTIwarn
-	("Field Next of node N_STEFunType has non-allowed target node.");
     }
 #endif /* DBUG_OFF */
   DBUG_RETURN (this);

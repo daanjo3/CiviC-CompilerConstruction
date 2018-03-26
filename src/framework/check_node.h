@@ -41,7 +41,6 @@ extern node *CHKMmonop (node * arg_node, info * arg_info);
 extern node *CHKMnum (node * arg_node, info * arg_info);
 extern node *CHKMparam (node * arg_node, info * arg_info);
 extern node *CHKMreturn (node * arg_node, info * arg_info);
-extern node *CHKMstefuntype (node * arg_node, info * arg_info);
 extern node *CHKMstmts (node * arg_node, info * arg_info);
 extern node *CHKMsymboltable (node * arg_node, info * arg_info);
 extern node *CHKMsymboltableentry (node * arg_node, info * arg_info);

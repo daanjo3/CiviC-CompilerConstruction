@@ -39,7 +39,6 @@ extern node *EVALmonop (node * arg_node, info * arg_info);
 extern node *EVALnum (node * arg_node, info * arg_info);
 extern node *EVALparam (node * arg_node, info * arg_info);
 extern node *EVALreturn (node * arg_node, info * arg_info);
-extern node *EVALstefuntype (node * arg_node, info * arg_info);
 extern node *EVALstmts (node * arg_node, info * arg_info);
 extern node *EVALsymboltable (node * arg_node, info * arg_info);
 extern node *EVALsymboltableentry (node * arg_node, info * arg_info);

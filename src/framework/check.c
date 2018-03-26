@@ -1628,57 +1628,6 @@ CHKreturn (node * arg_node, info * arg_info)
 
 /** <!--******************************************************************-->
  *
- * @fn CHKstefuntype
- *
- * @brief Check the node and its sons/attributes
- *
- * @param arg_node STEFunType node to process
- * @param arg_info pointer to info structure
- *
- * @return processed node
- *
- ***************************************************************************/
-node *
-CHKstefuntype (node * arg_node, info * arg_info)
-{
-  DBUG_ENTER ("CHKstefuntype");
-
-/*
- * Son check: STEFUNTYPE_NEXT 
- */
-  if ((FALSE) || (TRUE))
-    {
-      if (STEFUNTYPE_NEXT (arg_node) != NULL)
-	{
-	  if (!
-	      ((FALSE)
-	       || (NODE_TYPE (STEFUNTYPE_NEXT (arg_node)) == N_stefuntype)))
-	    {
-	      CHKcorrectTypeInsertError (arg_node,
-					 "STEFUNTYPE_NEXT hasnt the right type."
-					 " It should be: " "N_stefuntype");
-	    }
-	}
-    }
-  else
-    {
-      CHKnotExist (STEFUNTYPE_NEXT (arg_node), arg_node,
-		   "attribute STEFUNTYPE_NEXT must be NULL");
-    }
-
-/*
- * trav functions: to get all sons
- */
-  if (STEFUNTYPE_NEXT (arg_node) != NULL)
-    {
-      STEFUNTYPE_NEXT (arg_node) =
-	TRAVdo (STEFUNTYPE_NEXT (arg_node), arg_info);
-    }
-  DBUG_RETURN (arg_node);
-}
-
-/** <!--******************************************************************-->
- *
  * @fn CHKstmts
  *
  * @brief Check the node and its sons/attributes
@@ -1848,11 +1797,11 @@ CHKsymboltableentry (node * arg_node, info * arg_info)
 	  if (!
 	      ((FALSE)
 	       || (NODE_TYPE (SYMBOLTABLEENTRY_FUNTYPES (arg_node)) ==
-		   N_stefuntype)))
+		   N_param)))
 	    {
 	      CHKcorrectTypeInsertError (arg_node,
 					 "SYMBOLTABLEENTRY_FUNTYPES hasnt the right type."
-					 " It should be: " "N_stefuntype");
+					 " It should be: " "N_param");
 	    }
 	}
     }
@@ -2106,7 +2055,6 @@ typedef enum
   CHK_monop_op,
   CHK_num_value,
   CHK_param_type,
-  CHK_stefuntype_type,
   CHK_symboltable_parent,
   CHK_symboltableentry_name,
   CHK_vardec_type,

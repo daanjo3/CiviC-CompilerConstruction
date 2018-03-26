@@ -39,7 +39,6 @@ extern node *COPYmonop (node * arg_node, info * arg_info);
 extern node *COPYnum (node * arg_node, info * arg_info);
 extern node *COPYparam (node * arg_node, info * arg_info);
 extern node *COPYreturn (node * arg_node, info * arg_info);
-extern node *COPYstefuntype (node * arg_node, info * arg_info);
 extern node *COPYstmts (node * arg_node, info * arg_info);
 extern node *COPYsymboltable (node * arg_node, info * arg_info);
 extern node *COPYsymboltableentry (node * arg_node, info * arg_info);

@@ -107,10 +107,6 @@ struct ATTRIBS_N_PARAM
 struct ATTRIBS_N_RETURN
 {
 };
-struct ATTRIBS_N_STEFUNTYPE
-{
-  basictype Type;
-};
 struct ATTRIBS_N_STMTS
 {
 };
@@ -160,7 +156,6 @@ struct ATTRIBUNION
   struct ATTRIBS_N_NUM *N_num;
   struct ATTRIBS_N_PARAM *N_param;
   struct ATTRIBS_N_RETURN *N_return;
-  struct ATTRIBS_N_STEFUNTYPE *N_stefuntype;
   struct ATTRIBS_N_STMTS *N_stmts;
   struct ATTRIBS_N_SYMBOLTABLE *N_symboltable;
   struct ATTRIBS_N_SYMBOLTABLEENTRY *N_symboltableentry;

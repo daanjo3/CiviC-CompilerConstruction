@@ -606,32 +606,6 @@ COPYreturn (node * arg_node, info * arg_info)
 
 /** <!--******************************************************************-->
  *
- * @fn COPYstefuntype
- *
- * @brief Copies the node and its sons/attributes
- *
- * @param arg_node STEFunType node to process
- * @param arg_info pointer to info structure
- *
- * @return processed node
- *
- ***************************************************************************/
-node *
-COPYstefuntype (node * arg_node, info * arg_info)
-{
-  node *result = TBmakeStefuntype (BT_unknown, NULL);
-  DBUG_ENTER ("COPYstefuntype");
-  LUTinsertIntoLutP (INFO_LUT (arg_info), arg_node, result);
-  /* Copy attributes */
-  STEFUNTYPE_TYPE (result) = STEFUNTYPE_TYPE (arg_node);
-  /* Copy sons */
-  STEFUNTYPE_NEXT (result) = COPYTRAV (STEFUNTYPE_NEXT (arg_node), arg_info);
-  /* Return value */
-  DBUG_RETURN (result);
-}
-
-/** <!--******************************************************************-->
- *
  * @fn COPYstmts
  *
  * @brief Copies the node and its sons/attributes

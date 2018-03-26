@@ -121,10 +121,6 @@ struct SONS_N_RETURN
 {
   node *Expr;
 };
-struct SONS_N_STEFUNTYPE
-{
-  node *Next;
-};
 struct SONS_N_STMTS
 {
   node *First;
@@ -177,7 +173,6 @@ struct SONUNION
   struct SONS_N_NUM *N_num;
   struct SONS_N_PARAM *N_param;
   struct SONS_N_RETURN *N_return;
-  struct SONS_N_STEFUNTYPE *N_stefuntype;
   struct SONS_N_STMTS *N_stmts;
   struct SONS_N_SYMBOLTABLE *N_symboltable;
   struct SONS_N_SYMBOLTABLEENTRY *N_symboltableentry;
