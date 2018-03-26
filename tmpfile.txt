@@ -1,0 +1,21 @@
+PHASE ( ca,
+        "Doing Context Analysis",
+        ALWAYS)
+
+SUBPHASE( ms,
+          "Making symboltable",
+          MSdoMakeSymbolTable,
+          ALWAYS,
+          ca)
+
+ENDPHASE( ca)
+
+fundefdec:  export type id BRACKET_L BRACKET_R BRACE_L funbody BRACE_R
+            { $$ = TBmakeFundefdec($1, $2, $3, NULL, $7); }
+            | export type id BRACKET_L BRACKET_R param BRACE_L funbody BRACE_R
+            { $$ = TBmakeFundefdec($1, $2, $3, $6, $8); }
+            | EXTERN type id BRACKET_L BRACKET_R SEMICOLON
+            { $$ = TBmakeFundefdec(FALSE, $2, $3, NULL, NULL); }
+            | EXTERN type id BRACKET_L param BRACKET_R SEMICOLON
+            { $$ = TBmakeFundefdec(FALSE, $2, $3, $5, NULL); }
+            ;

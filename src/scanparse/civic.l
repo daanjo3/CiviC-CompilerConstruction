@@ -34,6 +34,8 @@
 
 "("                        { FILTER( BRACKET_L); }
 ")"                        { FILTER( BRACKET_R); }
+"{"                        { FILTER( BRACE_L);}
+"}"                        { FILTER( BRACE_R);}
 ","                        { FILTER( COMMA); }
 ";"                        { FILTER( SEMICOLON); }
 
@@ -52,21 +54,41 @@
 "&&"                       { FILTER( AND);    }
 "||"                       { FILTER( OR);    }
 
+"!"                        { FILTER( NOT); }
 "="                        { FILTER( LET);    }
+
+"bool"                      { FILTER(TYPE_BOOL);}
+"int"                       { FILTER(TYPE_INT);}
+"float"                     { FILTER(TYPE_FLOAT);}
+"void"                      { FILTER(TYPE_VOID);}
+
+"do"                        { FILTER(DO);}
+"while"                     { FILTER(WHILE);}
+"for"                       { FILTER(FOR);}
+"if"                        { FILTER(IF);}
+"else"                      { FILTER(ELSE);}
+"return"                    { FILTER(RETURN);}
+
+"extern"                    { FILTER(EXTERN);}
+"export"                    { FILTER(EXPORT);}
 
 "true"                     { FILTER( TRUEVAL); }
 "false"                    { FILTER( FALSEVAL); }
 
-"while"                     { FILTER(WHILE);}
-"for"                       { FILTER(FOR);}
-"if"                        { FILTER(IF);}
+\/\/.$                    { FILTER (COMMENT_SINGLE); }
 
-[A-Za-z][A-Za-z0-9_]*      { yylval.id = STRcpy(yytext);
-                             FILTER( ID);
-                           }
+\/\*.*?\*\/               { FILTER (COMMENT_MULT); }
 
 [0-9]+                     { yylval.cint=atoi(yytext);
                              FILTER( NUM);
+                           }
+
+[0-9]*\.?[0-9]+             { yylval.cflt = atof(yytext);
+                             FILTER(FLOAT);
+                           }
+
+[A-Za-z][A-Za-z0-9_]*      { yylval.id = STRcpy(yytext);
+                             FILTER( ID);
                            }
 
 \n.*                       { global.line += 1;

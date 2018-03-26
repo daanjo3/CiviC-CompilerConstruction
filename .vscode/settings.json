@@ -1,0 +1,9 @@
+{
+    "files.associations": {
+        "types.h": "c",
+        "mytypes.h": "c",
+        "*.mac": "c",
+        "tree_basic.h": "c",
+        "dbug.h": "c"
+    }
+}

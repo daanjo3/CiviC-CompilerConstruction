@@ -35,14 +35,13 @@ struct INFO {
 static info *MakeInfo()
 {
   info *result;
-  
+
   result = MEMmalloc(sizeof(info));
 
   INFO_FIRSTERROR(result) = FALSE;
-  
+
   return result;
 }
-
 
 static info *FreeInfo( info *info)
 {
@@ -51,89 +50,225 @@ static info *FreeInfo( info *info)
   return info;
 }
 
-
-
-/** <!--******************************************************************-->
- *
- * @fn PRTstmts
- *
- * @brief Prints the node and its sons/attributes
- *
- * @param arg_node BinOp node to process
- * @param arg_info pointer to info structure
- *
- * @return processed node
- *
- ***************************************************************************/
-
-node *
-PRTstmts (node * arg_node, info * arg_info)
-{
-  DBUG_ENTER ("PRTstmts");
-
-  STMTS_STMT( arg_node) = TRAVdo( STMTS_STMT( arg_node), arg_info);
-  
-  STMTS_NEXT( arg_node) = TRAVopt( STMTS_NEXT( arg_node), arg_info);
-  
-  DBUG_RETURN (arg_node);
-}
-
-
-/** <!--******************************************************************-->
- *
- * @fn PRTassign
- *
- * @brief Prints the node and its sons/attributes
- *
- * @param arg_node BinOp node to process
- * @param arg_info pointer to info structure
- *
- * @return processed node
- *
- ***************************************************************************/
-
-node *
-PRTassign (node * arg_node, info * arg_info)
-{
-  DBUG_ENTER ("PRTassign");
-
-  if (ASSIGN_LET( arg_node) != NULL) {
-    ASSIGN_LET( arg_node) = TRAVdo( ASSIGN_LET( arg_node), arg_info);
-    printf( " = ");
+char *type_string(basictype type) {
+    switch (type) {
+    case BT_bool:
+      return "boolean ";
+    case BT_int:
+      return "int ";
+    case BT_float:
+      return "float ";
+    case RT_void:
+      return "void ";
+    case BT_unknown:
+      DBUG_ASSERT(0, "unknown basictype selected!");
   }
-  
-  ASSIGN_EXPR( arg_node) = TRAVdo( ASSIGN_EXPR( arg_node), arg_info);
-  
-  printf( ";\n");
-  
-  DBUG_RETURN (arg_node);
+  return " ";
 }
 
+node *PRTdeclarations(node * arg_node, info * arg_info) {
+   DBUG_ENTER("PRTdeclarations");
+   DECLARATIONS_DECLARATION(arg_node) = TRAVdo(DECLARATIONS_DECLARATION(arg_node), arg_info);
+   DECLARATIONS_NEXT(arg_node) = TRAVopt(DECLARATIONS_NEXT(arg_node), arg_info);
+   DBUG_RETURN(arg_node);
+ }
 
-/** <!--******************************************************************-->
- *
- * @fn PRTbinop
- *
- * @brief Prints the node and its sons/attributes
- *
- * @param arg_node BinOp node to process
- * @param arg_info pointer to info structure
- *
- * @return processed node
- *
- ***************************************************************************/
+node *PRTfundefdec(node * arg_node, info * arg_info) {
+  DBUG_ENTER("PRTfundefdec");
 
-node *
-PRTbinop (node * arg_node, info * arg_info)
-{
+  if (FUNDEFDEC_EXPORT(arg_node)) {
+    printf("export ");
+  }
+  if (!FUNDEFDEC_BODY(arg_node)) {
+    printf("extern ");
+  }
+
+  char* type = type_string(FUNDEFDEC_RETTYPE(arg_node));
+  printf("%s", type);
+  FUNDEFDEC_ID(arg_node) = TRAVdo(FUNDEFDEC_ID(arg_node), arg_info);
+  printf("(");
+  FUNDEFDEC_PARAM(arg_node) = TRAVopt(FUNDEFDEC_PARAM(arg_node), arg_info);
+  printf(") {");
+  FUNDEFDEC_BODY(arg_node) = TRAVopt(FUNDEFDEC_BODY(arg_node), arg_info);
+  printf("}");
+
+  DBUG_RETURN(arg_node);
+}
+
+node *PRTfunbody(node * arg_node, info * arg_info) {
+  DBUG_ENTER("PRTfunbody");
+  FUNBODY_VARDEC(arg_node) = TRAVopt(FUNBODY_VARDEC(arg_node), arg_info);
+  FUNBODY_LOCALFUNDEFS(arg_node) = TRAVopt(FUNBODY_LOCALFUNDEFS(arg_node), arg_info);
+  FUNBODY_STATEMENTS(arg_node) = TRAVopt(FUNBODY_STATEMENTS(arg_node), arg_info);
+  DBUG_RETURN(arg_node);
+}
+
+node *PRTvardec(node * arg_node, info * arg_info) {
+  char* tmp;
+  DBUG_ENTER("PRTvardec");
+  tmp = type_string(VARDEC_TYPE(arg_node));
+  printf("%s ", tmp);
+  VARDEC_ID(arg_node) = TRAVdo(VARDEC_ID(arg_node), arg_info);
+  if (VARDEC_EXPR(arg_node) != NULL) {
+    printf(" = ");
+    VARDEC_EXPR(arg_node) = TRAVopt(VARDEC_EXPR(arg_node), arg_info);
+  }
+  VARDEC_NEXT(arg_node) = TRAVopt(VARDEC_NEXT(arg_node), arg_info);
+  printf(";\n");
+
+
+  DBUG_RETURN(arg_node);
+}
+node *PRTlocalfundefs(node * arg_node, info * arg_info) {
+  DBUG_ENTER("PRTlocalfundefs");
+  LOCALFUNDEFS_FIRST(arg_node) = TRAVdo(LOCALFUNDEFS_FIRST(arg_node), arg_info);
+  LOCALFUNDEFS_NEXT(arg_node) = TRAVopt(LOCALFUNDEFS_NEXT(arg_node), arg_info);
+  DBUG_RETURN(arg_node);
+}
+
+node *PRTglobaldec(node * arg_node, info * arg_info) {
+  char* tmp;
+  DBUG_ENTER("PRTglobaldec");
+  printf("extern ");
+  tmp = type_string(GLOBALDEC_TYPE(arg_node));
+  printf("%s ", tmp);
+  GLOBALDEC_ID(arg_node) = TRAVdo(GLOBALDEC_ID(arg_node), arg_info);
+  printf(";\n");
+  DBUG_RETURN(arg_node);
+}
+
+node *PRTglobaldef(node * arg_node, info * arg_info) {
+  char* tmp;
+  DBUG_ENTER("PRTglobaldef");
+  if (GLOBALDEF_EXPORT(arg_node)) {
+    printf("Export ");
+  }
+  tmp = type_string(GLOBALDEF_TYPE(arg_node));
+  printf("%s ", tmp);
+  GLOBALDEF_ID(arg_node) = TRAVdo(GLOBALDEF_ID(arg_node), arg_info);
+  if (GLOBALDEF_EXPR(arg_node) != NULL) {
+    printf(" ");
+    GLOBALDEF_EXPR(arg_node) = TRAVopt(GLOBALDEF_EXPR(arg_node), arg_info);
+  }
+  printf(";\n");
+  DBUG_RETURN(arg_node);
+}
+
+node *PRTparam(node * arg_node, info * arg_info) {
+  char* tmp;
+  DBUG_ENTER("PRTparam");
+  tmp = type_string(PARAM_TYPE(arg_node));
+  printf("%s", tmp);
+  PARAM_ID(arg_node) = TRAVdo(PARAM_ID(arg_node), arg_info);
+  if(PARAM_NEXT(arg_node)) {
+    printf(", ");
+    PARAM_NEXT(arg_node) = TRAVopt(PARAM_NEXT(arg_node), arg_info);
+  }
+  DBUG_RETURN(arg_node);
+}
+
+node *PRTid(node * arg_node, info * arg_info) {
+  DBUG_ENTER("PRTid");
+  printf("%s", ID_NAME(arg_node));
+  DBUG_RETURN(arg_node);
+}
+
+node *PRTstmts(node * arg_node, info * arg_info) {
+  DBUG_ENTER("PRTstmts");
+  STMTS_FIRST(arg_node) = TRAVdo(STMTS_FIRST(arg_node), arg_info);
+  STMTS_NEXT(arg_node) = TRAVopt(STMTS_NEXT(arg_node), arg_info);
+  DBUG_RETURN(arg_node);
+}
+
+node *PRTassign(node * arg_node, info * arg_info) {
+  DBUG_ENTER("PRTassign");
+  ASSIGN_ID(arg_node) = TRAVdo(ASSIGN_ID(arg_node), arg_info);
+  printf(" = ");
+  ASSIGN_EXPR(arg_node) = TRAVdo(ASSIGN_EXPR(arg_node), arg_info);
+  printf(";\n");
+  DBUG_RETURN(arg_node);
+}
+
+node *PRTfuncall(node * arg_node, info * arg_info) {
+  DBUG_ENTER("PRTfuncall");
+  FUNCALL_ID(arg_node) = TRAVdo(FUNCALL_ID(arg_node), arg_info);
+  printf(" (");
+  FUNCALL_EXPRS(arg_node) = TRAVopt(FUNCALL_EXPRS(arg_node), arg_info);
+  printf(");\n");
+  DBUG_RETURN(arg_node);
+}
+
+node *PRTif(node * arg_node, info * arg_info) {
+  DBUG_ENTER("PRTif");
+  printf("if (");
+  IF_EXPR(arg_node) = TRAVdo(IF_EXPR(arg_node), arg_info);
+  printf(") {\n");
+  IF_BLOCK(arg_node) = TRAVdo(IF_BLOCK(arg_node), arg_info);
+  if (IF_ELSEBLOCK(arg_node) != NULL) {
+    printf("} else {\n");
+  }
+  IF_ELSEBLOCK(arg_node) = TRAVopt(IF_ELSEBLOCK(arg_node), arg_info);
+  printf("}\n");
+  DBUG_RETURN(arg_node);
+}
+
+node *PRTwhile(node * arg_node, info * arg_info) {
+  DBUG_ENTER("PRTwhile");
+  printf("while (");
+  WHILE_EXPR(arg_node) = TRAVdo(WHILE_EXPR(arg_node), arg_info);
+  printf(") {\n");
+  WHILE_BLOCK(arg_node) = TRAVdo(WHILE_BLOCK(arg_node), arg_info);
+  printf("}\n");
+  DBUG_RETURN(arg_node);
+}
+
+node *PRTdowhile(node * arg_node, info * arg_info) {
+  DBUG_ENTER("PRTdowhile");
+  printf("do {\n");
+  DOWHILE_BLOCK(arg_node) = TRAVdo(DOWHILE_BLOCK(arg_node), arg_info);
+  printf("} while (");
+  DOWHILE_EXPR(arg_node) = TRAVdo(DOWHILE_EXPR(arg_node), arg_info);
+  printf(");\n");
+  DBUG_RETURN(arg_node);
+}
+
+node *PRTfor(node * arg_node, info * arg_info) {
+  DBUG_ENTER("PRTfor");
+  printf("for (");
+  FOR_ID(arg_node) = TRAVdo(FOR_ID(arg_node), arg_info);
+  printf(" = ");
+  FOR_EXPRSTART(arg_node) = TRAVdo(FOR_EXPRSTART(arg_node), arg_info);
+  printf("; ");
+  FOR_EXPRSTOP(arg_node) = TRAVdo(FOR_EXPRSTOP(arg_node), arg_info);
+  if (FOR_EXPRINCR(arg_node) != NULL) {
+    printf("; ");
+    FOR_EXPRINCR(arg_node) = TRAVopt(FOR_EXPRINCR(arg_node), arg_info);
+  }
+  printf(") {");
+  FOR_BLOCK(arg_node) = TRAVdo(FOR_BLOCK(arg_node), arg_info);
+  printf("}\n");
+  DBUG_RETURN(arg_node);
+}
+
+node *PRTreturn(node * arg_node, info * arg_info) {
+  DBUG_ENTER("PRTreturn");
+  printf("return \n");
+  RETURN_EXPR(arg_node) = TRAVdo(RETURN_EXPR(arg_node), arg_info);
+  DBUG_RETURN(arg_node);
+}
+
+node *PRTexprs(node * arg_node, info * arg_info) {
+  DBUG_ENTER("PRTexprs");
+  EXPRS_FIRST(arg_node) = TRAVdo(EXPRS_FIRST(arg_node), arg_info);
+  EXPRS_NEXT(arg_node) = TRAVopt(EXPRS_NEXT(arg_node), arg_info);
+  DBUG_RETURN(arg_node);
+}
+
+node * PRTbinop (node * arg_node, info * arg_info) {
   char *tmp;
-
   DBUG_ENTER ("PRTbinop");
-
   printf( "( ");
-
   BINOP_LEFT( arg_node) = TRAVdo( BINOP_LEFT( arg_node), arg_info);
-
   switch (BINOP_OP( arg_node)) {
     case BO_add:
       tmp = "+";
@@ -177,142 +312,78 @@ PRTbinop (node * arg_node, info * arg_info)
     case BO_unknown:
       DBUG_ASSERT( 0, "unknown binop detected!");
   }
-
   printf( " %s ", tmp);
-
   BINOP_RIGHT( arg_node) = TRAVdo( BINOP_RIGHT( arg_node), arg_info);
-
   printf( ")");
-
   DBUG_RETURN (arg_node);
 }
 
-
-/** <!--******************************************************************-->
- *
- * @fn PRTfloat
- *
- * @brief Prints the node and its sons/attributes
- *
- * @param arg_node Float node to process
- * @param arg_info pointer to info structure
- *
- * @return processed node
- *
- ***************************************************************************/
-
-node *
-PRTfloat (node * arg_node, info * arg_info)
-{
-  DBUG_ENTER ("PRTfloat");
-
-  printf( "%f", FLOAT_VALUE( arg_node));
-
-  DBUG_RETURN (arg_node);
+node *PRTmonop(node * arg_node, info * arg_info) {
+  char* tmp;
+  DBUG_ENTER("PRTmonop");
+  switch(MONOP_OP(arg_node)) {
+    case MO_not:
+      tmp = "!";
+      break;
+    case MO_neg:
+      tmp = "-";
+      break;
+    case MO_unknown:
+      DBUG_ASSERT( 0, "unknown monop detected!");
+  }
+  printf("%s ", tmp);
+  MONOP_EXPR(arg_node) = TRAVdo(MONOP_EXPR(arg_node), arg_info);
+  printf("\n");
+  DBUG_RETURN(arg_node);
 }
 
+node *PRTcast(node * arg_node, info * arg_info) {
+  char* tmp;
+  DBUG_ENTER("PRTcast");
+  switch (CAST_CASTTYPE(arg_node)) {
+    case BT_bool:
+      tmp = "(boolean) ";
+      break;
+    case BT_int:
+      tmp = "(int) ";
+      break;
+    case BT_float:
+      tmp = "float) ";
+      break;
+    case RT_void:
+      DBUG_ASSERT(0, "var can't be of type: void");
+      break;
+    case BT_unknown:
+      DBUG_ASSERT(0, "unknown basictype selected!");
+  }
+  printf("(%s) ", tmp);
+  CAST_EXPR(arg_node) = TRAVdo(CAST_EXPR(arg_node), arg_info);
+  DBUG_RETURN(arg_node);
+}
 
-
-/** <!--******************************************************************-->
- *
- * @fn PRTnum
- *
- * @brief Prints the node and its sons/attributes
- *
- * @param arg_node Num node to process
- * @param arg_info pointer to info structure
- *
- * @return processed node
- *
- ***************************************************************************/
-
-node *
-PRTnum (node * arg_node, info * arg_info)
-{
+node * PRTnum (node * arg_node, info * arg_info) {
   DBUG_ENTER ("PRTnum");
-
   printf( "%i", NUM_VALUE( arg_node));
-
   DBUG_RETURN (arg_node);
 }
 
+node * PRTfloat (node * arg_node, info * arg_info) {
+  DBUG_ENTER ("PRTfloat");
+  printf( "%f", FLOAT_VALUE( arg_node));
+  DBUG_RETURN (arg_node);
+}
 
-/** <!--******************************************************************-->
- *
- * @fn PRTboolean
- *
- * @brief Prints the node and its sons/attributes
- *
- * @param arg_node Boolean node to process
- * @param arg_info pointer to info structure
- *
- * @return processed node
- *
- ***************************************************************************/
-
-node *
-PRTbool (node * arg_node, info * arg_info)
+node * PRTbool (node * arg_node, info * arg_info)
 {
   DBUG_ENTER ("PRTbool");
-
   if (BOOL_VALUE( arg_node)) {
     printf( "true");
   }
   else {
     printf( "false");
   }
-  
   DBUG_RETURN (arg_node);
 }
-
-
-/** <!--******************************************************************-->
- *
- * @fn PRTvar
- *
- * @brief Prints the node and its sons/attributes
- *
- * @param arg_node letrec node to process
- * @param arg_info pointer to info structure
- *
- * @return processed node
- *
- ***************************************************************************/
-
-node *
-PRTvar (node * arg_node, info * arg_info)
-{
-  DBUG_ENTER ("PRTvar");
-
-  printf( "%s", VAR_NAME( arg_node));
-
-  DBUG_RETURN (arg_node);
-}
-
-
-/** <!--******************************************************************-->
- *
- * @fn PRTvarlet
- *
- * @brief Prints the node and its sons/attributes
- *
- * @param arg_node letrec node to process
- * @param arg_info pointer to info structure
- *
- * @return processed node
- *
- ***************************************************************************/
-
-node *
-PRTvarlet (node * arg_node, info * arg_info)
-{
-  DBUG_ENTER ("PRTvarlet");
-
-  printf( "%s", VARLET_NAME( arg_node));
-
-  DBUG_RETURN (arg_node);
-}
-
 
 /** <!--******************************************************************-->
  *
@@ -327,11 +398,20 @@ PRTvarlet (node * arg_node, info * arg_info)
  *
  ***************************************************************************/
 
+node *PRTsymboltable(node * arg_node, info * arg_info) {
+  DBUG_ENTER("PRTsymboltable");
+  DBUG_RETURN(arg_node);
+}
+
 node *PRTsymboltableentry (node * arg_node, info * arg_info)
 {
   DBUG_ENTER ("PRTsymboltableentry");
-
   DBUG_RETURN (arg_node);
+}
+
+node *PRTstefuntype (node * arg_node, info * arg_info) {
+  DBUG_ENTER("PRTstetype");
+  DBUG_RETURN(arg_node);
 }
 
 /** <!--******************************************************************-->
@@ -384,20 +464,19 @@ PRTerror (node * arg_node, info * arg_info)
 }
 
 
-
 /** <!-- ****************************************************************** -->
  * @brief Prints the given syntaxtree
- * 
+ *
  * @param syntaxtree a node structure
- * 
+ *
  * @return the unchanged nodestructure
  ******************************************************************************/
 
-node 
+node
 *PRTdoPrint( node *syntaxtree)
 {
   info *info;
-  
+
   DBUG_ENTER("PRTdoPrint");
 
   DBUG_ASSERT( (syntaxtree!= NULL), "PRTdoPrint called with empty syntaxtree");
@@ -405,7 +484,7 @@ node
   printf( "\n\n------------------------------\n\n");
 
   info = MakeInfo();
-  
+
   TRAVpush( TR_prt);
 
   syntaxtree = TRAVdo( syntaxtree, info);
