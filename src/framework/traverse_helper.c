@@ -43,56 +43,35 @@ TRAVsons (node * arg_node, info * arg_info)
       TRAV (DECLARATIONS_DECLARATION (arg_node), arg_info);
       TRAV (DECLARATIONS_NEXT (arg_node), arg_info);
       break;
-    case N_fundec:
-      TRAV (FUNDEC_FUNHEADER (arg_node), arg_info);
-      break;
-    case N_fundef:
-      TRAV (FUNDEF_HEADER (arg_node), arg_info);
-      TRAV (FUNDEF_BODY (arg_node), arg_info);
-      break;
-    case N_funheader:
-      TRAV (FUNHEADER_PARAMS (arg_node), arg_info);
-      TRAV (FUNHEADER_ID (arg_node), arg_info);
+    case N_fundefdec:
+      TRAV (FUNDEFDEC_PARAM (arg_node), arg_info);
+      TRAV (FUNDEFDEC_BODY (arg_node), arg_info);
       break;
     case N_funbody:
-      TRAV (FUNBODY_VARDECS (arg_node), arg_info);
+      TRAV (FUNBODY_VARDEC (arg_node), arg_info);
       TRAV (FUNBODY_LOCALFUNDEFS (arg_node), arg_info);
       TRAV (FUNBODY_STATEMENTS (arg_node), arg_info);
       break;
-    case N_vardecs:
-      TRAV (VARDECS_FIRST (arg_node), arg_info);
-      TRAV (VARDECS_NEXT (arg_node), arg_info);
-      break;
     case N_vardec:
-      TRAV (VARDEC_ID (arg_node), arg_info);
       TRAV (VARDEC_EXPR (arg_node), arg_info);
+      TRAV (VARDEC_NEXT (arg_node), arg_info);
       break;
     case N_localfundefs:
       TRAV (LOCALFUNDEFS_FIRST (arg_node), arg_info);
       TRAV (LOCALFUNDEFS_NEXT (arg_node), arg_info);
       break;
-    case N_localfundef:
-      TRAV (LOCALFUNDEF_HEADER (arg_node), arg_info);
-      TRAV (LOCALFUNDEF_BODY (arg_node), arg_info);
-      break;
     case N_globaldec:
-      TRAV (GLOBALDEC_ID (arg_node), arg_info);
       break;
     case N_globaldef:
-      TRAV (GLOBALDEF_ID (arg_node), arg_info);
       TRAV (GLOBALDEF_EXPR (arg_node), arg_info);
       break;
-    case N_params:
-      TRAV (PARAMS_FIRST (arg_node), arg_info);
-      TRAV (PARAMS_NEXT (arg_node), arg_info);
-      break;
     case N_param:
-      TRAV (PARAM_ID (arg_node), arg_info);
+      TRAV (PARAM_NEXT (arg_node), arg_info);
       break;
     case N_id:
       break;
     case N_stmts:
-      TRAV (STMTS_STMT (arg_node), arg_info);
+      TRAV (STMTS_FIRST (arg_node), arg_info);
       TRAV (STMTS_NEXT (arg_node), arg_info);
       break;
     case N_assign:
@@ -117,7 +96,8 @@ TRAVsons (node * arg_node, info * arg_info)
       TRAV (DOWHILE_BLOCK (arg_node), arg_info);
       break;
     case N_for:
-      TRAV (FOR_ASSIGN (arg_node), arg_info);
+      TRAV (FOR_ID (arg_node), arg_info);
+      TRAV (FOR_EXPRSTART (arg_node), arg_info);
       TRAV (FOR_EXPRSTOP (arg_node), arg_info);
       TRAV (FOR_EXPRINCR (arg_node), arg_info);
       TRAV (FOR_BLOCK (arg_node), arg_info);
@@ -145,6 +125,16 @@ TRAVsons (node * arg_node, info * arg_info)
       break;
     case N_bool:
       break;
+    case N_symboltable:
+      TRAV (SYMBOLTABLE_HEAD (arg_node), arg_info);
+      break;
+    case N_symboltableentry:
+      TRAV (SYMBOLTABLEENTRY_NEXT (arg_node), arg_info);
+      TRAV (SYMBOLTABLEENTRY_FUNTYPES (arg_node), arg_info);
+      break;
+    case N_stefuntype:
+      TRAV (STEFUNTYPE_NEXT (arg_node), arg_info);
+      break;
     case N_error:
       TRAV (ERROR_NEXT (arg_node), arg_info);
       break;
@@ -168,20 +158,11 @@ TRAVnumSons (node * node)
     case N_declarations:
       result = 2;
       break;
-    case N_fundec:
-      result = 1;
-      break;
-    case N_fundef:
-      result = 2;
-      break;
-    case N_funheader:
+    case N_fundefdec:
       result = 2;
       break;
     case N_funbody:
       result = 3;
-      break;
-    case N_vardecs:
-      result = 2;
       break;
     case N_vardec:
       result = 2;
@@ -189,17 +170,11 @@ TRAVnumSons (node * node)
     case N_localfundefs:
       result = 2;
       break;
-    case N_localfundef:
-      result = 2;
-      break;
     case N_globaldec:
-      result = 1;
+      result = 0;
       break;
     case N_globaldef:
-      result = 2;
-      break;
-    case N_params:
-      result = 2;
+      result = 1;
       break;
     case N_param:
       result = 1;
@@ -226,7 +201,7 @@ TRAVnumSons (node * node)
       result = 2;
       break;
     case N_for:
-      result = 4;
+      result = 5;
       break;
     case N_return:
       result = 1;
@@ -251,6 +226,15 @@ TRAVnumSons (node * node)
       break;
     case N_bool:
       result = 0;
+      break;
+    case N_symboltable:
+      result = 1;
+      break;
+    case N_symboltableentry:
+      result = 2;
+      break;
+    case N_stefuntype:
+      result = 1;
       break;
     case N_error:
       result = 1;
@@ -286,39 +270,14 @@ TRAVgetSon (int no, node * parent)
 	  break;
 	}
       break;
-    case N_fundec:
+    case N_fundefdec:
       switch (no)
 	{
 	case 0:
-	  result = FUNDEC_FUNHEADER (parent);
-	  break;
-	default:
-	  DBUG_ASSERT ((FALSE), "index out of range!");
-	  break;
-	}
-      break;
-    case N_fundef:
-      switch (no)
-	{
-	case 0:
-	  result = FUNDEF_HEADER (parent);
+	  result = FUNDEFDEC_PARAM (parent);
 	  break;
 	case 1:
-	  result = FUNDEF_BODY (parent);
-	  break;
-	default:
-	  DBUG_ASSERT ((FALSE), "index out of range!");
-	  break;
-	}
-      break;
-    case N_funheader:
-      switch (no)
-	{
-	case 0:
-	  result = FUNHEADER_PARAMS (parent);
-	  break;
-	case 1:
-	  result = FUNHEADER_ID (parent);
+	  result = FUNDEFDEC_BODY (parent);
 	  break;
 	default:
 	  DBUG_ASSERT ((FALSE), "index out of range!");
@@ -329,7 +288,7 @@ TRAVgetSon (int no, node * parent)
       switch (no)
 	{
 	case 0:
-	  result = FUNBODY_VARDECS (parent);
+	  result = FUNBODY_VARDEC (parent);
 	  break;
 	case 1:
 	  result = FUNBODY_LOCALFUNDEFS (parent);
@@ -342,28 +301,14 @@ TRAVgetSon (int no, node * parent)
 	  break;
 	}
       break;
-    case N_vardecs:
-      switch (no)
-	{
-	case 0:
-	  result = VARDECS_FIRST (parent);
-	  break;
-	case 1:
-	  result = VARDECS_NEXT (parent);
-	  break;
-	default:
-	  DBUG_ASSERT ((FALSE), "index out of range!");
-	  break;
-	}
-      break;
     case N_vardec:
       switch (no)
 	{
 	case 0:
-	  result = VARDEC_ID (parent);
+	  result = VARDEC_EXPR (parent);
 	  break;
 	case 1:
-	  result = VARDEC_EXPR (parent);
+	  result = VARDEC_NEXT (parent);
 	  break;
 	default:
 	  DBUG_ASSERT ((FALSE), "index out of range!");
@@ -384,26 +329,9 @@ TRAVgetSon (int no, node * parent)
 	  break;
 	}
       break;
-    case N_localfundef:
-      switch (no)
-	{
-	case 0:
-	  result = LOCALFUNDEF_HEADER (parent);
-	  break;
-	case 1:
-	  result = LOCALFUNDEF_BODY (parent);
-	  break;
-	default:
-	  DBUG_ASSERT ((FALSE), "index out of range!");
-	  break;
-	}
-      break;
     case N_globaldec:
       switch (no)
 	{
-	case 0:
-	  result = GLOBALDEC_ID (parent);
-	  break;
 	default:
 	  DBUG_ASSERT ((FALSE), "index out of range!");
 	  break;
@@ -413,24 +341,7 @@ TRAVgetSon (int no, node * parent)
       switch (no)
 	{
 	case 0:
-	  result = GLOBALDEF_ID (parent);
-	  break;
-	case 1:
 	  result = GLOBALDEF_EXPR (parent);
-	  break;
-	default:
-	  DBUG_ASSERT ((FALSE), "index out of range!");
-	  break;
-	}
-      break;
-    case N_params:
-      switch (no)
-	{
-	case 0:
-	  result = PARAMS_FIRST (parent);
-	  break;
-	case 1:
-	  result = PARAMS_NEXT (parent);
 	  break;
 	default:
 	  DBUG_ASSERT ((FALSE), "index out of range!");
@@ -441,7 +352,7 @@ TRAVgetSon (int no, node * parent)
       switch (no)
 	{
 	case 0:
-	  result = PARAM_ID (parent);
+	  result = PARAM_NEXT (parent);
 	  break;
 	default:
 	  DBUG_ASSERT ((FALSE), "index out of range!");
@@ -460,7 +371,7 @@ TRAVgetSon (int no, node * parent)
       switch (no)
 	{
 	case 0:
-	  result = STMTS_STMT (parent);
+	  result = STMTS_FIRST (parent);
 	  break;
 	case 1:
 	  result = STMTS_NEXT (parent);
@@ -547,15 +458,18 @@ TRAVgetSon (int no, node * parent)
       switch (no)
 	{
 	case 0:
-	  result = FOR_ASSIGN (parent);
+	  result = FOR_ID (parent);
 	  break;
 	case 1:
-	  result = FOR_EXPRSTOP (parent);
+	  result = FOR_EXPRSTART (parent);
 	  break;
 	case 2:
-	  result = FOR_EXPRINCR (parent);
+	  result = FOR_EXPRSTOP (parent);
 	  break;
 	case 3:
+	  result = FOR_EXPRINCR (parent);
+	  break;
+	case 4:
 	  result = FOR_BLOCK (parent);
 	  break;
 	default:
@@ -643,6 +557,42 @@ TRAVgetSon (int no, node * parent)
     case N_bool:
       switch (no)
 	{
+	default:
+	  DBUG_ASSERT ((FALSE), "index out of range!");
+	  break;
+	}
+      break;
+    case N_symboltable:
+      switch (no)
+	{
+	case 0:
+	  result = SYMBOLTABLE_HEAD (parent);
+	  break;
+	default:
+	  DBUG_ASSERT ((FALSE), "index out of range!");
+	  break;
+	}
+      break;
+    case N_symboltableentry:
+      switch (no)
+	{
+	case 0:
+	  result = SYMBOLTABLEENTRY_NEXT (parent);
+	  break;
+	case 1:
+	  result = SYMBOLTABLEENTRY_FUNTYPES (parent);
+	  break;
+	default:
+	  DBUG_ASSERT ((FALSE), "index out of range!");
+	  break;
+	}
+      break;
+    case N_stefuntype:
+      switch (no)
+	{
+	case 0:
+	  result = STEFUNTYPE_NEXT (parent);
+	  break;
 	default:
 	  DBUG_ASSERT ((FALSE), "index out of range!");
 	  break;

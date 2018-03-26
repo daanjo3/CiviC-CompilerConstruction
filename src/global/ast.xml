@@ -17,6 +17,7 @@
     <type name="Bool" ctype="bool" init="FALSE" copy="literal" />
     <type name="Float" ctype="float" init="0.0" copy="literal" />
     <type name="BinOp" ctype="binop" init="BO_unknown" copy="literal" />
+    <type name="MonOp" ctype="monop" init="MO_unknown" copy="literal" />
     <type name="Link" ctype="node*" init="NULL" copy="lookup" />
     <type name="CompilerPhase" ctype="compiler_phase_t" init="PH_initial" copy="literal" />
 
@@ -43,25 +44,15 @@
       <traversal id="FREE" name="Free Syntax Tree" default="user" include="free_node.h" />
       <traversal id="CHK" name="Check Syntax Tree" default="user" include="check.h" />
 
-      <traversal id="RI" name="Rename identifiers" default="sons" include="rename_identifiers.h">
+      <traversal id="MS" name="Make Symboltable" default="sons" include="make_st.h">
         <travuser>
-          <node name="Var" />
-          <node name="VarLet" />
+          <node name="FunDefDec"/>
+          <node name="For"/>
+          <node name="Vardec"/>
+          <node name="GlobalDef"/>
+          <node name="GlobalDec"/>
         </travuser>
       </traversal>
-
-      <traversal id="SI" name="Sum ins" default="sons" include="sum_ints.h">
-        <travuser>
-          <node name="Num" />
-        </travuser>
-      </traversal>
-
-      <traversal id="OS" name="Optimise subtraction" default="sons" include="opt_sub.h">
-        <travuser>
-          <node name="BinOp" />
-        </travuser>
-      </traversal>
-
     </general>
   </phases>
 
@@ -78,12 +69,6 @@
         <node name="Cast"/>
         <node name="FunCall"/>
         <node name="Id"/>
-        <node name="Const"/>
-      </target>
-    </nodeset>
-
-    <nodeset name="Const">
-      <target>
         <node name="Num"/>
         <node name="Float"/>
         <node name="Bool"/>
@@ -93,6 +78,7 @@
     <nodeset name="Stmt">
       <target>
         <node name="Assign" />
+        <node name="FunCall" />
         <node name="While"/>
         <node name="DoWhile"/>
         <node name="If"/>
@@ -103,8 +89,7 @@
 
     <nodeset name="Declaration">
       <target>
-        <node name="FunDec"/>
-        <node name="FunDef"/>
+        <node name="FunDefDec"/>
         <node name="GlobalDec"/>
         <node name="GlobalDef"/>
       </target>
@@ -149,40 +134,20 @@
       </attributes>
     </node>
 
-<!-- FunDeclaration node -->
-    <node name="FunDec">
-      <description>Respresents a function declaration</description>
+    <node name="FunDefDec">
+      <description>Definition of a function definition or declaration</description>
       <sons>
-        <son name="FunHeader">
-          <description>Header of the declaration</description>
+        <son name="Param">
+          <description>Parameters of the function header</description>
           <targets>
-            <target mandatory="yes">
-              <node name="FunHeader"/>
+            <target mandatory="no">
+              <node name="Param"/>
               <phases>
                 <all/>
               </phases>
             </target>
           </targets>
-        </son>
-      </sons>
-      <attributes>
-      </attributes>
-    </node>
-
-    <node name="FunDef">
-      <description>Definition of a function</description>
-      <sons>
-        <son name="Header">
-          <description>Header of the definition</description>
-          <targets>
-            <target mandatory="yes">
-              <node name="FunHeader"/>
-              <phases>
-                <all/>
-              </phases>
-            </target>
-          </targets>
-        </son>
+        </son>        
         <son name="Body">
           <description>Body of the definition</description>
           <targets>
@@ -208,44 +173,26 @@
             </targets>
           </type>
         </attribute>
-      </attributes>
-    </node>
-
-    <node name="FunHeader">
-      <description>Represents the header of a function</description>
-      <sons>
-        <son name="Params">
-          <description>Parameters of the function</description>
-          <targets>
-            <target mandatory="no">
-              <node name="Params"/>
-              <phases>
-                <all/>
-              </phases>
-            </target>
-          </targets>
-        </son>
-        <son name="Id">
-          <description>Identifier of the parameter</description>
-          <targets>
-            <target mandatory="yes">
-              <node name="Id"/>
-              <phases>
-                <all/>
-              </phases>
-            </target>
-          </targets>
-        </son>
-      </sons>
-      <attributes>
         <attribute name="RetType">
           <description>Return type of the header</description>
-          <type name="RetType">
+          <type name="BasicType">
             <targets>
               <target mandatory="yes">
                 <any/>
                 <phases>
                   <all />
+                </phases>
+              </target>
+            </targets>
+          </type>
+        </attribute>
+        <attribute name="Id">
+          <description> Name of the identifier</description>
+          <type name="String">
+            <targets>
+              <target mandatory="yes">
+                <phases>
+                  <all/>
                 </phases>
               </target>
             </targets>
@@ -257,11 +204,11 @@
     <node name="FunBody">
       <description>Content of a function body</description>
       <sons>
-        <son name="VarDecs">
+        <son name="VarDec">
           <description>Link to a sequence of variable declarations</description>
           <targets>
             <target mandatory="no">
-              <node name="VarDecs"/>
+              <node name="VarDec"/>
               <phases>
                 <all/>
               </phases>
@@ -295,55 +242,25 @@
       </attributes>
     </node>
 
-    <node name="VarDecs">
-      <description>Sequence of variable declarations</description>
-      <sons>
-        <son name="First">
-          <description>Link to the first node of declarations</description>
-          <targets>
-            <target mandatory="yes">
-              <node name="VarDec"/>
-              <phases>
-                <all/>
-              </phases>
-            </target>
-          </targets>
-        </son>
-        <son name="Next">
-          <description>Next item in the sequence</description>
-          <targets>
-            <target mandatory="no">
-              <node name="VarDecs"/>
-              <phases>
-                <all/>
-              </phases>
-            </target>
-          </targets>
-        </son>
-      </sons>
-      <attributes>
-      </attributes>
-    </node>
-
     <node name="VarDec">
       <description>A single variable declaration</description>
       <sons>
-        <son name="Id">
-          <description>Identifier of the parameter</description>
-          <targets>
-            <target mandatory="yes">
-              <node name="Id"/>
-              <phases>
-                <all/>
-              </phases>
-            </target>
-          </targets>
-        </son>
         <son name="Expr">
           <description>right hand side expression</description>
           <targets>
             <target mandatory="no">
               <set name="Expr" />
+                <phases>
+                  <all />
+                </phases>
+             </target>
+          </targets>
+        </son>
+        <son name="Next">
+          <description>Next vardec in the sequence</description>
+          <targets>
+            <target mandatory="no">
+              <node name="VarDec" />
                 <phases>
                   <all />
                 </phases>
@@ -365,6 +282,18 @@
             </targets>
           </type>
         </attribute>
+        <attribute name="Id">
+          <description> Name of the identifier</description>
+          <type name="String">
+            <targets>
+              <target mandatory="yes">
+                <phases>
+                  <all/>
+                </phases>
+              </target>
+            </targets>
+          </type>
+        </attribute>
       </attributes>
     </node>
 
@@ -375,7 +304,7 @@
           <description>Link to the first node of definitions</description>
           <targets>
             <target mandatory="yes">
-              <node name="LocalFunDef"/>
+              <node name="FunDefDec"/>
               <phases>
                 <all/>
               </phases>
@@ -398,50 +327,9 @@
       </attributes>
     </node>
 
-    <node name="LocalFunDef">
-      <description>A local function definition</description>
-      <sons>
-        <son name="Header">
-          <description>Header of the definition</description>
-          <targets>
-            <target mandatory="yes">
-              <node name="FunHeader"/>
-              <phases>
-                <all/>
-              </phases>
-            </target>
-          </targets>
-        </son>
-        <son name="Body">
-          <description>Body of the definition</description>
-          <targets>
-            <target mandatory="yes">
-              <node name="FunBody"/>
-              <phases>
-                <all/>
-              </phases>
-            </target>
-          </targets>
-        </son>
-      </sons>
-      <attribute>
-      </attribute>
-    </node>
-
     <node name="GlobalDec">
       <description>A global declarator</description>
       <sons>
-        <son name="Id">
-          <description>Identifier of the declarated</description>
-          <targets>
-            <target mandatory="yes">
-              <node name="Id"/>
-              <phases>
-                <all/>
-              </phases>
-            </target>
-          </targets>
-        </son>
       </sons>
       <attributes>
         <description>Type of declarated</description>
@@ -457,23 +345,24 @@
             </targets>
           </type>
         </attribute>
+        <attribute name="Id">
+          <description> Name of the identifier</description>
+          <type name="String">
+            <targets>
+              <target mandatory="yes">
+                <phases>
+                  <all/>
+                </phases>
+              </target>
+            </targets>
+          </type>
+        </attribute>
       </attributes>
     </node>
 
     <node name="GlobalDef">
       <description>Definition of variable</description>
       <sons>
-        <son name="Id">
-          <description>Identifier of the declarated</description>
-          <targets>
-            <target mandatory="yes">
-              <node name="Id"/>
-              <phases>
-                <all/>
-              </phases>
-            </target>
-          </targets>
-        </son>
         <son name="Expr">
           <description>Assignment of variable</description>
           <targets>
@@ -512,47 +401,29 @@
             </targets>
           </type>
         </attribute>
-      </attributes>
-    </node>
-
-    <node name="Params">
-      <description>Node which contains a sequence of parameters</description>
-      <sons>
-        <son name="First">
-          <description>First parameter in the sequence</description>
-          <targets>
-            <target mandatory="yes">
-              <node name="Param"/>
-              <phases>
-                <all/>
-              </phases>
-            </target>
-          </targets>
-        </son>
-        <son name="Next">
-          <description>Remaining parameters in the sequence</description>
-          <targets>
-            <target mandatory="no">
-              <node name="Params"/>
+        <attribute name="Id">
+          <description> Name of the identifier</description>
+          <type name="String">
+            <targets>
+              <target mandatory="yes">
                 <phases>
                   <all/>
                 </phases>
-            </target>
-          </targets>
-        </son>
-      </sons>
-      <attributes>
+              </target>
+            </targets>
+          </type>
+        </attribute>
       </attributes>
     </node>
 
     <node name="Param">
-      <description>A single parameter object</description>
+      <description>A parameter with possible siblings</description>
       <sons>
-        <son name="Id">
-          <description>Identifier of the parameter</description>
+        <son name="Next">
+          <description>Next parameter in the sequence</description>
           <targets>
-            <target mandatory="yes">
-              <node name="Id"/>
+            <target mandatory="no">
+              <node name="Param"/>
               <phases>
                 <all/>
               </phases>
@@ -574,6 +445,18 @@
             </targets>
           </type>
         </attribute>
+        <attribute name="Id">
+          <description> Name of the identifier</description>
+          <type name="String">
+            <targets>
+              <target mandatory="yes">
+                <phases>
+                  <all/>
+                </phases>
+              </target>
+            </targets>
+          </type>
+        </attribute>
       </attributes>
     </node>
 
@@ -584,14 +467,15 @@
       <attributes>
         <attribute name="Name">
           <description> Name of the identifier</description>
-          <type name="String"/>
-          <targets>
-            <target mandatory="yes">
-              <phases>
-                <all/>
-              </phases>
-            </target>
-          </targets>
+          <type name="String">
+            <targets>
+              <target mandatory="yes">
+                <phases>
+                  <all/>
+                </phases>
+              </target>
+            </targets>
+          </type>
         </attribute>
       </attributes>
     </node>
@@ -601,7 +485,7 @@
      <node name="Stmts">
       <description>represents (sequence of) statements</description>
       <sons>
-        <son name="Stmt">
+        <son name="First">
           <description>first statement in sequence</description>
           <targets>
             <target mandatory="yes">
@@ -793,22 +677,33 @@
 
     <node name="For">
       <sons>
-        <son name="Assign">
-          <description>Assign a starting value</description>
+        <son name="Id">
+          <description>Id of variable</description>
           <targets>
             <target mandatory="yes">
-              <node name="Assign" />
+              <node name="Id" />
               <phases>
                 <all/>
               </phases>
              </target>
           </targets>
         </son>
+        <son name="ExprStart">
+          <description>Expression for the starting value</description>
+          <targets>
+            <target mandatory="yes">
+              <set name="Expr"/>
+              <phases>
+                <all/>
+              </phases>
+            </target>
+          </targets>
+        </son>
         <son name="ExprStop">
           <description>Expression on when to stop the loop</description>
           <targets>
             <target mandatory="yes">
-              <node name="Expr"/>
+              <set name="Expr"/>
               <phases>
                 <all/>
               </phases>
@@ -819,7 +714,7 @@
           <description>Expression on how to e</description>
           <targets>
             <target mandatory="no">
-              <node name="Expr"/>
+              <set name="Expr"/>
               <phases>
                 <all/>
               </phases>
@@ -943,7 +838,7 @@
           <description>Expression on which to perform the operator</description>
           <targets>
             <target mandatory="yes">
-              <node name="Expr"/>
+              <set name="Expr"/>
               <phases>
                 <all/>
               </phases>
@@ -975,7 +870,7 @@
           <description>Expression which to cast</description>
           <targets>
             <target mandatory="yes">
-              <node name="Expr"/>
+              <set name="Expr"/>
               <phases>
                 <all/>
               </phases>
@@ -1033,10 +928,10 @@
           <type name="Float">
             <targets>
               <target mandatory="yes">
-              </target>
                  <phases>
                   <all />
                 </phases>
+              </target>
             </targets>
           </type>
         </attribute>
@@ -1066,13 +961,97 @@
 <!--
  Node SymbolTableEntry:
 -->
-    <!-- <node name="SymbolTableEntry">
-      <description>represents symbol table entry</description>
+    <node name="SymbolTable">
+      <description>The root of a symbol table linked list</description>
       <sons>
+        <son name="Head">
+          <targets>
+            <target mandatory="no">
+              <node name="SymbolTableEntry"/>
+              <phases>
+                <all/>
+              </phases>
+            </target>
+          </targets>
+        </son>
       </sons>
       <attributes>
+        <attribute name="Parent">
+          <type name="Link">
+            <targets>
+              <target mandatory="no">
+                <phases>
+                  <all/>
+                </phases>
+              </target>
+            </targets>
+          </type>
+        </attribute>
       </attributes>
-    </node> -->
+    </node>
+
+    <node name="SymbolTableEntry">
+      <description>represents symbol table entry</description>
+      <sons>
+        <son name="Next">
+          <description>Next node in the symboltable-list</description>
+          <targets>
+            <target mandatory="no">
+              <node name="SymbolTableEntry"/>
+              <phases>
+                <all/>
+              </phases>
+            </target>
+          </targets>
+        </son>
+        <son name="FunTypes">
+          <description>List of function parameter types</description>
+          <targets>
+            <target mandatory="no">
+              <node name="Param"/>
+              <phases>
+                <all/>
+              </phases>
+            </target>
+          </targets>
+        </son>
+      </sons>
+      <attributes>
+        <attribute name="Name">
+          <type name="String">
+            <targets>
+              <target mandatory="yes">
+                <phases>
+                  <all/>
+                </phases>
+              </target>
+            </targets>
+          </type>
+        </attribute>
+        <attribute name="Type">
+          <type name="BasicType">
+            <targets>
+              <target mandatory="yes">
+                <phases>
+                  <all/>
+                </phases>
+              </target>
+            </targets>
+          </type>
+        </attribute>
+        <attribute name="Function">
+          <type name="Bool">
+            <targets>
+              <target mandatory="yes">
+                <phases>
+                  <all/>
+                </phases>
+              </target>
+            </targets>
+          </type>
+        </attribute>
+      </attributes>
+    </node>
 <!--
  Node Error:
 -->

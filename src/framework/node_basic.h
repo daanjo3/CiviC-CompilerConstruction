@@ -30,56 +30,37 @@
 extern node *TBmakeDeclarations (node * Declaration, node * Next);
 
 /*****************************************************************************
- * macros and functions for N_fundec
+ * macros and functions for N_fundefdec
  *****************************************************************************/
 
-#define FUNDEC_FUNHEADER( n) ((n)->sons.N_fundec->FunHeader)
-extern node *TBmakeFundec (node * FunHeader);
-
-/*****************************************************************************
- * macros and functions for N_fundef
- *****************************************************************************/
-
-#define FUNDEF_HEADER( n) ((n)->sons.N_fundef->Header)
-#define FUNDEF_BODY( n) ((n)->sons.N_fundef->Body)
-#define FUNDEF_EXPORT( n) ((n)->attribs.N_fundef->Export)
-extern node *TBmakeFundef (bool Export, node * Header, node * Body);
-
-/*****************************************************************************
- * macros and functions for N_funheader
- *****************************************************************************/
-
-#define FUNHEADER_PARAMS( n) ((n)->sons.N_funheader->Params)
-#define FUNHEADER_ID( n) ((n)->sons.N_funheader->Id)
-#define FUNHEADER_RETTYPE( n) ((n)->attribs.N_funheader->RetType)
-extern node *TBmakeFunheader (RetType, node * Params, node * Id);
+#define FUNDEFDEC_PARAM( n) ((n)->sons.N_fundefdec->Param)
+#define FUNDEFDEC_BODY( n) ((n)->sons.N_fundefdec->Body)
+#define FUNDEFDEC_EXPORT( n) ((n)->attribs.N_fundefdec->Export)
+#define FUNDEFDEC_RETTYPE( n) ((n)->attribs.N_fundefdec->RetType)
+#define FUNDEFDEC_ID( n) ((n)->attribs.N_fundefdec->Id)
+extern node *TBmakeFundefdec (bool Export, basictype RetType, char *Id,
+			      node * Param, node * Body);
 
 /*****************************************************************************
  * macros and functions for N_funbody
  *****************************************************************************/
 
-#define FUNBODY_VARDECS( n) ((n)->sons.N_funbody->VarDecs)
+#define FUNBODY_VARDEC( n) ((n)->sons.N_funbody->VarDec)
 #define FUNBODY_LOCALFUNDEFS( n) ((n)->sons.N_funbody->LocalFunDefs)
 #define FUNBODY_STATEMENTS( n) ((n)->sons.N_funbody->Statements)
-extern node *TBmakeFunbody (node * VarDecs, node * LocalFunDefs,
+extern node *TBmakeFunbody (node * VarDec, node * LocalFunDefs,
 			    node * Statements);
-
-/*****************************************************************************
- * macros and functions for N_vardecs
- *****************************************************************************/
-
-#define VARDECS_FIRST( n) ((n)->sons.N_vardecs->First)
-#define VARDECS_NEXT( n) ((n)->sons.N_vardecs->Next)
-extern node *TBmakeVardecs (node * First, node * Next);
 
 /*****************************************************************************
  * macros and functions for N_vardec
  *****************************************************************************/
 
-#define VARDEC_ID( n) ((n)->sons.N_vardec->Id)
 #define VARDEC_EXPR( n) ((n)->sons.N_vardec->Expr)
+#define VARDEC_NEXT( n) ((n)->sons.N_vardec->Next)
 #define VARDEC_TYPE( n) ((n)->attribs.N_vardec->Type)
-extern node *TBmakeVardec (basictype Type, node * Id, node * Expr);
+#define VARDEC_ID( n) ((n)->attribs.N_vardec->Id)
+extern node *TBmakeVardec (basictype Type, char *Id, node * Expr,
+			   node * Next);
 
 /*****************************************************************************
  * macros and functions for N_localfundefs
@@ -90,62 +71,47 @@ extern node *TBmakeVardec (basictype Type, node * Id, node * Expr);
 extern node *TBmakeLocalfundefs (node * First, node * Next);
 
 /*****************************************************************************
- * macros and functions for N_localfundef
- *****************************************************************************/
-
-#define LOCALFUNDEF_HEADER( n) ((n)->sons.N_localfundef->Header)
-#define LOCALFUNDEF_BODY( n) ((n)->sons.N_localfundef->Body)
-extern node *TBmakeLocalfundef (node * Header, node * Body);
-
-/*****************************************************************************
  * macros and functions for N_globaldec
  *****************************************************************************/
 
-#define GLOBALDEC_ID( n) ((n)->sons.N_globaldec->Id)
 #define GLOBALDEC_TYPE( n) ((n)->attribs.N_globaldec->Type)
-extern node *TBmakeGlobaldec (basictype Type, node * Id);
+#define GLOBALDEC_ID( n) ((n)->attribs.N_globaldec->Id)
+extern node *TBmakeGlobaldec (basictype Type, char *Id);
 
 /*****************************************************************************
  * macros and functions for N_globaldef
  *****************************************************************************/
 
-#define GLOBALDEF_ID( n) ((n)->sons.N_globaldef->Id)
 #define GLOBALDEF_EXPR( n) ((n)->sons.N_globaldef->Expr)
 #define GLOBALDEF_TYPE( n) ((n)->attribs.N_globaldef->Type)
 #define GLOBALDEF_EXPORT( n) ((n)->attribs.N_globaldef->Export)
-extern node *TBmakeGlobaldef (basictype Type, bool Export, node * Id,
+#define GLOBALDEF_ID( n) ((n)->attribs.N_globaldef->Id)
+extern node *TBmakeGlobaldef (basictype Type, bool Export, char *Id,
 			      node * Expr);
-
-/*****************************************************************************
- * macros and functions for N_params
- *****************************************************************************/
-
-#define PARAMS_FIRST( n) ((n)->sons.N_params->First)
-#define PARAMS_NEXT( n) ((n)->sons.N_params->Next)
-extern node *TBmakeParams (node * First, node * Next);
 
 /*****************************************************************************
  * macros and functions for N_param
  *****************************************************************************/
 
-#define PARAM_ID( n) ((n)->sons.N_param->Id)
+#define PARAM_NEXT( n) ((n)->sons.N_param->Next)
 #define PARAM_TYPE( n) ((n)->attribs.N_param->Type)
-extern node *TBmakeParam (basictype Type, node * Id);
+#define PARAM_ID( n) ((n)->attribs.N_param->Id)
+extern node *TBmakeParam (basictype Type, char *Id, node * Next);
 
 /*****************************************************************************
  * macros and functions for N_id
  *****************************************************************************/
 
 #define ID_NAME( n) ((n)->attribs.N_id->Name)
-extern node *TBmakeId ();
+extern node *TBmakeId (char *Name);
 
 /*****************************************************************************
  * macros and functions for N_stmts
  *****************************************************************************/
 
-#define STMTS_STMT( n) ((n)->sons.N_stmts->Stmt)
+#define STMTS_FIRST( n) ((n)->sons.N_stmts->First)
 #define STMTS_NEXT( n) ((n)->sons.N_stmts->Next)
-extern node *TBmakeStmts (node * Stmt, node * Next);
+extern node *TBmakeStmts (node * First, node * Next);
 
 /*****************************************************************************
  * macros and functions for N_assign
@@ -192,12 +158,13 @@ extern node *TBmakeDowhile (node * Expr, node * Block);
  * macros and functions for N_for
  *****************************************************************************/
 
-#define FOR_ASSIGN( n) ((n)->sons.N_for->Assign)
+#define FOR_ID( n) ((n)->sons.N_for->Id)
+#define FOR_EXPRSTART( n) ((n)->sons.N_for->ExprStart)
 #define FOR_EXPRSTOP( n) ((n)->sons.N_for->ExprStop)
 #define FOR_EXPRINCR( n) ((n)->sons.N_for->ExprIncr)
 #define FOR_BLOCK( n) ((n)->sons.N_for->Block)
-extern node *TBmakeFor (node * Assign, node * ExprStop, node * ExprIncr,
-			node * Block);
+extern node *TBmakeFor (node * Id, node * ExprStart, node * ExprStop,
+			node * ExprIncr, node * Block);
 
 /*****************************************************************************
  * macros and functions for N_return
@@ -229,7 +196,7 @@ extern node *TBmakeBinop (binop Op, node * Left, node * Right);
 
 #define MONOP_EXPR( n) ((n)->sons.N_monop->Expr)
 #define MONOP_OP( n) ((n)->attribs.N_monop->Op)
-extern node *TBmakeMonop (Op, node * Expr);
+extern node *TBmakeMonop (monop Op, node * Expr);
 
 /*****************************************************************************
  * macros and functions for N_cast
@@ -251,7 +218,7 @@ extern node *TBmakeNum (int Value);
  *****************************************************************************/
 
 #define FLOAT_VALUE( n) ((n)->attribs.N_float->Value)
-extern node *TBmakeFloat ();
+extern node *TBmakeFloat (float Value);
 
 /*****************************************************************************
  * macros and functions for N_bool
@@ -259,6 +226,35 @@ extern node *TBmakeFloat ();
 
 #define BOOL_VALUE( n) ((n)->attribs.N_bool->Value)
 extern node *TBmakeBool (bool Value);
+
+/*****************************************************************************
+ * macros and functions for N_symboltable
+ *****************************************************************************/
+
+#define SYMBOLTABLE_HEAD( n) ((n)->sons.N_symboltable->Head)
+#define SYMBOLTABLE_PARENT( n) ((n)->attribs.N_symboltable->Parent)
+extern node *TBmakeSymboltable (node * Head);
+
+/*****************************************************************************
+ * macros and functions for N_symboltableentry
+ *****************************************************************************/
+
+#define SYMBOLTABLEENTRY_NEXT( n) ((n)->sons.N_symboltableentry->Next)
+#define SYMBOLTABLEENTRY_FUNTYPES( n) ((n)->sons.N_symboltableentry->FunTypes)
+#define SYMBOLTABLEENTRY_NAME( n) ((n)->attribs.N_symboltableentry->Name)
+#define SYMBOLTABLEENTRY_TYPE( n) ((n)->attribs.N_symboltableentry->Type)
+#define SYMBOLTABLEENTRY_FUNCTION( n) ((n)->attribs.N_symboltableentry->Function)
+extern node *TBmakeSymboltableentry (char *Name, basictype Type,
+				     bool Function, node * Next,
+				     node * FunTypes);
+
+/*****************************************************************************
+ * macros and functions for N_stefuntype
+ *****************************************************************************/
+
+#define STEFUNTYPE_NEXT( n) ((n)->sons.N_stefuntype->Next)
+#define STEFUNTYPE_TYPE( n) ((n)->attribs.N_stefuntype->Type)
+extern node *TBmakeStefuntype (basictype Type, node * Next);
 
 /*****************************************************************************
  * macros and functions for N_error

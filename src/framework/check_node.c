@@ -262,7 +262,8 @@ CHKMfor (node * arg_node, info * arg_info)
 {
   DBUG_ENTER ("CHKMfor");
   NODE_ERROR (arg_node) = CHKMTRAV (NODE_ERROR (arg_node), arg_info);
-  FOR_ASSIGN (arg_node) = CHKMTRAV (FOR_ASSIGN (arg_node), arg_info);
+  FOR_ID (arg_node) = CHKMTRAV (FOR_ID (arg_node), arg_info);
+  FOR_EXPRSTART (arg_node) = CHKMTRAV (FOR_EXPRSTART (arg_node), arg_info);
   FOR_EXPRSTOP (arg_node) = CHKMTRAV (FOR_EXPRSTOP (arg_node), arg_info);
   FOR_EXPRINCR (arg_node) = CHKMTRAV (FOR_EXPRINCR (arg_node), arg_info);
   FOR_BLOCK (arg_node) = CHKMTRAV (FOR_BLOCK (arg_node), arg_info);
@@ -286,8 +287,7 @@ CHKMfunbody (node * arg_node, info * arg_info)
 {
   DBUG_ENTER ("CHKMfunbody");
   NODE_ERROR (arg_node) = CHKMTRAV (NODE_ERROR (arg_node), arg_info);
-  FUNBODY_VARDECS (arg_node) =
-    CHKMTRAV (FUNBODY_VARDECS (arg_node), arg_info);
+  FUNBODY_VARDEC (arg_node) = CHKMTRAV (FUNBODY_VARDEC (arg_node), arg_info);
   FUNBODY_LOCALFUNDEFS (arg_node) =
     CHKMTRAV (FUNBODY_LOCALFUNDEFS (arg_node), arg_info);
   FUNBODY_STATEMENTS (arg_node) =
@@ -319,70 +319,26 @@ CHKMfuncall (node * arg_node, info * arg_info)
 
 /** <!--******************************************************************-->
  *
- * @fn CHKMfundec
+ * @fn CHKMfundefdec
  *
  * @brief Touched the node and its sons/attributes
  *
- * @param arg_node FunDec node to process
+ * @param arg_node FunDefDec node to process
  * @param arg_info pointer to info structure
  *
  * @return processed node
  *
  ***************************************************************************/
 node *
-CHKMfundec (node * arg_node, info * arg_info)
+CHKMfundefdec (node * arg_node, info * arg_info)
 {
-  DBUG_ENTER ("CHKMfundec");
+  DBUG_ENTER ("CHKMfundefdec");
   NODE_ERROR (arg_node) = CHKMTRAV (NODE_ERROR (arg_node), arg_info);
-  FUNDEC_FUNHEADER (arg_node) =
-    CHKMTRAV (FUNDEC_FUNHEADER (arg_node), arg_info);
-  DBUG_RETURN (arg_node);
-}
-
-/** <!--******************************************************************-->
- *
- * @fn CHKMfundef
- *
- * @brief Touched the node and its sons/attributes
- *
- * @param arg_node FunDef node to process
- * @param arg_info pointer to info structure
- *
- * @return processed node
- *
- ***************************************************************************/
-node *
-CHKMfundef (node * arg_node, info * arg_info)
-{
-  DBUG_ENTER ("CHKMfundef");
-  NODE_ERROR (arg_node) = CHKMTRAV (NODE_ERROR (arg_node), arg_info);
-  FUNDEF_HEADER (arg_node) = CHKMTRAV (FUNDEF_HEADER (arg_node), arg_info);
-  FUNDEF_BODY (arg_node) = CHKMTRAV (FUNDEF_BODY (arg_node), arg_info);
-  DBUG_RETURN (arg_node);
-}
-
-/** <!--******************************************************************-->
- *
- * @fn CHKMfunheader
- *
- * @brief Touched the node and its sons/attributes
- *
- * @param arg_node FunHeader node to process
- * @param arg_info pointer to info structure
- *
- * @return processed node
- *
- ***************************************************************************/
-node *
-CHKMfunheader (node * arg_node, info * arg_info)
-{
-  DBUG_ENTER ("CHKMfunheader");
-  NODE_ERROR (arg_node) = CHKMTRAV (NODE_ERROR (arg_node), arg_info);
-  FUNHEADER_RETTYPE (arg_node) =
-    CHKMattribRetType (FUNHEADER_RETTYPE (arg_node), arg_info);
-  FUNHEADER_PARAMS (arg_node) =
-    CHKMTRAV (FUNHEADER_PARAMS (arg_node), arg_info);
-  FUNHEADER_ID (arg_node) = CHKMTRAV (FUNHEADER_ID (arg_node), arg_info);
+  FUNDEFDEC_ID (arg_node) =
+    CHKMattribString (FUNDEFDEC_ID (arg_node), arg_info);
+  FUNDEFDEC_PARAM (arg_node) =
+    CHKMTRAV (FUNDEFDEC_PARAM (arg_node), arg_info);
+  FUNDEFDEC_BODY (arg_node) = CHKMTRAV (FUNDEFDEC_BODY (arg_node), arg_info);
   DBUG_RETURN (arg_node);
 }
 
@@ -403,7 +359,8 @@ CHKMglobaldec (node * arg_node, info * arg_info)
 {
   DBUG_ENTER ("CHKMglobaldec");
   NODE_ERROR (arg_node) = CHKMTRAV (NODE_ERROR (arg_node), arg_info);
-  GLOBALDEC_ID (arg_node) = CHKMTRAV (GLOBALDEC_ID (arg_node), arg_info);
+  GLOBALDEC_ID (arg_node) =
+    CHKMattribString (GLOBALDEC_ID (arg_node), arg_info);
   DBUG_RETURN (arg_node);
 }
 
@@ -424,7 +381,8 @@ CHKMglobaldef (node * arg_node, info * arg_info)
 {
   DBUG_ENTER ("CHKMglobaldef");
   NODE_ERROR (arg_node) = CHKMTRAV (NODE_ERROR (arg_node), arg_info);
-  GLOBALDEF_ID (arg_node) = CHKMTRAV (GLOBALDEF_ID (arg_node), arg_info);
+  GLOBALDEF_ID (arg_node) =
+    CHKMattribString (GLOBALDEF_ID (arg_node), arg_info);
   GLOBALDEF_EXPR (arg_node) = CHKMTRAV (GLOBALDEF_EXPR (arg_node), arg_info);
   DBUG_RETURN (arg_node);
 }
@@ -475,30 +433,6 @@ CHKMif (node * arg_node, info * arg_info)
 
 /** <!--******************************************************************-->
  *
- * @fn CHKMlocalfundef
- *
- * @brief Touched the node and its sons/attributes
- *
- * @param arg_node LocalFunDef node to process
- * @param arg_info pointer to info structure
- *
- * @return processed node
- *
- ***************************************************************************/
-node *
-CHKMlocalfundef (node * arg_node, info * arg_info)
-{
-  DBUG_ENTER ("CHKMlocalfundef");
-  NODE_ERROR (arg_node) = CHKMTRAV (NODE_ERROR (arg_node), arg_info);
-  LOCALFUNDEF_HEADER (arg_node) =
-    CHKMTRAV (LOCALFUNDEF_HEADER (arg_node), arg_info);
-  LOCALFUNDEF_BODY (arg_node) =
-    CHKMTRAV (LOCALFUNDEF_BODY (arg_node), arg_info);
-  DBUG_RETURN (arg_node);
-}
-
-/** <!--******************************************************************-->
- *
  * @fn CHKMlocalfundefs
  *
  * @brief Touched the node and its sons/attributes
@@ -538,7 +472,6 @@ CHKMmonop (node * arg_node, info * arg_info)
 {
   DBUG_ENTER ("CHKMmonop");
   NODE_ERROR (arg_node) = CHKMTRAV (NODE_ERROR (arg_node), arg_info);
-  MONOP_OP (arg_node) = CHKMattribMonOp (MONOP_OP (arg_node), arg_info);
   MONOP_EXPR (arg_node) = CHKMTRAV (MONOP_EXPR (arg_node), arg_info);
   DBUG_RETURN (arg_node);
 }
@@ -580,29 +513,8 @@ CHKMparam (node * arg_node, info * arg_info)
 {
   DBUG_ENTER ("CHKMparam");
   NODE_ERROR (arg_node) = CHKMTRAV (NODE_ERROR (arg_node), arg_info);
-  PARAM_ID (arg_node) = CHKMTRAV (PARAM_ID (arg_node), arg_info);
-  DBUG_RETURN (arg_node);
-}
-
-/** <!--******************************************************************-->
- *
- * @fn CHKMparams
- *
- * @brief Touched the node and its sons/attributes
- *
- * @param arg_node Params node to process
- * @param arg_info pointer to info structure
- *
- * @return processed node
- *
- ***************************************************************************/
-node *
-CHKMparams (node * arg_node, info * arg_info)
-{
-  DBUG_ENTER ("CHKMparams");
-  NODE_ERROR (arg_node) = CHKMTRAV (NODE_ERROR (arg_node), arg_info);
-  PARAMS_NEXT (arg_node) = CHKMTRAV (PARAMS_NEXT (arg_node), arg_info);
-  PARAMS_FIRST (arg_node) = CHKMTRAV (PARAMS_FIRST (arg_node), arg_info);
+  PARAM_NEXT (arg_node) = CHKMTRAV (PARAM_NEXT (arg_node), arg_info);
+  PARAM_ID (arg_node) = CHKMattribString (PARAM_ID (arg_node), arg_info);
   DBUG_RETURN (arg_node);
 }
 
@@ -629,6 +541,28 @@ CHKMreturn (node * arg_node, info * arg_info)
 
 /** <!--******************************************************************-->
  *
+ * @fn CHKMstefuntype
+ *
+ * @brief Touched the node and its sons/attributes
+ *
+ * @param arg_node STEFunType node to process
+ * @param arg_info pointer to info structure
+ *
+ * @return processed node
+ *
+ ***************************************************************************/
+node *
+CHKMstefuntype (node * arg_node, info * arg_info)
+{
+  DBUG_ENTER ("CHKMstefuntype");
+  NODE_ERROR (arg_node) = CHKMTRAV (NODE_ERROR (arg_node), arg_info);
+  STEFUNTYPE_NEXT (arg_node) =
+    CHKMTRAV (STEFUNTYPE_NEXT (arg_node), arg_info);
+  DBUG_RETURN (arg_node);
+}
+
+/** <!--******************************************************************-->
+ *
  * @fn CHKMstmts
  *
  * @brief Touched the node and its sons/attributes
@@ -645,7 +579,57 @@ CHKMstmts (node * arg_node, info * arg_info)
   DBUG_ENTER ("CHKMstmts");
   NODE_ERROR (arg_node) = CHKMTRAV (NODE_ERROR (arg_node), arg_info);
   STMTS_NEXT (arg_node) = CHKMTRAV (STMTS_NEXT (arg_node), arg_info);
-  STMTS_STMT (arg_node) = CHKMTRAV (STMTS_STMT (arg_node), arg_info);
+  STMTS_FIRST (arg_node) = CHKMTRAV (STMTS_FIRST (arg_node), arg_info);
+  DBUG_RETURN (arg_node);
+}
+
+/** <!--******************************************************************-->
+ *
+ * @fn CHKMsymboltable
+ *
+ * @brief Touched the node and its sons/attributes
+ *
+ * @param arg_node SymbolTable node to process
+ * @param arg_info pointer to info structure
+ *
+ * @return processed node
+ *
+ ***************************************************************************/
+node *
+CHKMsymboltable (node * arg_node, info * arg_info)
+{
+  DBUG_ENTER ("CHKMsymboltable");
+  NODE_ERROR (arg_node) = CHKMTRAV (NODE_ERROR (arg_node), arg_info);
+  SYMBOLTABLE_PARENT (arg_node) =
+    CHKMattribLink (SYMBOLTABLE_PARENT (arg_node), arg_info);
+  SYMBOLTABLE_HEAD (arg_node) =
+    CHKMTRAV (SYMBOLTABLE_HEAD (arg_node), arg_info);
+  DBUG_RETURN (arg_node);
+}
+
+/** <!--******************************************************************-->
+ *
+ * @fn CHKMsymboltableentry
+ *
+ * @brief Touched the node and its sons/attributes
+ *
+ * @param arg_node SymbolTableEntry node to process
+ * @param arg_info pointer to info structure
+ *
+ * @return processed node
+ *
+ ***************************************************************************/
+node *
+CHKMsymboltableentry (node * arg_node, info * arg_info)
+{
+  DBUG_ENTER ("CHKMsymboltableentry");
+  NODE_ERROR (arg_node) = CHKMTRAV (NODE_ERROR (arg_node), arg_info);
+  SYMBOLTABLEENTRY_NEXT (arg_node) =
+    CHKMTRAV (SYMBOLTABLEENTRY_NEXT (arg_node), arg_info);
+  SYMBOLTABLEENTRY_NAME (arg_node) =
+    CHKMattribString (SYMBOLTABLEENTRY_NAME (arg_node), arg_info);
+  SYMBOLTABLEENTRY_FUNTYPES (arg_node) =
+    CHKMTRAV (SYMBOLTABLEENTRY_FUNTYPES (arg_node), arg_info);
   DBUG_RETURN (arg_node);
 }
 
@@ -666,30 +650,9 @@ CHKMvardec (node * arg_node, info * arg_info)
 {
   DBUG_ENTER ("CHKMvardec");
   NODE_ERROR (arg_node) = CHKMTRAV (NODE_ERROR (arg_node), arg_info);
-  VARDEC_ID (arg_node) = CHKMTRAV (VARDEC_ID (arg_node), arg_info);
+  VARDEC_NEXT (arg_node) = CHKMTRAV (VARDEC_NEXT (arg_node), arg_info);
+  VARDEC_ID (arg_node) = CHKMattribString (VARDEC_ID (arg_node), arg_info);
   VARDEC_EXPR (arg_node) = CHKMTRAV (VARDEC_EXPR (arg_node), arg_info);
-  DBUG_RETURN (arg_node);
-}
-
-/** <!--******************************************************************-->
- *
- * @fn CHKMvardecs
- *
- * @brief Touched the node and its sons/attributes
- *
- * @param arg_node VarDecs node to process
- * @param arg_info pointer to info structure
- *
- * @return processed node
- *
- ***************************************************************************/
-node *
-CHKMvardecs (node * arg_node, info * arg_info)
-{
-  DBUG_ENTER ("CHKMvardecs");
-  NODE_ERROR (arg_node) = CHKMTRAV (NODE_ERROR (arg_node), arg_info);
-  VARDECS_NEXT (arg_node) = CHKMTRAV (VARDECS_NEXT (arg_node), arg_info);
-  VARDECS_FIRST (arg_node) = CHKMTRAV (VARDECS_FIRST (arg_node), arg_info);
   DBUG_RETURN (arg_node);
 }
 

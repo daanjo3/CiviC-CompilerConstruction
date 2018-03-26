@@ -29,23 +29,21 @@ extern node *FREEfloat (node * arg_node, info * arg_info);
 extern node *FREEfor (node * arg_node, info * arg_info);
 extern node *FREEfunbody (node * arg_node, info * arg_info);
 extern node *FREEfuncall (node * arg_node, info * arg_info);
-extern node *FREEfundec (node * arg_node, info * arg_info);
-extern node *FREEfundef (node * arg_node, info * arg_info);
-extern node *FREEfunheader (node * arg_node, info * arg_info);
+extern node *FREEfundefdec (node * arg_node, info * arg_info);
 extern node *FREEglobaldec (node * arg_node, info * arg_info);
 extern node *FREEglobaldef (node * arg_node, info * arg_info);
 extern node *FREEid (node * arg_node, info * arg_info);
 extern node *FREEif (node * arg_node, info * arg_info);
-extern node *FREElocalfundef (node * arg_node, info * arg_info);
 extern node *FREElocalfundefs (node * arg_node, info * arg_info);
 extern node *FREEmonop (node * arg_node, info * arg_info);
 extern node *FREEnum (node * arg_node, info * arg_info);
 extern node *FREEparam (node * arg_node, info * arg_info);
-extern node *FREEparams (node * arg_node, info * arg_info);
 extern node *FREEreturn (node * arg_node, info * arg_info);
+extern node *FREEstefuntype (node * arg_node, info * arg_info);
 extern node *FREEstmts (node * arg_node, info * arg_info);
+extern node *FREEsymboltable (node * arg_node, info * arg_info);
+extern node *FREEsymboltableentry (node * arg_node, info * arg_info);
 extern node *FREEvardec (node * arg_node, info * arg_info);
-extern node *FREEvardecs (node * arg_node, info * arg_info);
 extern node *FREEwhile (node * arg_node, info * arg_info);
 
 #endif /* _SAC_FREE_NODE_H_ */

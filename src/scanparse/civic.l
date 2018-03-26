@@ -54,7 +54,7 @@
 "&&"                       { FILTER( AND);    }
 "||"                       { FILTER( OR);    }
 
-"!"                         { FILTER(NEG); }
+"!"                        { FILTER( NOT); }
 "="                        { FILTER( LET);    }
 
 "bool"                      { FILTER(TYPE_BOOL);}
@@ -79,12 +79,12 @@
 
 \/\*.*?\*\/               { FILTER (COMMENT_MULT); }
 
-[-+]?[0-9]*\.?[0-9]+       { yylval.cflt = atof(yytext);
-                             FILTER(FLOAT);
-                           }
-
 [0-9]+                     { yylval.cint=atoi(yytext);
                              FILTER( NUM);
+                           }
+
+[0-9]*\.?[0-9]+             { yylval.cflt = atof(yytext);
+                             FILTER(FLOAT);
                            }
 
 [A-Za-z][A-Za-z0-9_]*      { yylval.id = STRcpy(yytext);

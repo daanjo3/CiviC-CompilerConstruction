@@ -29,23 +29,21 @@ extern node *EVALfloat (node * arg_node, info * arg_info);
 extern node *EVALfor (node * arg_node, info * arg_info);
 extern node *EVALfunbody (node * arg_node, info * arg_info);
 extern node *EVALfuncall (node * arg_node, info * arg_info);
-extern node *EVALfundec (node * arg_node, info * arg_info);
-extern node *EVALfundef (node * arg_node, info * arg_info);
-extern node *EVALfunheader (node * arg_node, info * arg_info);
+extern node *EVALfundefdec (node * arg_node, info * arg_info);
 extern node *EVALglobaldec (node * arg_node, info * arg_info);
 extern node *EVALglobaldef (node * arg_node, info * arg_info);
 extern node *EVALid (node * arg_node, info * arg_info);
 extern node *EVALif (node * arg_node, info * arg_info);
-extern node *EVALlocalfundef (node * arg_node, info * arg_info);
 extern node *EVALlocalfundefs (node * arg_node, info * arg_info);
 extern node *EVALmonop (node * arg_node, info * arg_info);
 extern node *EVALnum (node * arg_node, info * arg_info);
 extern node *EVALparam (node * arg_node, info * arg_info);
-extern node *EVALparams (node * arg_node, info * arg_info);
 extern node *EVALreturn (node * arg_node, info * arg_info);
+extern node *EVALstefuntype (node * arg_node, info * arg_info);
 extern node *EVALstmts (node * arg_node, info * arg_info);
+extern node *EVALsymboltable (node * arg_node, info * arg_info);
+extern node *EVALsymboltableentry (node * arg_node, info * arg_info);
 extern node *EVALvardec (node * arg_node, info * arg_info);
-extern node *EVALvardecs (node * arg_node, info * arg_info);
 extern node *EVALwhile (node * arg_node, info * arg_info);
 
 #endif /* _SAC_EVAL_H_ */

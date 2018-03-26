@@ -45,55 +45,89 @@ extern int yydebug;
 # define YYTOKENTYPE
   enum yytokentype
   {
-    BRACKET_L = 258,
-    BRACKET_R = 259,
-    COMMA = 260,
-    SEMICOLON = 261,
-    MINUS = 262,
-    PLUS = 263,
-    STAR = 264,
-    SLASH = 265,
-    PERCENT = 266,
-    LE = 267,
-    LT = 268,
-    GE = 269,
-    GT = 270,
-    EQ = 271,
-    NE = 272,
-    OR = 273,
-    AND = 274,
-    TRUEVAL = 275,
-    FALSEVAL = 276,
-    LET = 277,
-    NUM = 278,
-    FLOAT = 279,
-    ID = 280
+    TYPE_BOOL = 258,
+    TYPE_INT = 259,
+    TYPE_VOID = 260,
+    TYPE_FLOAT = 261,
+    BRACKET_L = 262,
+    BRACKET_R = 263,
+    BRACE_L = 264,
+    BRACE_R = 265,
+    COMMA = 266,
+    SEMICOLON = 267,
+    MINUS = 268,
+    PLUS = 269,
+    STAR = 270,
+    SLASH = 271,
+    PERCENT = 272,
+    LE = 273,
+    LT = 274,
+    GE = 275,
+    GT = 276,
+    EQ = 277,
+    NE = 278,
+    AND = 279,
+    OR = 280,
+    NOT = 281,
+    LET = 282,
+    DO = 283,
+    WHILE = 284,
+    FOR = 285,
+    IF = 286,
+    ELSE = 287,
+    RETURN = 288,
+    EXTERN = 289,
+    EXPORT = 290,
+    TRUEVAL = 291,
+    FALSEVAL = 292,
+    COMMENT_SINGLE = 293,
+    COMMENT_MULT = 294,
+    NUM = 295,
+    FLOAT = 296,
+    ID = 297
   };
 #endif
 /* Tokens.  */
-#define BRACKET_L 258
-#define BRACKET_R 259
-#define COMMA 260
-#define SEMICOLON 261
-#define MINUS 262
-#define PLUS 263
-#define STAR 264
-#define SLASH 265
-#define PERCENT 266
-#define LE 267
-#define LT 268
-#define GE 269
-#define GT 270
-#define EQ 271
-#define NE 272
-#define OR 273
-#define AND 274
-#define TRUEVAL 275
-#define FALSEVAL 276
-#define LET 277
-#define NUM 278
-#define FLOAT 279
-#define ID 280
+#define TYPE_BOOL 258
+#define TYPE_INT 259
+#define TYPE_VOID 260
+#define TYPE_FLOAT 261
+#define BRACKET_L 262
+#define BRACKET_R 263
+#define BRACE_L 264
+#define BRACE_R 265
+#define COMMA 266
+#define SEMICOLON 267
+#define MINUS 268
+#define PLUS 269
+#define STAR 270
+#define SLASH 271
+#define PERCENT 272
+#define LE 273
+#define LT 274
+#define GE 275
+#define GT 276
+#define EQ 277
+#define NE 278
+#define AND 279
+#define OR 280
+#define NOT 281
+#define LET 282
+#define DO 283
+#define WHILE 284
+#define FOR 285
+#define IF 286
+#define ELSE 287
+#define RETURN 288
+#define EXTERN 289
+#define EXPORT 290
+#define TRUEVAL 291
+#define FALSEVAL 292
+#define COMMENT_SINGLE 293
+#define COMMENT_MULT 294
+#define NUM 295
+#define FLOAT 296
+#define ID 297
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
@@ -107,9 +141,11 @@ union YYSTYPE
  int                 cint;
  float               cflt;
  binop               cbinop;
+ monop               monop;
  node               *node;
+ basictype          basictype;
 
-#line 113 "y.tab.h" /* yacc.c:1909  */
+#line 149 "y.tab.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

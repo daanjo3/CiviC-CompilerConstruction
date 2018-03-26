@@ -268,60 +268,20 @@ EVALfuncall (node * arg_node, info * arg_info)
 
 /** <!--******************************************************************-->
  *
- * @fn EVALfundec
+ * @fn EVALfundefdec
  *
  * @brief Frees the node and its sons/attributes
  *
- * @param arg_node FunDec node to process
+ * @param arg_node FunDefDec node to process
  * @param arg_info pointer to info structure
  *
  * @return processed node
  *
  ***************************************************************************/
 node *
-EVALfundec (node * arg_node, info * arg_info)
+EVALfundefdec (node * arg_node, info * arg_info)
 {
-  DBUG_ENTER ("EVALfundec");
-  arg_node = TRAVcont (arg_node, arg_info);
-  DBUG_RETURN (arg_node);
-}
-
-/** <!--******************************************************************-->
- *
- * @fn EVALfundef
- *
- * @brief Frees the node and its sons/attributes
- *
- * @param arg_node FunDef node to process
- * @param arg_info pointer to info structure
- *
- * @return processed node
- *
- ***************************************************************************/
-node *
-EVALfundef (node * arg_node, info * arg_info)
-{
-  DBUG_ENTER ("EVALfundef");
-  arg_node = TRAVcont (arg_node, arg_info);
-  DBUG_RETURN (arg_node);
-}
-
-/** <!--******************************************************************-->
- *
- * @fn EVALfunheader
- *
- * @brief Frees the node and its sons/attributes
- *
- * @param arg_node FunHeader node to process
- * @param arg_info pointer to info structure
- *
- * @return processed node
- *
- ***************************************************************************/
-node *
-EVALfunheader (node * arg_node, info * arg_info)
-{
-  DBUG_ENTER ("EVALfunheader");
+  DBUG_ENTER ("EVALfundefdec");
   arg_node = TRAVcont (arg_node, arg_info);
   DBUG_RETURN (arg_node);
 }
@@ -408,26 +368,6 @@ EVALif (node * arg_node, info * arg_info)
 
 /** <!--******************************************************************-->
  *
- * @fn EVALlocalfundef
- *
- * @brief Frees the node and its sons/attributes
- *
- * @param arg_node LocalFunDef node to process
- * @param arg_info pointer to info structure
- *
- * @return processed node
- *
- ***************************************************************************/
-node *
-EVALlocalfundef (node * arg_node, info * arg_info)
-{
-  DBUG_ENTER ("EVALlocalfundef");
-  arg_node = TRAVcont (arg_node, arg_info);
-  DBUG_RETURN (arg_node);
-}
-
-/** <!--******************************************************************-->
- *
  * @fn EVALlocalfundefs
  *
  * @brief Frees the node and its sons/attributes
@@ -508,26 +448,6 @@ EVALparam (node * arg_node, info * arg_info)
 
 /** <!--******************************************************************-->
  *
- * @fn EVALparams
- *
- * @brief Frees the node and its sons/attributes
- *
- * @param arg_node Params node to process
- * @param arg_info pointer to info structure
- *
- * @return processed node
- *
- ***************************************************************************/
-node *
-EVALparams (node * arg_node, info * arg_info)
-{
-  DBUG_ENTER ("EVALparams");
-  arg_node = TRAVcont (arg_node, arg_info);
-  DBUG_RETURN (arg_node);
-}
-
-/** <!--******************************************************************-->
- *
  * @fn EVALreturn
  *
  * @brief Frees the node and its sons/attributes
@@ -542,6 +462,26 @@ node *
 EVALreturn (node * arg_node, info * arg_info)
 {
   DBUG_ENTER ("EVALreturn");
+  arg_node = TRAVcont (arg_node, arg_info);
+  DBUG_RETURN (arg_node);
+}
+
+/** <!--******************************************************************-->
+ *
+ * @fn EVALstefuntype
+ *
+ * @brief Frees the node and its sons/attributes
+ *
+ * @param arg_node STEFunType node to process
+ * @param arg_info pointer to info structure
+ *
+ * @return processed node
+ *
+ ***************************************************************************/
+node *
+EVALstefuntype (node * arg_node, info * arg_info)
+{
+  DBUG_ENTER ("EVALstefuntype");
   arg_node = TRAVcont (arg_node, arg_info);
   DBUG_RETURN (arg_node);
 }
@@ -568,6 +508,46 @@ EVALstmts (node * arg_node, info * arg_info)
 
 /** <!--******************************************************************-->
  *
+ * @fn EVALsymboltable
+ *
+ * @brief Frees the node and its sons/attributes
+ *
+ * @param arg_node SymbolTable node to process
+ * @param arg_info pointer to info structure
+ *
+ * @return processed node
+ *
+ ***************************************************************************/
+node *
+EVALsymboltable (node * arg_node, info * arg_info)
+{
+  DBUG_ENTER ("EVALsymboltable");
+  arg_node = TRAVcont (arg_node, arg_info);
+  DBUG_RETURN (arg_node);
+}
+
+/** <!--******************************************************************-->
+ *
+ * @fn EVALsymboltableentry
+ *
+ * @brief Frees the node and its sons/attributes
+ *
+ * @param arg_node SymbolTableEntry node to process
+ * @param arg_info pointer to info structure
+ *
+ * @return processed node
+ *
+ ***************************************************************************/
+node *
+EVALsymboltableentry (node * arg_node, info * arg_info)
+{
+  DBUG_ENTER ("EVALsymboltableentry");
+  arg_node = TRAVcont (arg_node, arg_info);
+  DBUG_RETURN (arg_node);
+}
+
+/** <!--******************************************************************-->
+ *
  * @fn EVALvardec
  *
  * @brief Frees the node and its sons/attributes
@@ -582,26 +562,6 @@ node *
 EVALvardec (node * arg_node, info * arg_info)
 {
   DBUG_ENTER ("EVALvardec");
-  arg_node = TRAVcont (arg_node, arg_info);
-  DBUG_RETURN (arg_node);
-}
-
-/** <!--******************************************************************-->
- *
- * @fn EVALvardecs
- *
- * @brief Frees the node and its sons/attributes
- *
- * @param arg_node VarDecs node to process
- * @param arg_info pointer to info structure
- *
- * @return processed node
- *
- ***************************************************************************/
-node *
-EVALvardecs (node * arg_node, info * arg_info)
-{
-  DBUG_ENTER ("EVALvardecs");
   arg_node = TRAVcont (arg_node, arg_info);
   DBUG_RETURN (arg_node);
 }
