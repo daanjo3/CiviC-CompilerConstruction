@@ -138,26 +138,17 @@ CHKassign (node * arg_node, info * arg_info)
     }
 
 /*
- * Son check: ASSIGN_VAR 
+ * Attribute check: ASSIGN_ID
  */
   if ((FALSE) || (TRUE))
     {
-      CHKexistSon (ASSIGN_VAR (arg_node), arg_node,
-		   "mandatory son ASSIGN_VAR is NULL");
-      if (ASSIGN_VAR (arg_node) != NULL)
-	{
-	  if (!((FALSE) || (NODE_TYPE (ASSIGN_VAR (arg_node)) == N_var)))
-	    {
-	      CHKcorrectTypeInsertError (arg_node,
-					 "ASSIGN_VAR hasnt the right type."
-					 " It should be: " "N_var");
-	    }
-	}
+      CHKexistAttribute (ASSIGN_ID (arg_node), arg_node,
+			 "mandatory attribute ASSIGN_ID is NULL");
     }
   else
     {
-      CHKnotExist (ASSIGN_VAR (arg_node), arg_node,
-		   "attribute ASSIGN_VAR must be NULL");
+      CHKnotExist (ASSIGN_ID (arg_node), arg_node,
+		   "attribute ASSIGN_ID must be NULL");
     }
 
 /*
@@ -166,14 +157,6 @@ CHKassign (node * arg_node, info * arg_info)
   if (ASSIGN_EXPR (arg_node) != NULL)
     {
       ASSIGN_EXPR (arg_node) = TRAVdo (ASSIGN_EXPR (arg_node), arg_info);
-    }
-
-/*
- * trav functions: to get all sons
- */
-  if (ASSIGN_VAR (arg_node) != NULL)
-    {
-      ASSIGN_VAR (arg_node) = TRAVdo (ASSIGN_VAR (arg_node), arg_info);
     }
   DBUG_RETURN (arg_node);
 }
@@ -767,26 +750,17 @@ CHKfor (node * arg_node, info * arg_info)
     }
 
 /*
- * Son check: FOR_VAR 
+ * Attribute check: FOR_ID
  */
   if ((FALSE) || (TRUE))
     {
-      CHKexistSon (FOR_VAR (arg_node), arg_node,
-		   "mandatory son FOR_VAR is NULL");
-      if (FOR_VAR (arg_node) != NULL)
-	{
-	  if (!((FALSE) || (NODE_TYPE (FOR_VAR (arg_node)) == N_var)))
-	    {
-	      CHKcorrectTypeInsertError (arg_node,
-					 "FOR_VAR hasnt the right type."
-					 " It should be: " "N_var");
-	    }
-	}
+      CHKexistAttribute (FOR_ID (arg_node), arg_node,
+			 "mandatory attribute FOR_ID is NULL");
     }
   else
     {
-      CHKnotExist (FOR_VAR (arg_node), arg_node,
-		   "attribute FOR_VAR must be NULL");
+      CHKnotExist (FOR_ID (arg_node), arg_node,
+		   "attribute FOR_ID must be NULL");
     }
 
 /*
@@ -819,14 +793,6 @@ CHKfor (node * arg_node, info * arg_info)
   if (FOR_EXPRSTOP (arg_node) != NULL)
     {
       FOR_EXPRSTOP (arg_node) = TRAVdo (FOR_EXPRSTOP (arg_node), arg_info);
-    }
-
-/*
- * trav functions: to get all sons
- */
-  if (FOR_VAR (arg_node) != NULL)
-    {
-      FOR_VAR (arg_node) = TRAVdo (FOR_VAR (arg_node), arg_info);
     }
   DBUG_RETURN (arg_node);
 }
@@ -987,26 +953,17 @@ CHKfuncall (node * arg_node, info * arg_info)
     }
 
 /*
- * Son check: FUNCALL_VAR 
+ * Attribute check: FUNCALL_ID
  */
   if ((FALSE) || (TRUE))
     {
-      CHKexistSon (FUNCALL_VAR (arg_node), arg_node,
-		   "mandatory son FUNCALL_VAR is NULL");
-      if (FUNCALL_VAR (arg_node) != NULL)
-	{
-	  if (!((FALSE) || (NODE_TYPE (FUNCALL_VAR (arg_node)) == N_var)))
-	    {
-	      CHKcorrectTypeInsertError (arg_node,
-					 "FUNCALL_VAR hasnt the right type."
-					 " It should be: " "N_var");
-	    }
-	}
+      CHKexistAttribute (FUNCALL_ID (arg_node), arg_node,
+			 "mandatory attribute FUNCALL_ID is NULL");
     }
   else
     {
-      CHKnotExist (FUNCALL_VAR (arg_node), arg_node,
-		   "attribute FUNCALL_VAR must be NULL");
+      CHKnotExist (FUNCALL_ID (arg_node), arg_node,
+		   "attribute FUNCALL_ID must be NULL");
     }
 
 /*
@@ -1015,14 +972,6 @@ CHKfuncall (node * arg_node, info * arg_info)
   if (FUNCALL_EXPRS (arg_node) != NULL)
     {
       FUNCALL_EXPRS (arg_node) = TRAVdo (FUNCALL_EXPRS (arg_node), arg_info);
-    }
-
-/*
- * trav functions: to get all sons
- */
-  if (FUNCALL_VAR (arg_node) != NULL)
-    {
-      FUNCALL_VAR (arg_node) = TRAVdo (FUNCALL_VAR (arg_node), arg_info);
     }
   DBUG_RETURN (arg_node);
 }
@@ -2164,11 +2113,14 @@ CHKwhile (node * arg_node, info * arg_info)
 }
 
 typedef enum
-{ CHK_binop_op,
+{ CHK_assign_id,
+  CHK_binop_op,
   CHK_bool_value,
   CHK_cast_casttype,
   CHK_error_message,
   CHK_float_value,
+  CHK_for_id,
+  CHK_funcall_id,
   CHK_fundefdec_export,
   CHK_globaldec_type,
   CHK_globaldef_type,

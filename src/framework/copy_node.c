@@ -51,8 +51,9 @@ COPYassign (node * arg_node, info * arg_info)
   node *result = TBmakeAssign (NULL, NULL);
   DBUG_ENTER ("COPYassign");
   LUTinsertIntoLutP (INFO_LUT (arg_info), arg_node, result);
+  /* Copy attributes */
+  ASSIGN_ID (result) = STRcpy (ASSIGN_ID (arg_node));
   /* Copy sons */
-  ASSIGN_VAR (result) = COPYTRAV (ASSIGN_VAR (arg_node), arg_info);
   ASSIGN_EXPR (result) = COPYTRAV (ASSIGN_EXPR (arg_node), arg_info);
   /* Return value */
   DBUG_RETURN (result);
@@ -281,8 +282,9 @@ COPYfor (node * arg_node, info * arg_info)
   node *result = TBmakeFor (NULL, NULL, NULL, NULL, NULL);
   DBUG_ENTER ("COPYfor");
   LUTinsertIntoLutP (INFO_LUT (arg_info), arg_node, result);
+  /* Copy attributes */
+  FOR_ID (result) = STRcpy (FOR_ID (arg_node));
   /* Copy sons */
-  FOR_VAR (result) = COPYTRAV (FOR_VAR (arg_node), arg_info);
   FOR_EXPRSTART (result) = COPYTRAV (FOR_EXPRSTART (arg_node), arg_info);
   FOR_EXPRSTOP (result) = COPYTRAV (FOR_EXPRSTOP (arg_node), arg_info);
   FOR_EXPRINCR (result) = COPYTRAV (FOR_EXPRINCR (arg_node), arg_info);
@@ -337,8 +339,9 @@ COPYfuncall (node * arg_node, info * arg_info)
   node *result = TBmakeFuncall (NULL, NULL);
   DBUG_ENTER ("COPYfuncall");
   LUTinsertIntoLutP (INFO_LUT (arg_info), arg_node, result);
+  /* Copy attributes */
+  FUNCALL_ID (result) = STRcpy (FUNCALL_ID (arg_node));
   /* Copy sons */
-  FUNCALL_VAR (result) = COPYTRAV (FUNCALL_VAR (arg_node), arg_info);
   FUNCALL_EXPRS (result) = COPYTRAV (FUNCALL_EXPRS (arg_node), arg_info);
   /* Return value */
   DBUG_RETURN (result);

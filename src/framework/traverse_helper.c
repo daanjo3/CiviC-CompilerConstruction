@@ -80,11 +80,9 @@ TRAVsons (node * arg_node, info * arg_info)
       TRAV (STATEMENTS_NEXT (arg_node), arg_info);
       break;
     case N_assign:
-      TRAV (ASSIGN_VAR (arg_node), arg_info);
       TRAV (ASSIGN_EXPR (arg_node), arg_info);
       break;
     case N_funcall:
-      TRAV (FUNCALL_VAR (arg_node), arg_info);
       TRAV (FUNCALL_EXPRS (arg_node), arg_info);
       break;
     case N_if:
@@ -101,7 +99,6 @@ TRAVsons (node * arg_node, info * arg_info)
       TRAV (DOWHILE_BLOCK (arg_node), arg_info);
       break;
     case N_for:
-      TRAV (FOR_VAR (arg_node), arg_info);
       TRAV (FOR_EXPRSTART (arg_node), arg_info);
       TRAV (FOR_EXPRSTOP (arg_node), arg_info);
       TRAV (FOR_EXPRINCR (arg_node), arg_info);
@@ -190,10 +187,10 @@ TRAVnumSons (node * node)
       result = 2;
       break;
     case N_assign:
-      result = 2;
+      result = 1;
       break;
     case N_funcall:
-      result = 2;
+      result = 1;
       break;
     case N_if:
       result = 3;
@@ -205,7 +202,7 @@ TRAVnumSons (node * node)
       result = 2;
       break;
     case N_for:
-      result = 5;
+      result = 4;
       break;
     case N_return:
       result = 1;
@@ -403,9 +400,6 @@ TRAVgetSon (int no, node * parent)
       switch (no)
 	{
 	case 0:
-	  result = ASSIGN_VAR (parent);
-	  break;
-	case 1:
 	  result = ASSIGN_EXPR (parent);
 	  break;
 	default:
@@ -417,9 +411,6 @@ TRAVgetSon (int no, node * parent)
       switch (no)
 	{
 	case 0:
-	  result = FUNCALL_VAR (parent);
-	  break;
-	case 1:
 	  result = FUNCALL_EXPRS (parent);
 	  break;
 	default:
@@ -476,18 +467,15 @@ TRAVgetSon (int no, node * parent)
       switch (no)
 	{
 	case 0:
-	  result = FOR_VAR (parent);
-	  break;
-	case 1:
 	  result = FOR_EXPRSTART (parent);
 	  break;
-	case 2:
+	case 1:
 	  result = FOR_EXPRSTOP (parent);
 	  break;
-	case 3:
+	case 2:
 	  result = FOR_EXPRINCR (parent);
 	  break;
-	case 4:
+	case 3:
 	  result = FOR_BLOCK (parent);
 	  break;
 	default:

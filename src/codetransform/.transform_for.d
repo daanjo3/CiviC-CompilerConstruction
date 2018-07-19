@@ -31,4 +31,4 @@ src/codetransform/transform_for.o src/codetransform/.transform_for.d: $(PROJECT_
  /usr/include/x86_64-linux-gnu/sys/sysmacros.h \
  /usr/include/x86_64-linux-gnu/bits/pthreadtypes.h /usr/include/alloca.h \
  /usr/include/x86_64-linux-gnu/bits/stdlib-float.h src/framework/memory.h \
- src/framework/str.h
+ src/framework/str.h src/framework/copy.h src/print/print.h

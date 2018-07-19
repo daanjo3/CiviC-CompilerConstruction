@@ -502,7 +502,7 @@ TBmakeStatements (node * First, node * Next)
  *****************************************************************************/
 
 node *
-TBmakeAssign (node * Var, node * Expr)
+TBmakeAssign (char *Id, node * Expr)
 {
   node *this;
   DBUG_ENTER ("TBmakeAssign");
@@ -516,16 +516,11 @@ TBmakeAssign (node * Var, node * Expr)
   this->attribs.N_assign = MEMmalloc (sizeof (struct ATTRIBS_N_ASSIGN));
   DBUG_PRINT ("MAKE", ("setting node type"));
   NODE_TYPE (this) = N_assign;
-  DBUG_PRINT ("MAKE", ("assigning son Var initial value: %s ", Var));
-  ASSIGN_VAR (this) = Var;
   DBUG_PRINT ("MAKE", ("assigning son Expr initial value: %s ", Expr));
   ASSIGN_EXPR (this) = Expr;
+  ASSIGN_ID (this) = Id;
 #ifndef DBUG_OFF
   DBUG_PRINT ("MAKE", ("doing son target checks"));
-  if ((ASSIGN_VAR (this) != NULL) && (NODE_TYPE (ASSIGN_VAR (this)) != N_var))
-    {
-      CTIwarn ("Field Var of node N_Assign has non-allowed target node.");
-    }
   if ((ASSIGN_EXPR (this) != NULL)
       && (NODE_TYPE (ASSIGN_EXPR (this)) != N_binop)
       && (NODE_TYPE (ASSIGN_EXPR (this)) != N_monop)
@@ -547,7 +542,7 @@ TBmakeAssign (node * Var, node * Expr)
  *****************************************************************************/
 
 node *
-TBmakeFuncall (node * Var, node * Exprs)
+TBmakeFuncall (char *Id, node * Exprs)
 {
   node *this;
   DBUG_ENTER ("TBmakeFuncall");
@@ -561,17 +556,11 @@ TBmakeFuncall (node * Var, node * Exprs)
   this->attribs.N_funcall = MEMmalloc (sizeof (struct ATTRIBS_N_FUNCALL));
   DBUG_PRINT ("MAKE", ("setting node type"));
   NODE_TYPE (this) = N_funcall;
-  DBUG_PRINT ("MAKE", ("assigning son Var initial value: %s ", Var));
-  FUNCALL_VAR (this) = Var;
   DBUG_PRINT ("MAKE", ("assigning son Exprs initial value: %s ", Exprs));
   FUNCALL_EXPRS (this) = Exprs;
+  FUNCALL_ID (this) = Id;
 #ifndef DBUG_OFF
   DBUG_PRINT ("MAKE", ("doing son target checks"));
-  if ((FUNCALL_VAR (this) != NULL)
-      && (NODE_TYPE (FUNCALL_VAR (this)) != N_var))
-    {
-      CTIwarn ("Field Var of node N_FunCall has non-allowed target node.");
-    }
   if ((FUNCALL_EXPRS (this) != NULL)
       && (NODE_TYPE (FUNCALL_EXPRS (this)) != N_exprs))
     {
@@ -731,7 +720,7 @@ TBmakeDowhile (node * Expr, node * Block)
  *****************************************************************************/
 
 node *
-TBmakeFor (node * Var, node * ExprStart, node * ExprStop, node * ExprIncr,
+TBmakeFor (char *Id, node * ExprStart, node * ExprStop, node * ExprIncr,
 	   node * Block)
 {
   node *this;
@@ -746,8 +735,6 @@ TBmakeFor (node * Var, node * ExprStart, node * ExprStop, node * ExprIncr,
   this->attribs.N_for = MEMmalloc (sizeof (struct ATTRIBS_N_FOR));
   DBUG_PRINT ("MAKE", ("setting node type"));
   NODE_TYPE (this) = N_for;
-  DBUG_PRINT ("MAKE", ("assigning son Var initial value: %s ", Var));
-  FOR_VAR (this) = Var;
   DBUG_PRINT ("MAKE",
 	      ("assigning son ExprStart initial value: %s ", ExprStart));
   FOR_EXPRSTART (this) = ExprStart;
@@ -759,12 +746,9 @@ TBmakeFor (node * Var, node * ExprStart, node * ExprStop, node * ExprIncr,
   FOR_EXPRINCR (this) = ExprIncr;
   DBUG_PRINT ("MAKE", ("assigning son Block initial value: %s ", Block));
   FOR_BLOCK (this) = Block;
+  FOR_ID (this) = Id;
 #ifndef DBUG_OFF
   DBUG_PRINT ("MAKE", ("doing son target checks"));
-  if ((FOR_VAR (this) != NULL) && (NODE_TYPE (FOR_VAR (this)) != N_var))
-    {
-      CTIwarn ("Field Var of node N_For has non-allowed target node.");
-    }
   if ((FOR_EXPRSTART (this) != NULL)
       && (NODE_TYPE (FOR_EXPRSTART (this)) != N_binop)
       && (NODE_TYPE (FOR_EXPRSTART (this)) != N_monop)

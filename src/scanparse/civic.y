@@ -158,7 +158,7 @@ statements:    stmt statements
           { $$ = TBmakeStatements( $1, NULL); }
           ;
 
-stmt:  var LET expr SEMICOLON
+stmt:  ID LET expr SEMICOLON
        { $$ = TBmakeAssign($1, $3); }
        | funcall SEMICOLON
        { $$ = $1; }
@@ -174,9 +174,9 @@ stmt:  var LET expr SEMICOLON
        { $$ = TBmakeReturn($2); }
        ;
 
-for:      FOR BRACKET_L TYPE_INT var LET expr COMMA expr COMMA expr BRACKET_R block
+for:      FOR BRACKET_L TYPE_INT ID LET expr COMMA expr COMMA expr BRACKET_R block
           { $$ = TBmakeFor($4, $6, $8, $10, $12); }
-          | FOR BRACKET_L TYPE_INT var LET expr COMMA expr BRACKET_R block
+          | FOR BRACKET_L TYPE_INT ID LET expr COMMA expr BRACKET_R block
           { $$ = TBmakeFor($4, $6, $8, NULL, $10); }
           ;
 
@@ -224,7 +224,7 @@ cast:   BRACKET_L type BRACKET_R expr
         { $$ = TBmakeCast($2, $4); }
         ;
 
-funcall: var BRACKET_L exprs BRACKET_R
+funcall: ID BRACKET_L exprs BRACKET_R
         { $$ = TBmakeFuncall($1, $3); }
         ;
 

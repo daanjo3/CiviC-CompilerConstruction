@@ -24,6 +24,7 @@
  *****************************************************************************/
 struct ATTRIBS_N_ASSIGN
 {
+  char *Id;
 };
 struct ATTRIBS_N_BINOP
 {
@@ -57,12 +58,14 @@ struct ATTRIBS_N_FLOAT
 };
 struct ATTRIBS_N_FOR
 {
+  char *Id;
 };
 struct ATTRIBS_N_FUNBODY
 {
 };
 struct ATTRIBS_N_FUNCALL
 {
+  char *Id;
 };
 struct ATTRIBS_N_FUNDEFDEC
 {

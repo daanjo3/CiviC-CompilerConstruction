@@ -66,7 +66,7 @@ CHKMassign (node * arg_node, info * arg_info)
 {
   DBUG_ENTER ("CHKMassign");
   NODE_ERROR (arg_node) = CHKMTRAV (NODE_ERROR (arg_node), arg_info);
-  ASSIGN_VAR (arg_node) = CHKMTRAV (ASSIGN_VAR (arg_node), arg_info);
+  ASSIGN_ID (arg_node) = CHKMattribString (ASSIGN_ID (arg_node), arg_info);
   ASSIGN_EXPR (arg_node) = CHKMTRAV (ASSIGN_EXPR (arg_node), arg_info);
   DBUG_RETURN (arg_node);
 }
@@ -262,7 +262,7 @@ CHKMfor (node * arg_node, info * arg_info)
 {
   DBUG_ENTER ("CHKMfor");
   NODE_ERROR (arg_node) = CHKMTRAV (NODE_ERROR (arg_node), arg_info);
-  FOR_VAR (arg_node) = CHKMTRAV (FOR_VAR (arg_node), arg_info);
+  FOR_ID (arg_node) = CHKMattribString (FOR_ID (arg_node), arg_info);
   FOR_EXPRSTART (arg_node) = CHKMTRAV (FOR_EXPRSTART (arg_node), arg_info);
   FOR_EXPRSTOP (arg_node) = CHKMTRAV (FOR_EXPRSTOP (arg_node), arg_info);
   FOR_EXPRINCR (arg_node) = CHKMTRAV (FOR_EXPRINCR (arg_node), arg_info);
@@ -312,7 +312,7 @@ CHKMfuncall (node * arg_node, info * arg_info)
 {
   DBUG_ENTER ("CHKMfuncall");
   NODE_ERROR (arg_node) = CHKMTRAV (NODE_ERROR (arg_node), arg_info);
-  FUNCALL_VAR (arg_node) = CHKMTRAV (FUNCALL_VAR (arg_node), arg_info);
+  FUNCALL_ID (arg_node) = CHKMattribString (FUNCALL_ID (arg_node), arg_info);
   FUNCALL_EXPRS (arg_node) = CHKMTRAV (FUNCALL_EXPRS (arg_node), arg_info);
   DBUG_RETURN (arg_node);
 }

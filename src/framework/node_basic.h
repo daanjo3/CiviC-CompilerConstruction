@@ -127,17 +127,17 @@ extern node *TBmakeStatements (node * First, node * Next);
  * macros and functions for N_assign
  *****************************************************************************/
 
-#define ASSIGN_VAR( n) ((n)->sons.N_assign->Var)
 #define ASSIGN_EXPR( n) ((n)->sons.N_assign->Expr)
-extern node *TBmakeAssign (node * Var, node * Expr);
+#define ASSIGN_ID( n) ((n)->attribs.N_assign->Id)
+extern node *TBmakeAssign (char *Id, node * Expr);
 
 /*****************************************************************************
  * macros and functions for N_funcall
  *****************************************************************************/
 
-#define FUNCALL_VAR( n) ((n)->sons.N_funcall->Var)
 #define FUNCALL_EXPRS( n) ((n)->sons.N_funcall->Exprs)
-extern node *TBmakeFuncall (node * Var, node * Exprs);
+#define FUNCALL_ID( n) ((n)->attribs.N_funcall->Id)
+extern node *TBmakeFuncall (char *Id, node * Exprs);
 
 /*****************************************************************************
  * macros and functions for N_if
@@ -168,12 +168,12 @@ extern node *TBmakeDowhile (node * Expr, node * Block);
  * macros and functions for N_for
  *****************************************************************************/
 
-#define FOR_VAR( n) ((n)->sons.N_for->Var)
 #define FOR_EXPRSTART( n) ((n)->sons.N_for->ExprStart)
 #define FOR_EXPRSTOP( n) ((n)->sons.N_for->ExprStop)
 #define FOR_EXPRINCR( n) ((n)->sons.N_for->ExprIncr)
 #define FOR_BLOCK( n) ((n)->sons.N_for->Block)
-extern node *TBmakeFor (node * Var, node * ExprStart, node * ExprStop,
+#define FOR_ID( n) ((n)->attribs.N_for->Id)
+extern node *TBmakeFor (char *Id, node * ExprStart, node * ExprStop,
 			node * ExprIncr, node * Block);
 
 /*****************************************************************************

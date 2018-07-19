@@ -66,10 +66,10 @@ travtables_t travtables = {
 
   /* TR_tf */
   , {&TRAVerror, &TRAVsons, &TRAVsons, &TFfundefdec, &TRAVsons, &TRAVsons,
+     &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons, &TFvar, &TRAVsons, &TRAVsons,
+     &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons, &TFfor, &TRAVsons, &TRAVsons,
      &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons,
-     &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons, &TFfor, &TRAVsons,
-     &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons,
-     &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons}
+     &TRAVsons, &TRAVsons, &TRAVsons}
 
   /* TR_ms */
   , {&TRAVerror, &MSprogram, &TRAVsons, &MSfundefdec, &TRAVsons, &MSvardec,

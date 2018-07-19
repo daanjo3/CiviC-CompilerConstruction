@@ -145,11 +145,8 @@ node *MSfundefdec(node *arg_node, info *arg_info) {
 
 node *MSfor(node *arg_node, info *arg_info) {
     DBUG_ENTER("MSfor");
-
-    char* name = VAR_NAME(FOR_VAR(arg_node));
-
     // Add the parameter to the new symbol table
-    addSymbolTableEntry(arg_info, name, BT_int, FALSE, NULL);
+    addSymbolTableEntry(arg_info, FOR_ID(arg_node), BT_int, FALSE, NULL);
     DBUG_RETURN(arg_node);
 }
 

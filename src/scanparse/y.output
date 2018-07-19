@@ -61,7 +61,7 @@ Grammar
    37 statements: stmt statements
    38           | stmt
 
-   39 stmt: var LET expr SEMICOLON
+   39 stmt: ID LET expr SEMICOLON
    40     | funcall SEMICOLON
    41     | WHILE BRACKET_L expr BRACKET_R block
    42     | DO block WHILE BRACKET_L expr BRACKET_R SEMICOLON
@@ -69,8 +69,8 @@ Grammar
    44     | for
    45     | RETURN expr SEMICOLON
 
-   46 for: FOR BRACKET_L TYPE_INT var LET expr COMMA expr COMMA expr BRACKET_R block
-   47    | FOR BRACKET_L TYPE_INT var LET expr COMMA expr BRACKET_R block
+   46 for: FOR BRACKET_L TYPE_INT ID LET expr COMMA expr COMMA expr BRACKET_R block
+   47    | FOR BRACKET_L TYPE_INT ID LET expr COMMA expr BRACKET_R block
 
    48 if: IF BRACKET_L expr BRACKET_R block ELSE block
    49   | IF BRACKET_L expr BRACKET_R block
@@ -94,7 +94,7 @@ Grammar
 
    64 cast: BRACKET_L type BRACKET_R expr
 
-   65 funcall: var BRACKET_L exprs BRACKET_R
+   65 funcall: ID BRACKET_L exprs BRACKET_R
 
    66 monop: MINUS expr
    67      | NOT expr
@@ -159,7 +159,8 @@ COMMENT_SINGLE (293)
 COMMENT_MULT (294)
 NUM (295) 61
 FLOAT (296) 60
-ID (297) 7 8 9 10 11 12 13 14 15 16 17 18 19 31 32 33 34 81
+ID (297) 7 8 9 10 11 12 13 14 15 16 17 18 19 31 32 33 34 39 46 47 65
+    81
 
 
 Nonterminals, with rules where they appear
@@ -214,7 +215,7 @@ monop (64)
 binop (65)
     on left: 68 69 70 71 72 73 74 75 76 77 78 79 80, on right: 55
 var (66)
-    on left: 81, on right: 39 46 47 58 65
+    on left: 81, on right: 58
 
 
 State 0
@@ -650,7 +651,10 @@ State 38
 
 State 39
 
+   65 funcall: ID . BRACKET_L exprs BRACKET_R
    81 var: ID .
+
+    BRACKET_L  shift, and go to state 57
 
     $default  reduce using rule 81 (var)
 
@@ -672,20 +676,20 @@ State 40
    79      | expr . OR expr
    80      | expr . AND expr
 
-    SEMICOLON  shift, and go to state 57
-    MINUS      shift, and go to state 58
-    PLUS       shift, and go to state 59
-    STAR       shift, and go to state 60
-    SLASH      shift, and go to state 61
-    PERCENT    shift, and go to state 62
-    LE         shift, and go to state 63
-    LT         shift, and go to state 64
-    GE         shift, and go to state 65
-    GT         shift, and go to state 66
-    EQ         shift, and go to state 67
-    NE         shift, and go to state 68
-    AND        shift, and go to state 69
-    OR         shift, and go to state 70
+    SEMICOLON  shift, and go to state 58
+    MINUS      shift, and go to state 59
+    PLUS       shift, and go to state 60
+    STAR       shift, and go to state 61
+    SLASH      shift, and go to state 62
+    PERCENT    shift, and go to state 63
+    LE         shift, and go to state 64
+    LT         shift, and go to state 65
+    GE         shift, and go to state 66
+    GT         shift, and go to state 67
+    EQ         shift, and go to state 68
+    NE         shift, and go to state 69
+    AND        shift, and go to state 70
+    OR         shift, and go to state 71
 
 
 State 41
@@ -719,9 +723,6 @@ State 44
 State 45
 
    58 expr: var .
-   65 funcall: var . BRACKET_L exprs BRACKET_R
-
-    BRACKET_L  shift, and go to state 71
 
     $default  reduce using rule 58 (expr)
 
@@ -773,19 +774,19 @@ State 49
    80      | expr . AND expr
 
     SEMICOLON  shift, and go to state 76
-    MINUS      shift, and go to state 58
-    PLUS       shift, and go to state 59
-    STAR       shift, and go to state 60
-    SLASH      shift, and go to state 61
-    PERCENT    shift, and go to state 62
-    LE         shift, and go to state 63
-    LT         shift, and go to state 64
-    GE         shift, and go to state 65
-    GT         shift, and go to state 66
-    EQ         shift, and go to state 67
-    NE         shift, and go to state 68
-    AND        shift, and go to state 69
-    OR         shift, and go to state 70
+    MINUS      shift, and go to state 59
+    PLUS       shift, and go to state 60
+    STAR       shift, and go to state 61
+    SLASH      shift, and go to state 62
+    PERCENT    shift, and go to state 63
+    LE         shift, and go to state 64
+    LT         shift, and go to state 65
+    GE         shift, and go to state 66
+    GT         shift, and go to state 67
+    EQ         shift, and go to state 68
+    NE         shift, and go to state 69
+    AND        shift, and go to state 70
+    OR         shift, and go to state 71
 
 
 State 50
@@ -803,19 +804,18 @@ State 50
     RETURN      shift, and go to state 81
     EXTERN      shift, and go to state 82
     EXPORT      shift, and go to state 83
-    ID          shift, and go to state 39
+    ID          shift, and go to state 84
 
-    fundefdec     go to state 84
-    type          go to state 85
-    funbody       go to state 86
-    vardecs       go to state 87
-    localfundefs  go to state 88
-    statements    go to state 89
-    stmt          go to state 90
-    for           go to state 91
-    if            go to state 92
-    funcall       go to state 93
-    var           go to state 94
+    fundefdec     go to state 85
+    type          go to state 86
+    funbody       go to state 87
+    vardecs       go to state 88
+    localfundefs  go to state 89
+    statements    go to state 90
+    stmt          go to state 91
+    for           go to state 92
+    if            go to state 93
+    funcall       go to state 94
 
 
 State 51
@@ -860,19 +860,19 @@ State 54
    80      | expr . AND expr
 
     BRACKET_R  shift, and go to state 98
-    MINUS      shift, and go to state 58
-    PLUS       shift, and go to state 59
-    STAR       shift, and go to state 60
-    SLASH      shift, and go to state 61
-    PERCENT    shift, and go to state 62
-    LE         shift, and go to state 63
-    LT         shift, and go to state 64
-    GE         shift, and go to state 65
-    GT         shift, and go to state 66
-    EQ         shift, and go to state 67
-    NE         shift, and go to state 68
-    AND        shift, and go to state 69
-    OR         shift, and go to state 70
+    MINUS      shift, and go to state 59
+    PLUS       shift, and go to state 60
+    STAR       shift, and go to state 61
+    SLASH      shift, and go to state 62
+    PERCENT    shift, and go to state 63
+    LE         shift, and go to state 64
+    LT         shift, and go to state 65
+    GE         shift, and go to state 66
+    GT         shift, and go to state 67
+    EQ         shift, and go to state 68
+    NE         shift, and go to state 69
+    AND        shift, and go to state 70
+    OR         shift, and go to state 71
 
 
 State 55
@@ -917,14 +917,7 @@ State 56
 
 State 57
 
-   16 globaldef: type ID LET expr SEMICOLON .
-
-    $default  reduce using rule 16 (globaldef)
-
-
-State 58
-
-   69 binop: expr MINUS . expr
+   65 funcall: ID BRACKET_L . exprs BRACKET_R
 
     BRACKET_L  shift, and go to state 32
     MINUS      shift, and go to state 33
@@ -935,27 +928,7 @@ State 58
     FLOAT      shift, and go to state 38
     ID         shift, and go to state 39
 
-    expr     go to state 99
-    cast     go to state 41
-    funcall  go to state 42
-    monop    go to state 43
-    binop    go to state 44
-    var      go to state 45
-
-
-State 59
-
-   68 binop: expr PLUS . expr
-
-    BRACKET_L  shift, and go to state 32
-    MINUS      shift, and go to state 33
-    NOT        shift, and go to state 34
-    TRUEVAL    shift, and go to state 35
-    FALSEVAL   shift, and go to state 36
-    NUM        shift, and go to state 37
-    FLOAT      shift, and go to state 38
-    ID         shift, and go to state 39
-
+    exprs    go to state 99
     expr     go to state 100
     cast     go to state 41
     funcall  go to state 42
@@ -964,9 +937,16 @@ State 59
     var      go to state 45
 
 
-State 60
+State 58
 
-   70 binop: expr STAR . expr
+   16 globaldef: type ID LET expr SEMICOLON .
+
+    $default  reduce using rule 16 (globaldef)
+
+
+State 59
+
+   69 binop: expr MINUS . expr
 
     BRACKET_L  shift, and go to state 32
     MINUS      shift, and go to state 33
@@ -985,9 +965,9 @@ State 60
     var      go to state 45
 
 
-State 61
+State 60
 
-   71 binop: expr SLASH . expr
+   68 binop: expr PLUS . expr
 
     BRACKET_L  shift, and go to state 32
     MINUS      shift, and go to state 33
@@ -1006,9 +986,9 @@ State 61
     var      go to state 45
 
 
-State 62
+State 61
 
-   72 binop: expr PERCENT . expr
+   70 binop: expr STAR . expr
 
     BRACKET_L  shift, and go to state 32
     MINUS      shift, and go to state 33
@@ -1027,9 +1007,9 @@ State 62
     var      go to state 45
 
 
-State 63
+State 62
 
-   73 binop: expr LE . expr
+   71 binop: expr SLASH . expr
 
     BRACKET_L  shift, and go to state 32
     MINUS      shift, and go to state 33
@@ -1048,9 +1028,9 @@ State 63
     var      go to state 45
 
 
-State 64
+State 63
 
-   74 binop: expr LT . expr
+   72 binop: expr PERCENT . expr
 
     BRACKET_L  shift, and go to state 32
     MINUS      shift, and go to state 33
@@ -1069,9 +1049,9 @@ State 64
     var      go to state 45
 
 
-State 65
+State 64
 
-   75 binop: expr GE . expr
+   73 binop: expr LE . expr
 
     BRACKET_L  shift, and go to state 32
     MINUS      shift, and go to state 33
@@ -1090,9 +1070,9 @@ State 65
     var      go to state 45
 
 
-State 66
+State 65
 
-   76 binop: expr GT . expr
+   74 binop: expr LT . expr
 
     BRACKET_L  shift, and go to state 32
     MINUS      shift, and go to state 33
@@ -1111,9 +1091,9 @@ State 66
     var      go to state 45
 
 
-State 67
+State 66
 
-   77 binop: expr EQ . expr
+   75 binop: expr GE . expr
 
     BRACKET_L  shift, and go to state 32
     MINUS      shift, and go to state 33
@@ -1132,9 +1112,9 @@ State 67
     var      go to state 45
 
 
-State 68
+State 67
 
-   78 binop: expr NE . expr
+   76 binop: expr GT . expr
 
     BRACKET_L  shift, and go to state 32
     MINUS      shift, and go to state 33
@@ -1153,9 +1133,9 @@ State 68
     var      go to state 45
 
 
-State 69
+State 68
 
-   80 binop: expr AND . expr
+   77 binop: expr EQ . expr
 
     BRACKET_L  shift, and go to state 32
     MINUS      shift, and go to state 33
@@ -1174,9 +1154,9 @@ State 69
     var      go to state 45
 
 
-State 70
+State 69
 
-   79 binop: expr OR . expr
+   78 binop: expr NE . expr
 
     BRACKET_L  shift, and go to state 32
     MINUS      shift, and go to state 33
@@ -1195,9 +1175,9 @@ State 70
     var      go to state 45
 
 
-State 71
+State 70
 
-   65 funcall: var BRACKET_L . exprs BRACKET_R
+   80 binop: expr AND . expr
 
     BRACKET_L  shift, and go to state 32
     MINUS      shift, and go to state 33
@@ -1208,7 +1188,27 @@ State 71
     FLOAT      shift, and go to state 38
     ID         shift, and go to state 39
 
-    exprs    go to state 112
+    expr     go to state 112
+    cast     go to state 41
+    funcall  go to state 42
+    monop    go to state 43
+    binop    go to state 44
+    var      go to state 45
+
+
+State 71
+
+   79 binop: expr OR . expr
+
+    BRACKET_L  shift, and go to state 32
+    MINUS      shift, and go to state 33
+    NOT        shift, and go to state 34
+    TRUEVAL    shift, and go to state 35
+    FALSEVAL   shift, and go to state 36
+    NUM        shift, and go to state 37
+    FLOAT      shift, and go to state 38
+    ID         shift, and go to state 39
+
     expr     go to state 113
     cast     go to state 41
     funcall  go to state 42
@@ -1246,19 +1246,18 @@ State 74
     RETURN      shift, and go to state 81
     EXTERN      shift, and go to state 82
     EXPORT      shift, and go to state 83
-    ID          shift, and go to state 39
+    ID          shift, and go to state 84
 
-    fundefdec     go to state 84
-    type          go to state 85
+    fundefdec     go to state 85
+    type          go to state 86
     funbody       go to state 115
-    vardecs       go to state 87
-    localfundefs  go to state 88
-    statements    go to state 89
-    stmt          go to state 90
-    for           go to state 91
-    if            go to state 92
-    funcall       go to state 93
-    var           go to state 94
+    vardecs       go to state 88
+    localfundefs  go to state 89
+    statements    go to state 90
+    stmt          go to state 91
+    for           go to state 92
+    if            go to state 93
+    funcall       go to state 94
 
 
 State 75
@@ -1285,14 +1284,13 @@ State 77
     FOR      shift, and go to state 79
     IF       shift, and go to state 80
     RETURN   shift, and go to state 81
-    ID       shift, and go to state 39
+    ID       shift, and go to state 84
 
     stmt     go to state 118
-    for      go to state 91
-    if       go to state 92
+    for      go to state 92
+    if       go to state 93
     block    go to state 119
-    funcall  go to state 93
-    var      go to state 94
+    funcall  go to state 94
 
 
 State 78
@@ -1304,8 +1302,8 @@ State 78
 
 State 79
 
-   46 for: FOR . BRACKET_L TYPE_INT var LET expr COMMA expr COMMA expr BRACKET_R block
-   47    | FOR . BRACKET_L TYPE_INT var LET expr COMMA expr BRACKET_R block
+   46 for: FOR . BRACKET_L TYPE_INT ID LET expr COMMA expr COMMA expr BRACKET_R block
+   47    | FOR . BRACKET_L TYPE_INT ID LET expr COMMA expr BRACKET_R block
 
     BRACKET_L  shift, and go to state 121
 
@@ -1367,6 +1365,15 @@ State 83
 
 State 84
 
+   39 stmt: ID . LET expr SEMICOLON
+   65 funcall: ID . BRACKET_L exprs BRACKET_R
+
+    BRACKET_L  shift, and go to state 57
+    LET        shift, and go to state 126
+
+
+State 85
+
    35 localfundefs: fundefdec . localfundefs
    36             | fundefdec .
 
@@ -1379,29 +1386,29 @@ State 84
 
     $default  reduce using rule 36 (localfundefs)
 
-    fundefdec     go to state 84
-    type          go to state 126
-    localfundefs  go to state 127
+    fundefdec     go to state 85
+    type          go to state 127
+    localfundefs  go to state 128
 
 
-State 85
+State 86
 
     9 fundefdec: type . ID BRACKET_L BRACKET_R BRACE_L funbody BRACE_R
    10          | type . ID BRACKET_L param BRACKET_R BRACE_L funbody BRACE_R
    33 vardecs: type . ID LET expr SEMICOLON
    34        | type . ID SEMICOLON
 
-    ID  shift, and go to state 128
-
-
-State 86
-
-    9 fundefdec: type ID BRACKET_L BRACKET_R BRACE_L funbody . BRACE_R
-
-    BRACE_R  shift, and go to state 129
+    ID  shift, and go to state 129
 
 
 State 87
+
+    9 fundefdec: type ID BRACKET_L BRACKET_R BRACE_L funbody . BRACE_R
+
+    BRACE_R  shift, and go to state 130
+
+
+State 88
 
    24 funbody: vardecs . localfundefs statements
    25        | vardecs . localfundefs
@@ -1421,22 +1428,21 @@ State 87
     RETURN      shift, and go to state 81
     EXTERN      shift, and go to state 82
     EXPORT      shift, and go to state 83
-    ID          shift, and go to state 39
+    ID          shift, and go to state 84
 
     $default  reduce using rule 28 (funbody)
 
-    fundefdec     go to state 84
-    type          go to state 130
-    localfundefs  go to state 131
-    statements    go to state 132
-    stmt          go to state 90
-    for           go to state 91
-    if            go to state 92
-    funcall       go to state 93
-    var           go to state 94
+    fundefdec     go to state 85
+    type          go to state 131
+    localfundefs  go to state 132
+    statements    go to state 133
+    stmt          go to state 91
+    for           go to state 92
+    if            go to state 93
+    funcall       go to state 94
 
 
-State 88
+State 89
 
    27 funbody: localfundefs . statements
    29        | localfundefs .
@@ -1446,26 +1452,25 @@ State 88
     FOR     shift, and go to state 79
     IF      shift, and go to state 80
     RETURN  shift, and go to state 81
-    ID      shift, and go to state 39
+    ID      shift, and go to state 84
 
     $default  reduce using rule 29 (funbody)
 
-    statements  go to state 133
-    stmt        go to state 90
-    for         go to state 91
-    if          go to state 92
-    funcall     go to state 93
-    var         go to state 94
+    statements  go to state 134
+    stmt        go to state 91
+    for         go to state 92
+    if          go to state 93
+    funcall     go to state 94
 
 
-State 89
+State 90
 
    30 funbody: statements .
 
     $default  reduce using rule 30 (funbody)
 
 
-State 90
+State 91
 
    37 statements: stmt . statements
    38           | stmt .
@@ -1475,46 +1480,36 @@ State 90
     FOR     shift, and go to state 79
     IF      shift, and go to state 80
     RETURN  shift, and go to state 81
-    ID      shift, and go to state 39
+    ID      shift, and go to state 84
 
     $default  reduce using rule 38 (statements)
 
-    statements  go to state 134
-    stmt        go to state 90
-    for         go to state 91
-    if          go to state 92
-    funcall     go to state 93
-    var         go to state 94
+    statements  go to state 135
+    stmt        go to state 91
+    for         go to state 92
+    if          go to state 93
+    funcall     go to state 94
 
 
-State 91
+State 92
 
    44 stmt: for .
 
     $default  reduce using rule 44 (stmt)
 
 
-State 92
+State 93
 
    43 stmt: if .
 
     $default  reduce using rule 43 (stmt)
 
 
-State 93
+State 94
 
    40 stmt: funcall . SEMICOLON
 
-    SEMICOLON  shift, and go to state 135
-
-
-State 94
-
-   39 stmt: var . LET expr SEMICOLON
-   65 funcall: var . BRACKET_L exprs BRACKET_R
-
-    BRACKET_L  shift, and go to state 71
-    LET        shift, and go to state 136
+    SEMICOLON  shift, and go to state 136
 
 
 State 95
@@ -1532,19 +1527,18 @@ State 95
     RETURN      shift, and go to state 81
     EXTERN      shift, and go to state 82
     EXPORT      shift, and go to state 83
-    ID          shift, and go to state 39
+    ID          shift, and go to state 84
 
-    fundefdec     go to state 84
-    type          go to state 85
+    fundefdec     go to state 85
+    type          go to state 86
     funbody       go to state 137
-    vardecs       go to state 87
-    localfundefs  go to state 88
-    statements    go to state 89
-    stmt          go to state 90
-    for           go to state 91
-    if            go to state 92
-    funcall       go to state 93
-    var           go to state 94
+    vardecs       go to state 88
+    localfundefs  go to state 89
+    statements    go to state 90
+    stmt          go to state 91
+    for           go to state 92
+    if            go to state 93
+    funcall       go to state 94
 
 
 State 96
@@ -1590,6 +1584,49 @@ State 98
 
 State 99
 
+   65 funcall: ID BRACKET_L exprs . BRACKET_R
+
+    BRACKET_R  shift, and go to state 140
+
+
+State 100
+
+   52 exprs: expr . COMMA exprs
+   53      | expr .
+   68 binop: expr . PLUS expr
+   69      | expr . MINUS expr
+   70      | expr . STAR expr
+   71      | expr . SLASH expr
+   72      | expr . PERCENT expr
+   73      | expr . LE expr
+   74      | expr . LT expr
+   75      | expr . GE expr
+   76      | expr . GT expr
+   77      | expr . EQ expr
+   78      | expr . NE expr
+   79      | expr . OR expr
+   80      | expr . AND expr
+
+    COMMA    shift, and go to state 141
+    MINUS    shift, and go to state 59
+    PLUS     shift, and go to state 60
+    STAR     shift, and go to state 61
+    SLASH    shift, and go to state 62
+    PERCENT  shift, and go to state 63
+    LE       shift, and go to state 64
+    LT       shift, and go to state 65
+    GE       shift, and go to state 66
+    GT       shift, and go to state 67
+    EQ       shift, and go to state 68
+    NE       shift, and go to state 69
+    AND      shift, and go to state 70
+    OR       shift, and go to state 71
+
+    $default  reduce using rule 53 (exprs)
+
+
+State 101
+
    68 binop: expr . PLUS expr
    69      | expr . MINUS expr
    69      | expr MINUS expr .
@@ -1608,7 +1645,7 @@ State 99
     $default  reduce using rule 69 (binop)
 
 
-State 100
+State 102
 
    68 binop: expr . PLUS expr
    68      | expr PLUS expr .
@@ -1628,7 +1665,7 @@ State 100
     $default  reduce using rule 68 (binop)
 
 
-State 101
+State 103
 
    68 binop: expr . PLUS expr
    69      | expr . MINUS expr
@@ -1648,7 +1685,7 @@ State 101
     $default  reduce using rule 70 (binop)
 
 
-State 102
+State 104
 
    68 binop: expr . PLUS expr
    69      | expr . MINUS expr
@@ -1668,7 +1705,7 @@ State 102
     $default  reduce using rule 71 (binop)
 
 
-State 103
+State 105
 
    68 binop: expr . PLUS expr
    69      | expr . MINUS expr
@@ -1688,7 +1725,7 @@ State 103
     $default  reduce using rule 72 (binop)
 
 
-State 104
+State 106
 
    68 binop: expr . PLUS expr
    69      | expr . MINUS expr
@@ -1708,7 +1745,7 @@ State 104
     $default  reduce using rule 73 (binop)
 
 
-State 105
+State 107
 
    68 binop: expr . PLUS expr
    69      | expr . MINUS expr
@@ -1728,7 +1765,7 @@ State 105
     $default  reduce using rule 74 (binop)
 
 
-State 106
+State 108
 
    68 binop: expr . PLUS expr
    69      | expr . MINUS expr
@@ -1748,7 +1785,7 @@ State 106
     $default  reduce using rule 75 (binop)
 
 
-State 107
+State 109
 
    68 binop: expr . PLUS expr
    69      | expr . MINUS expr
@@ -1768,7 +1805,7 @@ State 107
     $default  reduce using rule 76 (binop)
 
 
-State 108
+State 110
 
    68 binop: expr . PLUS expr
    69      | expr . MINUS expr
@@ -1788,7 +1825,7 @@ State 108
     $default  reduce using rule 77 (binop)
 
 
-State 109
+State 111
 
    68 binop: expr . PLUS expr
    69      | expr . MINUS expr
@@ -1808,7 +1845,7 @@ State 109
     $default  reduce using rule 78 (binop)
 
 
-State 110
+State 112
 
    68 binop: expr . PLUS expr
    69      | expr . MINUS expr
@@ -1828,7 +1865,7 @@ State 110
     $default  reduce using rule 80 (binop)
 
 
-State 111
+State 113
 
    68 binop: expr . PLUS expr
    69      | expr . MINUS expr
@@ -1846,49 +1883,6 @@ State 111
    80      | expr . AND expr
 
     $default  reduce using rule 79 (binop)
-
-
-State 112
-
-   65 funcall: var BRACKET_L exprs . BRACKET_R
-
-    BRACKET_R  shift, and go to state 140
-
-
-State 113
-
-   52 exprs: expr . COMMA exprs
-   53      | expr .
-   68 binop: expr . PLUS expr
-   69      | expr . MINUS expr
-   70      | expr . STAR expr
-   71      | expr . SLASH expr
-   72      | expr . PERCENT expr
-   73      | expr . LE expr
-   74      | expr . LT expr
-   75      | expr . GE expr
-   76      | expr . GT expr
-   77      | expr . EQ expr
-   78      | expr . NE expr
-   79      | expr . OR expr
-   80      | expr . AND expr
-
-    COMMA    shift, and go to state 141
-    MINUS    shift, and go to state 58
-    PLUS     shift, and go to state 59
-    STAR     shift, and go to state 60
-    SLASH    shift, and go to state 61
-    PERCENT  shift, and go to state 62
-    LE       shift, and go to state 63
-    LT       shift, and go to state 64
-    GE       shift, and go to state 65
-    GT       shift, and go to state 66
-    EQ       shift, and go to state 67
-    NE       shift, and go to state 68
-    AND      shift, and go to state 69
-    OR       shift, and go to state 70
-
-    $default  reduce using rule 53 (exprs)
 
 
 State 114
@@ -1920,19 +1914,18 @@ State 116
     RETURN      shift, and go to state 81
     EXTERN      shift, and go to state 82
     EXPORT      shift, and go to state 83
-    ID          shift, and go to state 39
+    ID          shift, and go to state 84
 
-    fundefdec     go to state 84
-    type          go to state 85
+    fundefdec     go to state 85
+    type          go to state 86
     funbody       go to state 143
-    vardecs       go to state 87
-    localfundefs  go to state 88
-    statements    go to state 89
-    stmt          go to state 90
-    for           go to state 91
-    if            go to state 92
-    funcall       go to state 93
-    var           go to state 94
+    vardecs       go to state 88
+    localfundefs  go to state 89
+    statements    go to state 90
+    stmt          go to state 91
+    for           go to state 92
+    if            go to state 93
+    funcall       go to state 94
 
 
 State 117
@@ -1944,14 +1937,13 @@ State 117
     FOR     shift, and go to state 79
     IF      shift, and go to state 80
     RETURN  shift, and go to state 81
-    ID      shift, and go to state 39
+    ID      shift, and go to state 84
 
     statements  go to state 144
-    stmt        go to state 90
-    for         go to state 91
-    if          go to state 92
-    funcall     go to state 93
-    var         go to state 94
+    stmt        go to state 91
+    for         go to state 92
+    if          go to state 93
+    funcall     go to state 94
 
 
 State 118
@@ -1991,8 +1983,8 @@ State 120
 
 State 121
 
-   46 for: FOR BRACKET_L . TYPE_INT var LET expr COMMA expr COMMA expr BRACKET_R block
-   47    | FOR BRACKET_L . TYPE_INT var LET expr COMMA expr BRACKET_R block
+   46 for: FOR BRACKET_L . TYPE_INT ID LET expr COMMA expr COMMA expr BRACKET_R block
+   47    | FOR BRACKET_L . TYPE_INT ID LET expr COMMA expr BRACKET_R block
 
     TYPE_INT  shift, and go to state 147
 
@@ -2037,19 +2029,19 @@ State 123
    80      | expr . AND expr
 
     SEMICOLON  shift, and go to state 149
-    MINUS      shift, and go to state 58
-    PLUS       shift, and go to state 59
-    STAR       shift, and go to state 60
-    SLASH      shift, and go to state 61
-    PERCENT    shift, and go to state 62
-    LE         shift, and go to state 63
-    LT         shift, and go to state 64
-    GE         shift, and go to state 65
-    GT         shift, and go to state 66
-    EQ         shift, and go to state 67
-    NE         shift, and go to state 68
-    AND        shift, and go to state 69
-    OR         shift, and go to state 70
+    MINUS      shift, and go to state 59
+    PLUS       shift, and go to state 60
+    STAR       shift, and go to state 61
+    SLASH      shift, and go to state 62
+    PERCENT    shift, and go to state 63
+    LE         shift, and go to state 64
+    LT         shift, and go to state 65
+    GE         shift, and go to state 66
+    GT         shift, and go to state 67
+    EQ         shift, and go to state 68
+    NE         shift, and go to state 69
+    AND        shift, and go to state 70
+    OR         shift, and go to state 71
 
 
 State 124
@@ -2070,101 +2062,7 @@ State 125
 
 State 126
 
-    9 fundefdec: type . ID BRACKET_L BRACKET_R BRACE_L funbody BRACE_R
-   10          | type . ID BRACKET_L param BRACKET_R BRACE_L funbody BRACE_R
-
-    ID  shift, and go to state 152
-
-
-State 127
-
-   35 localfundefs: fundefdec localfundefs .
-
-    $default  reduce using rule 35 (localfundefs)
-
-
-State 128
-
-    9 fundefdec: type ID . BRACKET_L BRACKET_R BRACE_L funbody BRACE_R
-   10          | type ID . BRACKET_L param BRACKET_R BRACE_L funbody BRACE_R
-   33 vardecs: type ID . LET expr SEMICOLON
-   34        | type ID . SEMICOLON
-
-    BRACKET_L  shift, and go to state 21
-    SEMICOLON  shift, and go to state 153
-    LET        shift, and go to state 154
-
-
-State 129
-
-    9 fundefdec: type ID BRACKET_L BRACKET_R BRACE_L funbody BRACE_R .
-
-    $default  reduce using rule 9 (fundefdec)
-
-
-State 130
-
-    9 fundefdec: type . ID BRACKET_L BRACKET_R BRACE_L funbody BRACE_R
-   10          | type . ID BRACKET_L param BRACKET_R BRACE_L funbody BRACE_R
-   31 vardecs: vardecs type . ID LET expr SEMICOLON
-   32        | vardecs type . ID SEMICOLON
-
-    ID  shift, and go to state 155
-
-
-State 131
-
-   24 funbody: vardecs localfundefs . statements
-   25        | vardecs localfundefs .
-
-    DO      shift, and go to state 77
-    WHILE   shift, and go to state 78
-    FOR     shift, and go to state 79
-    IF      shift, and go to state 80
-    RETURN  shift, and go to state 81
-    ID      shift, and go to state 39
-
-    $default  reduce using rule 25 (funbody)
-
-    statements  go to state 156
-    stmt        go to state 90
-    for         go to state 91
-    if          go to state 92
-    funcall     go to state 93
-    var         go to state 94
-
-
-State 132
-
-   26 funbody: vardecs statements .
-
-    $default  reduce using rule 26 (funbody)
-
-
-State 133
-
-   27 funbody: localfundefs statements .
-
-    $default  reduce using rule 27 (funbody)
-
-
-State 134
-
-   37 statements: stmt statements .
-
-    $default  reduce using rule 37 (statements)
-
-
-State 135
-
-   40 stmt: funcall SEMICOLON .
-
-    $default  reduce using rule 40 (stmt)
-
-
-State 136
-
-   39 stmt: var LET . expr SEMICOLON
+   39 stmt: ID LET . expr SEMICOLON
 
     BRACKET_L  shift, and go to state 32
     MINUS      shift, and go to state 33
@@ -2175,12 +2073,105 @@ State 136
     FLOAT      shift, and go to state 38
     ID         shift, and go to state 39
 
-    expr     go to state 157
+    expr     go to state 152
     cast     go to state 41
     funcall  go to state 42
     monop    go to state 43
     binop    go to state 44
     var      go to state 45
+
+
+State 127
+
+    9 fundefdec: type . ID BRACKET_L BRACKET_R BRACE_L funbody BRACE_R
+   10          | type . ID BRACKET_L param BRACKET_R BRACE_L funbody BRACE_R
+
+    ID  shift, and go to state 153
+
+
+State 128
+
+   35 localfundefs: fundefdec localfundefs .
+
+    $default  reduce using rule 35 (localfundefs)
+
+
+State 129
+
+    9 fundefdec: type ID . BRACKET_L BRACKET_R BRACE_L funbody BRACE_R
+   10          | type ID . BRACKET_L param BRACKET_R BRACE_L funbody BRACE_R
+   33 vardecs: type ID . LET expr SEMICOLON
+   34        | type ID . SEMICOLON
+
+    BRACKET_L  shift, and go to state 21
+    SEMICOLON  shift, and go to state 154
+    LET        shift, and go to state 155
+
+
+State 130
+
+    9 fundefdec: type ID BRACKET_L BRACKET_R BRACE_L funbody BRACE_R .
+
+    $default  reduce using rule 9 (fundefdec)
+
+
+State 131
+
+    9 fundefdec: type . ID BRACKET_L BRACKET_R BRACE_L funbody BRACE_R
+   10          | type . ID BRACKET_L param BRACKET_R BRACE_L funbody BRACE_R
+   31 vardecs: vardecs type . ID LET expr SEMICOLON
+   32        | vardecs type . ID SEMICOLON
+
+    ID  shift, and go to state 156
+
+
+State 132
+
+   24 funbody: vardecs localfundefs . statements
+   25        | vardecs localfundefs .
+
+    DO      shift, and go to state 77
+    WHILE   shift, and go to state 78
+    FOR     shift, and go to state 79
+    IF      shift, and go to state 80
+    RETURN  shift, and go to state 81
+    ID      shift, and go to state 84
+
+    $default  reduce using rule 25 (funbody)
+
+    statements  go to state 157
+    stmt        go to state 91
+    for         go to state 92
+    if          go to state 93
+    funcall     go to state 94
+
+
+State 133
+
+   26 funbody: vardecs statements .
+
+    $default  reduce using rule 26 (funbody)
+
+
+State 134
+
+   27 funbody: localfundefs statements .
+
+    $default  reduce using rule 27 (funbody)
+
+
+State 135
+
+   37 statements: stmt statements .
+
+    $default  reduce using rule 37 (statements)
+
+
+State 136
+
+   40 stmt: funcall SEMICOLON .
+
+    $default  reduce using rule 40 (stmt)
 
 
 State 137
@@ -2219,7 +2210,7 @@ State 139
 
 State 140
 
-   65 funcall: var BRACKET_L exprs BRACKET_R .
+   65 funcall: ID BRACKET_L exprs BRACKET_R .
 
     $default  reduce using rule 65 (funcall)
 
@@ -2238,7 +2229,7 @@ State 141
     ID         shift, and go to state 39
 
     exprs    go to state 159
-    expr     go to state 113
+    expr     go to state 100
     cast     go to state 41
     funcall  go to state 42
     monop    go to state 43
@@ -2292,29 +2283,27 @@ State 146
    80      | expr . AND expr
 
     BRACKET_R  shift, and go to state 163
-    MINUS      shift, and go to state 58
-    PLUS       shift, and go to state 59
-    STAR       shift, and go to state 60
-    SLASH      shift, and go to state 61
-    PERCENT    shift, and go to state 62
-    LE         shift, and go to state 63
-    LT         shift, and go to state 64
-    GE         shift, and go to state 65
-    GT         shift, and go to state 66
-    EQ         shift, and go to state 67
-    NE         shift, and go to state 68
-    AND        shift, and go to state 69
-    OR         shift, and go to state 70
+    MINUS      shift, and go to state 59
+    PLUS       shift, and go to state 60
+    STAR       shift, and go to state 61
+    SLASH      shift, and go to state 62
+    PERCENT    shift, and go to state 63
+    LE         shift, and go to state 64
+    LT         shift, and go to state 65
+    GE         shift, and go to state 66
+    GT         shift, and go to state 67
+    EQ         shift, and go to state 68
+    NE         shift, and go to state 69
+    AND        shift, and go to state 70
+    OR         shift, and go to state 71
 
 
 State 147
 
-   46 for: FOR BRACKET_L TYPE_INT . var LET expr COMMA expr COMMA expr BRACKET_R block
-   47    | FOR BRACKET_L TYPE_INT . var LET expr COMMA expr BRACKET_R block
+   46 for: FOR BRACKET_L TYPE_INT . ID LET expr COMMA expr COMMA expr BRACKET_R block
+   47    | FOR BRACKET_L TYPE_INT . ID LET expr COMMA expr BRACKET_R block
 
-    ID  shift, and go to state 39
-
-    var  go to state 164
+    ID  shift, and go to state 164
 
 
 State 148
@@ -2336,19 +2325,19 @@ State 148
    80      | expr . AND expr
 
     BRACKET_R  shift, and go to state 165
-    MINUS      shift, and go to state 58
-    PLUS       shift, and go to state 59
-    STAR       shift, and go to state 60
-    SLASH      shift, and go to state 61
-    PERCENT    shift, and go to state 62
-    LE         shift, and go to state 63
-    LT         shift, and go to state 64
-    GE         shift, and go to state 65
-    GT         shift, and go to state 66
-    EQ         shift, and go to state 67
-    NE         shift, and go to state 68
-    AND        shift, and go to state 69
-    OR         shift, and go to state 70
+    MINUS      shift, and go to state 59
+    PLUS       shift, and go to state 60
+    STAR       shift, and go to state 61
+    SLASH      shift, and go to state 62
+    PERCENT    shift, and go to state 63
+    LE         shift, and go to state 64
+    LT         shift, and go to state 65
+    GE         shift, and go to state 66
+    GT         shift, and go to state 67
+    EQ         shift, and go to state 68
+    NE         shift, and go to state 69
+    AND        shift, and go to state 70
+    OR         shift, and go to state 71
 
 
 State 149
@@ -2376,62 +2365,7 @@ State 151
 
 State 152
 
-    9 fundefdec: type ID . BRACKET_L BRACKET_R BRACE_L funbody BRACE_R
-   10          | type ID . BRACKET_L param BRACKET_R BRACE_L funbody BRACE_R
-
-    BRACKET_L  shift, and go to state 21
-
-
-State 153
-
-   34 vardecs: type ID SEMICOLON .
-
-    $default  reduce using rule 34 (vardecs)
-
-
-State 154
-
-   33 vardecs: type ID LET . expr SEMICOLON
-
-    BRACKET_L  shift, and go to state 32
-    MINUS      shift, and go to state 33
-    NOT        shift, and go to state 34
-    TRUEVAL    shift, and go to state 35
-    FALSEVAL   shift, and go to state 36
-    NUM        shift, and go to state 37
-    FLOAT      shift, and go to state 38
-    ID         shift, and go to state 39
-
-    expr     go to state 166
-    cast     go to state 41
-    funcall  go to state 42
-    monop    go to state 43
-    binop    go to state 44
-    var      go to state 45
-
-
-State 155
-
-    9 fundefdec: type ID . BRACKET_L BRACKET_R BRACE_L funbody BRACE_R
-   10          | type ID . BRACKET_L param BRACKET_R BRACE_L funbody BRACE_R
-   31 vardecs: vardecs type ID . LET expr SEMICOLON
-   32        | vardecs type ID . SEMICOLON
-
-    BRACKET_L  shift, and go to state 21
-    SEMICOLON  shift, and go to state 167
-    LET        shift, and go to state 168
-
-
-State 156
-
-   24 funbody: vardecs localfundefs statements .
-
-    $default  reduce using rule 24 (funbody)
-
-
-State 157
-
-   39 stmt: var LET expr . SEMICOLON
+   39 stmt: ID LET expr . SEMICOLON
    68 binop: expr . PLUS expr
    69      | expr . MINUS expr
    70      | expr . STAR expr
@@ -2446,20 +2380,75 @@ State 157
    79      | expr . OR expr
    80      | expr . AND expr
 
-    SEMICOLON  shift, and go to state 169
-    MINUS      shift, and go to state 58
-    PLUS       shift, and go to state 59
-    STAR       shift, and go to state 60
-    SLASH      shift, and go to state 61
-    PERCENT    shift, and go to state 62
-    LE         shift, and go to state 63
-    LT         shift, and go to state 64
-    GE         shift, and go to state 65
-    GT         shift, and go to state 66
-    EQ         shift, and go to state 67
-    NE         shift, and go to state 68
-    AND        shift, and go to state 69
-    OR         shift, and go to state 70
+    SEMICOLON  shift, and go to state 166
+    MINUS      shift, and go to state 59
+    PLUS       shift, and go to state 60
+    STAR       shift, and go to state 61
+    SLASH      shift, and go to state 62
+    PERCENT    shift, and go to state 63
+    LE         shift, and go to state 64
+    LT         shift, and go to state 65
+    GE         shift, and go to state 66
+    GT         shift, and go to state 67
+    EQ         shift, and go to state 68
+    NE         shift, and go to state 69
+    AND        shift, and go to state 70
+    OR         shift, and go to state 71
+
+
+State 153
+
+    9 fundefdec: type ID . BRACKET_L BRACKET_R BRACE_L funbody BRACE_R
+   10          | type ID . BRACKET_L param BRACKET_R BRACE_L funbody BRACE_R
+
+    BRACKET_L  shift, and go to state 21
+
+
+State 154
+
+   34 vardecs: type ID SEMICOLON .
+
+    $default  reduce using rule 34 (vardecs)
+
+
+State 155
+
+   33 vardecs: type ID LET . expr SEMICOLON
+
+    BRACKET_L  shift, and go to state 32
+    MINUS      shift, and go to state 33
+    NOT        shift, and go to state 34
+    TRUEVAL    shift, and go to state 35
+    FALSEVAL   shift, and go to state 36
+    NUM        shift, and go to state 37
+    FLOAT      shift, and go to state 38
+    ID         shift, and go to state 39
+
+    expr     go to state 167
+    cast     go to state 41
+    funcall  go to state 42
+    monop    go to state 43
+    binop    go to state 44
+    var      go to state 45
+
+
+State 156
+
+    9 fundefdec: type ID . BRACKET_L BRACKET_R BRACE_L funbody BRACE_R
+   10          | type ID . BRACKET_L param BRACKET_R BRACE_L funbody BRACE_R
+   31 vardecs: vardecs type ID . LET expr SEMICOLON
+   32        | vardecs type ID . SEMICOLON
+
+    BRACKET_L  shift, and go to state 21
+    SEMICOLON  shift, and go to state 168
+    LET        shift, and go to state 169
+
+
+State 157
+
+   24 funbody: vardecs localfundefs statements .
+
+    $default  reduce using rule 24 (funbody)
 
 
 State 158
@@ -2521,20 +2510,19 @@ State 163
     FOR      shift, and go to state 79
     IF       shift, and go to state 80
     RETURN   shift, and go to state 81
-    ID       shift, and go to state 39
+    ID       shift, and go to state 84
 
     stmt     go to state 118
-    for      go to state 91
-    if       go to state 92
+    for      go to state 92
+    if       go to state 93
     block    go to state 171
-    funcall  go to state 93
-    var      go to state 94
+    funcall  go to state 94
 
 
 State 164
 
-   46 for: FOR BRACKET_L TYPE_INT var . LET expr COMMA expr COMMA expr BRACKET_R block
-   47    | FOR BRACKET_L TYPE_INT var . LET expr COMMA expr BRACKET_R block
+   46 for: FOR BRACKET_L TYPE_INT ID . LET expr COMMA expr COMMA expr BRACKET_R block
+   47    | FOR BRACKET_L TYPE_INT ID . LET expr COMMA expr BRACKET_R block
 
     LET  shift, and go to state 172
 
@@ -2550,17 +2538,23 @@ State 165
     FOR      shift, and go to state 79
     IF       shift, and go to state 80
     RETURN   shift, and go to state 81
-    ID       shift, and go to state 39
+    ID       shift, and go to state 84
 
     stmt     go to state 118
-    for      go to state 91
-    if       go to state 92
+    for      go to state 92
+    if       go to state 93
     block    go to state 173
-    funcall  go to state 93
-    var      go to state 94
+    funcall  go to state 94
 
 
 State 166
+
+   39 stmt: ID LET expr SEMICOLON .
+
+    $default  reduce using rule 39 (stmt)
+
+
+State 167
 
    33 vardecs: type ID LET expr . SEMICOLON
    68 binop: expr . PLUS expr
@@ -2578,29 +2572,29 @@ State 166
    80      | expr . AND expr
 
     SEMICOLON  shift, and go to state 174
-    MINUS      shift, and go to state 58
-    PLUS       shift, and go to state 59
-    STAR       shift, and go to state 60
-    SLASH      shift, and go to state 61
-    PERCENT    shift, and go to state 62
-    LE         shift, and go to state 63
-    LT         shift, and go to state 64
-    GE         shift, and go to state 65
-    GT         shift, and go to state 66
-    EQ         shift, and go to state 67
-    NE         shift, and go to state 68
-    AND        shift, and go to state 69
-    OR         shift, and go to state 70
+    MINUS      shift, and go to state 59
+    PLUS       shift, and go to state 60
+    STAR       shift, and go to state 61
+    SLASH      shift, and go to state 62
+    PERCENT    shift, and go to state 63
+    LE         shift, and go to state 64
+    LT         shift, and go to state 65
+    GE         shift, and go to state 66
+    GT         shift, and go to state 67
+    EQ         shift, and go to state 68
+    NE         shift, and go to state 69
+    AND        shift, and go to state 70
+    OR         shift, and go to state 71
 
 
-State 167
+State 168
 
    32 vardecs: vardecs type ID SEMICOLON .
 
     $default  reduce using rule 32 (vardecs)
 
 
-State 168
+State 169
 
    31 vardecs: vardecs type ID LET . expr SEMICOLON
 
@@ -2621,13 +2615,6 @@ State 168
     var      go to state 45
 
 
-State 169
-
-   39 stmt: var LET expr SEMICOLON .
-
-    $default  reduce using rule 39 (stmt)
-
-
 State 170
 
    42 stmt: DO block WHILE BRACKET_L expr . BRACKET_R SEMICOLON
@@ -2646,19 +2633,19 @@ State 170
    80      | expr . AND expr
 
     BRACKET_R  shift, and go to state 176
-    MINUS      shift, and go to state 58
-    PLUS       shift, and go to state 59
-    STAR       shift, and go to state 60
-    SLASH      shift, and go to state 61
-    PERCENT    shift, and go to state 62
-    LE         shift, and go to state 63
-    LT         shift, and go to state 64
-    GE         shift, and go to state 65
-    GT         shift, and go to state 66
-    EQ         shift, and go to state 67
-    NE         shift, and go to state 68
-    AND        shift, and go to state 69
-    OR         shift, and go to state 70
+    MINUS      shift, and go to state 59
+    PLUS       shift, and go to state 60
+    STAR       shift, and go to state 61
+    SLASH      shift, and go to state 62
+    PERCENT    shift, and go to state 63
+    LE         shift, and go to state 64
+    LT         shift, and go to state 65
+    GE         shift, and go to state 66
+    GT         shift, and go to state 67
+    EQ         shift, and go to state 68
+    NE         shift, and go to state 69
+    AND        shift, and go to state 70
+    OR         shift, and go to state 71
 
 
 State 171
@@ -2670,8 +2657,8 @@ State 171
 
 State 172
 
-   46 for: FOR BRACKET_L TYPE_INT var LET . expr COMMA expr COMMA expr BRACKET_R block
-   47    | FOR BRACKET_L TYPE_INT var LET . expr COMMA expr BRACKET_R block
+   46 for: FOR BRACKET_L TYPE_INT ID LET . expr COMMA expr COMMA expr BRACKET_R block
+   47    | FOR BRACKET_L TYPE_INT ID LET . expr COMMA expr BRACKET_R block
 
     BRACKET_L  shift, and go to state 32
     MINUS      shift, and go to state 33
@@ -2726,19 +2713,19 @@ State 175
    80      | expr . AND expr
 
     SEMICOLON  shift, and go to state 179
-    MINUS      shift, and go to state 58
-    PLUS       shift, and go to state 59
-    STAR       shift, and go to state 60
-    SLASH      shift, and go to state 61
-    PERCENT    shift, and go to state 62
-    LE         shift, and go to state 63
-    LT         shift, and go to state 64
-    GE         shift, and go to state 65
-    GT         shift, and go to state 66
-    EQ         shift, and go to state 67
-    NE         shift, and go to state 68
-    AND        shift, and go to state 69
-    OR         shift, and go to state 70
+    MINUS      shift, and go to state 59
+    PLUS       shift, and go to state 60
+    STAR       shift, and go to state 61
+    SLASH      shift, and go to state 62
+    PERCENT    shift, and go to state 63
+    LE         shift, and go to state 64
+    LT         shift, and go to state 65
+    GE         shift, and go to state 66
+    GT         shift, and go to state 67
+    EQ         shift, and go to state 68
+    NE         shift, and go to state 69
+    AND        shift, and go to state 70
+    OR         shift, and go to state 71
 
 
 State 176
@@ -2750,8 +2737,8 @@ State 176
 
 State 177
 
-   46 for: FOR BRACKET_L TYPE_INT var LET expr . COMMA expr COMMA expr BRACKET_R block
-   47    | FOR BRACKET_L TYPE_INT var LET expr . COMMA expr BRACKET_R block
+   46 for: FOR BRACKET_L TYPE_INT ID LET expr . COMMA expr COMMA expr BRACKET_R block
+   47    | FOR BRACKET_L TYPE_INT ID LET expr . COMMA expr BRACKET_R block
    68 binop: expr . PLUS expr
    69      | expr . MINUS expr
    70      | expr . STAR expr
@@ -2767,19 +2754,19 @@ State 177
    80      | expr . AND expr
 
     COMMA    shift, and go to state 181
-    MINUS    shift, and go to state 58
-    PLUS     shift, and go to state 59
-    STAR     shift, and go to state 60
-    SLASH    shift, and go to state 61
-    PERCENT  shift, and go to state 62
-    LE       shift, and go to state 63
-    LT       shift, and go to state 64
-    GE       shift, and go to state 65
-    GT       shift, and go to state 66
-    EQ       shift, and go to state 67
-    NE       shift, and go to state 68
-    AND      shift, and go to state 69
-    OR       shift, and go to state 70
+    MINUS    shift, and go to state 59
+    PLUS     shift, and go to state 60
+    STAR     shift, and go to state 61
+    SLASH    shift, and go to state 62
+    PERCENT  shift, and go to state 63
+    LE       shift, and go to state 64
+    LT       shift, and go to state 65
+    GE       shift, and go to state 66
+    GT       shift, and go to state 67
+    EQ       shift, and go to state 68
+    NE       shift, and go to state 69
+    AND      shift, and go to state 70
+    OR       shift, and go to state 71
 
 
 State 178
@@ -2792,14 +2779,13 @@ State 178
     FOR      shift, and go to state 79
     IF       shift, and go to state 80
     RETURN   shift, and go to state 81
-    ID       shift, and go to state 39
+    ID       shift, and go to state 84
 
     stmt     go to state 118
-    for      go to state 91
-    if       go to state 92
+    for      go to state 92
+    if       go to state 93
     block    go to state 182
-    funcall  go to state 93
-    var      go to state 94
+    funcall  go to state 94
 
 
 State 179
@@ -2818,8 +2804,8 @@ State 180
 
 State 181
 
-   46 for: FOR BRACKET_L TYPE_INT var LET expr COMMA . expr COMMA expr BRACKET_R block
-   47    | FOR BRACKET_L TYPE_INT var LET expr COMMA . expr BRACKET_R block
+   46 for: FOR BRACKET_L TYPE_INT ID LET expr COMMA . expr COMMA expr BRACKET_R block
+   47    | FOR BRACKET_L TYPE_INT ID LET expr COMMA . expr BRACKET_R block
 
     BRACKET_L  shift, and go to state 32
     MINUS      shift, and go to state 33
@@ -2847,8 +2833,8 @@ State 182
 
 State 183
 
-   46 for: FOR BRACKET_L TYPE_INT var LET expr COMMA expr . COMMA expr BRACKET_R block
-   47    | FOR BRACKET_L TYPE_INT var LET expr COMMA expr . BRACKET_R block
+   46 for: FOR BRACKET_L TYPE_INT ID LET expr COMMA expr . COMMA expr BRACKET_R block
+   47    | FOR BRACKET_L TYPE_INT ID LET expr COMMA expr . BRACKET_R block
    68 binop: expr . PLUS expr
    69      | expr . MINUS expr
    70      | expr . STAR expr
@@ -2865,24 +2851,24 @@ State 183
 
     BRACKET_R  shift, and go to state 184
     COMMA      shift, and go to state 185
-    MINUS      shift, and go to state 58
-    PLUS       shift, and go to state 59
-    STAR       shift, and go to state 60
-    SLASH      shift, and go to state 61
-    PERCENT    shift, and go to state 62
-    LE         shift, and go to state 63
-    LT         shift, and go to state 64
-    GE         shift, and go to state 65
-    GT         shift, and go to state 66
-    EQ         shift, and go to state 67
-    NE         shift, and go to state 68
-    AND        shift, and go to state 69
-    OR         shift, and go to state 70
+    MINUS      shift, and go to state 59
+    PLUS       shift, and go to state 60
+    STAR       shift, and go to state 61
+    SLASH      shift, and go to state 62
+    PERCENT    shift, and go to state 63
+    LE         shift, and go to state 64
+    LT         shift, and go to state 65
+    GE         shift, and go to state 66
+    GT         shift, and go to state 67
+    EQ         shift, and go to state 68
+    NE         shift, and go to state 69
+    AND        shift, and go to state 70
+    OR         shift, and go to state 71
 
 
 State 184
 
-   47 for: FOR BRACKET_L TYPE_INT var LET expr COMMA expr BRACKET_R . block
+   47 for: FOR BRACKET_L TYPE_INT ID LET expr COMMA expr BRACKET_R . block
 
     BRACE_L  shift, and go to state 117
     DO       shift, and go to state 77
@@ -2890,19 +2876,18 @@ State 184
     FOR      shift, and go to state 79
     IF       shift, and go to state 80
     RETURN   shift, and go to state 81
-    ID       shift, and go to state 39
+    ID       shift, and go to state 84
 
     stmt     go to state 118
-    for      go to state 91
-    if       go to state 92
+    for      go to state 92
+    if       go to state 93
     block    go to state 186
-    funcall  go to state 93
-    var      go to state 94
+    funcall  go to state 94
 
 
 State 185
 
-   46 for: FOR BRACKET_L TYPE_INT var LET expr COMMA expr COMMA . expr BRACKET_R block
+   46 for: FOR BRACKET_L TYPE_INT ID LET expr COMMA expr COMMA . expr BRACKET_R block
 
     BRACKET_L  shift, and go to state 32
     MINUS      shift, and go to state 33
@@ -2923,14 +2908,14 @@ State 185
 
 State 186
 
-   47 for: FOR BRACKET_L TYPE_INT var LET expr COMMA expr BRACKET_R block .
+   47 for: FOR BRACKET_L TYPE_INT ID LET expr COMMA expr BRACKET_R block .
 
     $default  reduce using rule 47 (for)
 
 
 State 187
 
-   46 for: FOR BRACKET_L TYPE_INT var LET expr COMMA expr COMMA expr . BRACKET_R block
+   46 for: FOR BRACKET_L TYPE_INT ID LET expr COMMA expr COMMA expr . BRACKET_R block
    68 binop: expr . PLUS expr
    69      | expr . MINUS expr
    70      | expr . STAR expr
@@ -2946,24 +2931,24 @@ State 187
    80      | expr . AND expr
 
     BRACKET_R  shift, and go to state 188
-    MINUS      shift, and go to state 58
-    PLUS       shift, and go to state 59
-    STAR       shift, and go to state 60
-    SLASH      shift, and go to state 61
-    PERCENT    shift, and go to state 62
-    LE         shift, and go to state 63
-    LT         shift, and go to state 64
-    GE         shift, and go to state 65
-    GT         shift, and go to state 66
-    EQ         shift, and go to state 67
-    NE         shift, and go to state 68
-    AND        shift, and go to state 69
-    OR         shift, and go to state 70
+    MINUS      shift, and go to state 59
+    PLUS       shift, and go to state 60
+    STAR       shift, and go to state 61
+    SLASH      shift, and go to state 62
+    PERCENT    shift, and go to state 63
+    LE         shift, and go to state 64
+    LT         shift, and go to state 65
+    GE         shift, and go to state 66
+    GT         shift, and go to state 67
+    EQ         shift, and go to state 68
+    NE         shift, and go to state 69
+    AND        shift, and go to state 70
+    OR         shift, and go to state 71
 
 
 State 188
 
-   46 for: FOR BRACKET_L TYPE_INT var LET expr COMMA expr COMMA expr BRACKET_R . block
+   46 for: FOR BRACKET_L TYPE_INT ID LET expr COMMA expr COMMA expr BRACKET_R . block
 
     BRACE_L  shift, and go to state 117
     DO       shift, and go to state 77
@@ -2971,18 +2956,17 @@ State 188
     FOR      shift, and go to state 79
     IF       shift, and go to state 80
     RETURN   shift, and go to state 81
-    ID       shift, and go to state 39
+    ID       shift, and go to state 84
 
     stmt     go to state 118
-    for      go to state 91
-    if       go to state 92
+    for      go to state 92
+    if       go to state 93
     block    go to state 189
-    funcall  go to state 93
-    var      go to state 94
+    funcall  go to state 94
 
 
 State 189
 
-   46 for: FOR BRACKET_L TYPE_INT var LET expr COMMA expr COMMA expr BRACKET_R block .
+   46 for: FOR BRACKET_L TYPE_INT ID LET expr COMMA expr COMMA expr BRACKET_R block .
 
     $default  reduce using rule 46 (for)

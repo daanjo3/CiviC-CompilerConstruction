@@ -24,7 +24,6 @@
  *****************************************************************************/
 struct SONS_N_ASSIGN
 {
-  node *Var;
   node *Expr;
 };
 struct SONS_N_BINOP
@@ -63,7 +62,6 @@ struct SONS_N_FLOAT
 };
 struct SONS_N_FOR
 {
-  node *Var;
   node *ExprStart;
   node *ExprStop;
   node *ExprIncr;
@@ -77,7 +75,6 @@ struct SONS_N_FUNBODY
 };
 struct SONS_N_FUNCALL
 {
-  node *Var;
   node *Exprs;
 };
 struct SONS_N_FUNDEFDEC

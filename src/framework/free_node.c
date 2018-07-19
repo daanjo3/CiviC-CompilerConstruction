@@ -56,7 +56,7 @@ FREEassign (node * arg_node, info * arg_info)
   node *result = NULL;
   DBUG_ENTER ("FREEassign");
   DBUG_PRINT ("FREE", ("Processing node N_assign at " F_PTR, arg_node));
-  ASSIGN_VAR (arg_node) = FREETRAV (ASSIGN_VAR (arg_node), arg_info);
+  ASSIGN_ID (arg_node) = FREEattribString (ASSIGN_ID (arg_node), arg_node);
   ASSIGN_EXPR (arg_node) = FREETRAV (ASSIGN_EXPR (arg_node), arg_info);
   result = NULL;
   arg_node->sons.N_assign = MEMfree (arg_node->sons.N_assign);
@@ -307,7 +307,7 @@ FREEfor (node * arg_node, info * arg_info)
   node *result = NULL;
   DBUG_ENTER ("FREEfor");
   DBUG_PRINT ("FREE", ("Processing node N_for at " F_PTR, arg_node));
-  FOR_VAR (arg_node) = FREETRAV (FOR_VAR (arg_node), arg_info);
+  FOR_ID (arg_node) = FREEattribString (FOR_ID (arg_node), arg_node);
   FOR_EXPRSTART (arg_node) = FREETRAV (FOR_EXPRSTART (arg_node), arg_info);
   FOR_EXPRSTOP (arg_node) = FREETRAV (FOR_EXPRSTOP (arg_node), arg_info);
   FOR_EXPRINCR (arg_node) = FREETRAV (FOR_EXPRINCR (arg_node), arg_info);
@@ -369,7 +369,7 @@ FREEfuncall (node * arg_node, info * arg_info)
   node *result = NULL;
   DBUG_ENTER ("FREEfuncall");
   DBUG_PRINT ("FREE", ("Processing node N_funcall at " F_PTR, arg_node));
-  FUNCALL_VAR (arg_node) = FREETRAV (FUNCALL_VAR (arg_node), arg_info);
+  FUNCALL_ID (arg_node) = FREEattribString (FUNCALL_ID (arg_node), arg_node);
   FUNCALL_EXPRS (arg_node) = FREETRAV (FUNCALL_EXPRS (arg_node), arg_info);
   result = NULL;
   arg_node->sons.N_funcall = MEMfree (arg_node->sons.N_funcall);

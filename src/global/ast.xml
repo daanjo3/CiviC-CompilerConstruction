@@ -48,6 +48,7 @@
         <travuser>
           <node name="FunDefDec"/>
           <node name="For"/>
+          <node name="Var"/>
         </travuser>
       </traversal>
 
@@ -594,17 +595,6 @@
      <node name="Assign">
       <description>represents assignment statement</description>
       <sons>
-        <son name="Var">
-          <description>Id of variable of function</description>
-          <targets>
-            <target mandatory="yes">
-              <node name="Var" />
-              <phases>
-                <all/>
-              </phases>
-             </target>
-          </targets>
-        </son>
         <son name="Expr">
           <description>right hand side expression</description>
           <targets>
@@ -618,23 +608,25 @@
         </son>
       </sons>
       <attributes>
+        <attribute name="Id">
+          <description>Id of the to be assigned variable</description>
+          <type name="String">
+            <targets>
+              <target mandatory="yes">
+                <any />
+                <phases>
+                  <all />
+                </phases>
+              </target>
+            </targets>
+          </type>
+        </attribute>
       </attributes>
     </node>
 
     <node name="FunCall">
       <description>Represents a function call</description>
       <sons>
-        <son name="Var">
-          <description>Function-variable name</description>
-          <targets>
-            <target mandatory="yes">
-              <node name="Var" />
-              <phases>
-                <all/>
-              </phases>
-             </target>
-          </targets>
-        </son>
         <son name="Exprs">
           <description>Expressions provided with the function call</description>
           <targets>
@@ -648,6 +640,18 @@
         </son>
       </sons>
       <attributes>
+        <attribute name="Id">
+          <type name="String">
+            <targets>
+              <target mandatory="yes">
+                <any />
+                <phases>
+                  <all />
+                </phases>
+              </target>
+            </targets>
+          </type>
+        </attribute>
       </attributes>
     </node>
 
@@ -754,17 +758,6 @@
 
     <node name="For">
       <sons>
-        <son name="Var">
-          <description>Id of variable</description>
-          <targets>
-            <target mandatory="yes">
-              <node name="Var" />
-              <phases>
-                <all/>
-              </phases>
-             </target>
-          </targets>
-        </son>
         <son name="ExprStart">
           <description>Expression for the starting value</description>
           <targets>
@@ -811,6 +804,19 @@
         </son>
       </sons>
       <attributes>
+        <attribute name="Id">
+          <description>Id of the induction variable</description>
+          <type name="String">
+            <targets>
+              <target mandatory="yes">
+                <any />
+                <phases>
+                  <all />
+                </phases>
+              </target>
+            </targets>
+          </type>
+        </attribute>
       </attributes>
     </node>
 

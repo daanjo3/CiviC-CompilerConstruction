@@ -211,8 +211,7 @@ node *PRTstatements(node * arg_node, info * arg_info) {
 
 node *PRTassign(node * arg_node, info * arg_info) {
   DBUG_ENTER("PRTassign");
-  ASSIGN_VAR(arg_node) = TRAVdo(ASSIGN_VAR(arg_node), arg_info);
-  printf(" = ");
+  printf("%s = ", ASSIGN_ID(arg_node));
   ASSIGN_EXPR(arg_node) = TRAVdo(ASSIGN_EXPR(arg_node), arg_info);
   printf(";\n");
   DBUG_RETURN(arg_node);
@@ -220,8 +219,7 @@ node *PRTassign(node * arg_node, info * arg_info) {
 
 node *PRTfuncall(node * arg_node, info * arg_info) {
   DBUG_ENTER("PRTfuncall");
-  FUNCALL_VAR(arg_node) = TRAVdo(FUNCALL_VAR(arg_node), arg_info);
-  printf("(");
+  printf("%s(", FUNCALL_ID(arg_node));
   FUNCALL_EXPRS(arg_node) = TRAVopt(FUNCALL_EXPRS(arg_node), arg_info);
   printf(")");
   DBUG_RETURN(arg_node);
@@ -278,8 +276,7 @@ node *PRTdowhile(node * arg_node, info * arg_info) {
 node *PRTfor(node * arg_node, info * arg_info) {
   DBUG_ENTER("PRTfor");
   printf("for (");
-  FOR_VAR(arg_node) = TRAVdo(FOR_VAR(arg_node), arg_info);
-  printf(" = ");
+  printf("%s = ", FOR_ID(arg_node));
   FOR_EXPRSTART(arg_node) = TRAVdo(FOR_EXPRSTART(arg_node), arg_info);
   printf(", ");
   FOR_EXPRSTOP(arg_node) = TRAVdo(FOR_EXPRSTOP(arg_node), arg_info);

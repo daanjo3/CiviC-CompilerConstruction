@@ -68,8 +68,7 @@ node *TGglobaldef(node *arg_node, info *arg_info) {
 
     if(GLOBALDEF_EXPR(arg_node)) {
         EXPR_FOUND(arg_info) = TRUE;
-        node *var = TBmakeVar(GLOBALDEF_ID(arg_node));
-        node *assign = TBmakeAssign(var, GLOBALDEF_EXPR(arg_node));
+        node *assign = TBmakeAssign(GLOBALDEF_ID(arg_node), GLOBALDEF_EXPR(arg_node));
         node *new_statement = TBmakeStatements(assign, NULL);
 
         // If statement last is set use this to append the new statement

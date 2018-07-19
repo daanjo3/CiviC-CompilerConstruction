@@ -1,6 +1,11 @@
 void main() {
     int x = 0;
+    int y = 0;
     for(int i = 0, i < 3) {
         x = x + 1;
+        for(int j = 0, j < 4) {
+            y = y + 1;
+            printInt(i);
+        }
     }
 }

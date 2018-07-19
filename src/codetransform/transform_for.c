@@ -7,15 +7,24 @@
 #include "memory.h"
 #include "str.h"
 
+#include "copy.h"
+#include "print.h"
+
 struct INFO {
     int depth;
     node *vardecs_last;
     node *fundef_body;
+    char *new_varname;
+    char *old_varname;
 };
 
 #define INFO_LOOP_DEPTH(n) ((n)->depth)
 #define INFO_VARDECS_LAST(n) ((n)->vardecs_last)
 #define INFO_FUNDEF_BODY(n) ((n)->fundef_body)
+#define INFO_NEW_VARNAME(n) ((n)->new_varname)
+#define INFO_OLD_VARNAME(n) ((n)->old_varname)
+
+// TODO: replace the varname in the other expressions(?)
 
 static info *MakeInfo(void) {
     info *result;
@@ -25,6 +34,8 @@ static info *MakeInfo(void) {
     INFO_LOOP_DEPTH(result) = 0;
     INFO_VARDECS_LAST(result) = NULL;
     INFO_FUNDEF_BODY(result) = NULL;
+    INFO_NEW_VARNAME(result) = "";
+    INFO_OLD_VARNAME(result) = "";
 
     DBUG_RETURN(result);
 }
@@ -56,19 +67,20 @@ node *TFfundefdec(node *arg_node, info *arg_info) {
 node *TFfor(node *arg_node, info *arg_info) {
     DBUG_ENTER("TFfor");
 
+    // Store the old variable name
+    INFO_OLD_VARNAME(arg_info) = STRcpy(FOR_ID(arg_node));
+
     // Create new name like: "_for_[depth]_[name]"
-
-    // TODO
-    // FIX THE MISTAKE WHICH HAPPENS SOMEWHERE AROUND HERE
-    // WRONG NODE ASSIGNED
-    node *var = FOR_VAR(arg_node);
-    const char *id = STRcpy(VAR_NAME(var));
     const char *depth = STRitoa(INFO_LOOP_DEPTH(arg_info));
-    char *new_id = STRcatn(4, "_for_", id, "_", depth);
+    char *new_id = STRcatn(4, "_for_", FOR_ID(arg_node), "_", depth);
+    FOR_ID(arg_node) = STRcpy(new_id);
 
-    node *expr = FOR_EXPRSTART(arg_node);
+    INFO_NEW_VARNAME(arg_info) = STRcpy(new_id);
 
-    node *new_vardec = TBmakeVardec(BT_int, new_id, expr, NULL);
+    // Create a new variable declaration
+    node *new_vardec = TBmakeVardec(BT_int, new_id, COPYdoCopy(FOR_EXPRSTART(arg_node)), NULL);
+    
+    // Add the new vardec to the list of vardecs
     node *vardec_last = INFO_VARDECS_LAST(arg_info);
     
     if(vardec_last) {
@@ -79,10 +91,28 @@ node *TFfor(node *arg_node, info *arg_info) {
     }
     INFO_VARDECS_LAST(arg_info) = new_vardec;
 
-    // Not here
+    // Rename all the identifiers in the expressions
+    FOR_EXPRSTOP(arg_node) = TRAVdo(FOR_EXPRSTOP(arg_node), arg_info);
+    FOR_EXPRINCR(arg_node) = TRAVopt(FOR_EXPRINCR(arg_node), arg_info);
+    FOR_BLOCK(arg_node) = TRAVdo(FOR_BLOCK(arg_node), arg_info);
+
+    // Find more forloops
     INFO_LOOP_DEPTH(arg_info) += 1;
     FOR_BLOCK(arg_node) = TRAVdo(FOR_BLOCK(arg_node), arg_info);
     INFO_LOOP_DEPTH(arg_info) -= 1;
+
+
+
+    DBUG_RETURN(arg_node);
+}
+
+// Apply the renaming to all variables
+node *TFvar(node *arg_node, info *arg_info) {
+    DBUG_ENTER("TFvar");
+
+    if(STReq(VAR_NAME(arg_node), INFO_OLD_VARNAME(arg_info))) {
+        VAR_NAME(arg_node) = STRcpy(INFO_NEW_VARNAME(arg_info));
+    }
 
     DBUG_RETURN(arg_node);
 }
