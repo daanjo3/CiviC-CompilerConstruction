@@ -39,6 +39,10 @@ TRAVsons (node * arg_node, info * arg_info)
 {
   switch (NODE_TYPE (arg_node))
     {
+    case N_program:
+      TRAV (PROGRAM_DECLARATIONS (arg_node), arg_info);
+      TRAV (PROGRAM_SYMBOLTABLE (arg_node), arg_info);
+      break;
     case N_declarations:
       TRAV (DECLARATIONS_DECLARATION (arg_node), arg_info);
       TRAV (DECLARATIONS_NEXT (arg_node), arg_info);
@@ -46,6 +50,7 @@ TRAVsons (node * arg_node, info * arg_info)
     case N_fundefdec:
       TRAV (FUNDEFDEC_PARAM (arg_node), arg_info);
       TRAV (FUNDEFDEC_BODY (arg_node), arg_info);
+      TRAV (FUNDEFDEC_SYMBOLTABLE (arg_node), arg_info);
       break;
     case N_funbody:
       TRAV (FUNBODY_VARDEC (arg_node), arg_info);
@@ -68,18 +73,18 @@ TRAVsons (node * arg_node, info * arg_info)
     case N_param:
       TRAV (PARAM_NEXT (arg_node), arg_info);
       break;
-    case N_id:
+    case N_var:
       break;
-    case N_stmts:
-      TRAV (STMTS_FIRST (arg_node), arg_info);
-      TRAV (STMTS_NEXT (arg_node), arg_info);
+    case N_statements:
+      TRAV (STATEMENTS_FIRST (arg_node), arg_info);
+      TRAV (STATEMENTS_NEXT (arg_node), arg_info);
       break;
     case N_assign:
-      TRAV (ASSIGN_ID (arg_node), arg_info);
+      TRAV (ASSIGN_VAR (arg_node), arg_info);
       TRAV (ASSIGN_EXPR (arg_node), arg_info);
       break;
     case N_funcall:
-      TRAV (FUNCALL_ID (arg_node), arg_info);
+      TRAV (FUNCALL_VAR (arg_node), arg_info);
       TRAV (FUNCALL_EXPRS (arg_node), arg_info);
       break;
     case N_if:
@@ -96,7 +101,7 @@ TRAVsons (node * arg_node, info * arg_info)
       TRAV (DOWHILE_BLOCK (arg_node), arg_info);
       break;
     case N_for:
-      TRAV (FOR_ID (arg_node), arg_info);
+      TRAV (FOR_VAR (arg_node), arg_info);
       TRAV (FOR_EXPRSTART (arg_node), arg_info);
       TRAV (FOR_EXPRSTOP (arg_node), arg_info);
       TRAV (FOR_EXPRINCR (arg_node), arg_info);
@@ -130,7 +135,6 @@ TRAVsons (node * arg_node, info * arg_info)
       break;
     case N_symboltableentry:
       TRAV (SYMBOLTABLEENTRY_NEXT (arg_node), arg_info);
-      TRAV (SYMBOLTABLEENTRY_FUNTYPES (arg_node), arg_info);
       break;
     case N_error:
       TRAV (ERROR_NEXT (arg_node), arg_info);
@@ -152,11 +156,14 @@ TRAVnumSons (node * node)
 
   switch (NODE_TYPE (node))
     {
+    case N_program:
+      result = 2;
+      break;
     case N_declarations:
       result = 2;
       break;
     case N_fundefdec:
-      result = 2;
+      result = 3;
       break;
     case N_funbody:
       result = 3;
@@ -176,10 +183,10 @@ TRAVnumSons (node * node)
     case N_param:
       result = 1;
       break;
-    case N_id:
+    case N_var:
       result = 0;
       break;
-    case N_stmts:
+    case N_statements:
       result = 2;
       break;
     case N_assign:
@@ -228,7 +235,7 @@ TRAVnumSons (node * node)
       result = 1;
       break;
     case N_symboltableentry:
-      result = 2;
+      result = 1;
       break;
     case N_error:
       result = 1;
@@ -250,6 +257,20 @@ TRAVgetSon (int no, node * parent)
 
   switch (NODE_TYPE (parent))
     {
+    case N_program:
+      switch (no)
+	{
+	case 0:
+	  result = PROGRAM_DECLARATIONS (parent);
+	  break;
+	case 1:
+	  result = PROGRAM_SYMBOLTABLE (parent);
+	  break;
+	default:
+	  DBUG_ASSERT ((FALSE), "index out of range!");
+	  break;
+	}
+      break;
     case N_declarations:
       switch (no)
 	{
@@ -272,6 +293,9 @@ TRAVgetSon (int no, node * parent)
 	  break;
 	case 1:
 	  result = FUNDEFDEC_BODY (parent);
+	  break;
+	case 2:
+	  result = FUNDEFDEC_SYMBOLTABLE (parent);
 	  break;
 	default:
 	  DBUG_ASSERT ((FALSE), "index out of range!");
@@ -353,7 +377,7 @@ TRAVgetSon (int no, node * parent)
 	  break;
 	}
       break;
-    case N_id:
+    case N_var:
       switch (no)
 	{
 	default:
@@ -361,14 +385,14 @@ TRAVgetSon (int no, node * parent)
 	  break;
 	}
       break;
-    case N_stmts:
+    case N_statements:
       switch (no)
 	{
 	case 0:
-	  result = STMTS_FIRST (parent);
+	  result = STATEMENTS_FIRST (parent);
 	  break;
 	case 1:
-	  result = STMTS_NEXT (parent);
+	  result = STATEMENTS_NEXT (parent);
 	  break;
 	default:
 	  DBUG_ASSERT ((FALSE), "index out of range!");
@@ -379,7 +403,7 @@ TRAVgetSon (int no, node * parent)
       switch (no)
 	{
 	case 0:
-	  result = ASSIGN_ID (parent);
+	  result = ASSIGN_VAR (parent);
 	  break;
 	case 1:
 	  result = ASSIGN_EXPR (parent);
@@ -393,7 +417,7 @@ TRAVgetSon (int no, node * parent)
       switch (no)
 	{
 	case 0:
-	  result = FUNCALL_ID (parent);
+	  result = FUNCALL_VAR (parent);
 	  break;
 	case 1:
 	  result = FUNCALL_EXPRS (parent);
@@ -452,7 +476,7 @@ TRAVgetSon (int no, node * parent)
       switch (no)
 	{
 	case 0:
-	  result = FOR_ID (parent);
+	  result = FOR_VAR (parent);
 	  break;
 	case 1:
 	  result = FOR_EXPRSTART (parent);
@@ -572,9 +596,6 @@ TRAVgetSon (int no, node * parent)
 	{
 	case 0:
 	  result = SYMBOLTABLEENTRY_NEXT (parent);
-	  break;
-	case 1:
-	  result = SYMBOLTABLEENTRY_FUNTYPES (parent);
 	  break;
 	default:
 	  DBUG_ASSERT ((FALSE), "index out of range!");

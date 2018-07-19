@@ -4,6 +4,18 @@
         "mytypes.h": "c",
         "*.mac": "c",
         "tree_basic.h": "c",
-        "dbug.h": "c"
-    }
+        "dbug.h": "c",
+        "traverse.h": "c",
+        "memory.h": "c",
+        "globals.h": "c"
+    },
+    "favorites.resources": [
+        "src/print/print.c",
+        "src/framework/traverse.c",
+        "src/scanparse/civic.l",
+        "src/scanparse/civic.y",
+        "src/scanparse/y.output",
+        "Makefile.Targets",
+        "src/framework/node_basic.h"
+    ]
 }

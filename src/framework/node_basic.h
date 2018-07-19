@@ -22,6 +22,14 @@
 
 
 /*****************************************************************************
+ * macros and functions for N_program
+ *****************************************************************************/
+
+#define PROGRAM_DECLARATIONS( n) ((n)->sons.N_program->Declarations)
+#define PROGRAM_SYMBOLTABLE( n) ((n)->sons.N_program->SymbolTable)
+extern node *TBmakeProgram (node * Declarations, node * SymbolTable);
+
+/*****************************************************************************
  * macros and functions for N_declarations
  *****************************************************************************/
 
@@ -35,11 +43,12 @@ extern node *TBmakeDeclarations (node * Declaration, node * Next);
 
 #define FUNDEFDEC_PARAM( n) ((n)->sons.N_fundefdec->Param)
 #define FUNDEFDEC_BODY( n) ((n)->sons.N_fundefdec->Body)
+#define FUNDEFDEC_SYMBOLTABLE( n) ((n)->sons.N_fundefdec->SymbolTable)
 #define FUNDEFDEC_EXPORT( n) ((n)->attribs.N_fundefdec->Export)
 #define FUNDEFDEC_RETTYPE( n) ((n)->attribs.N_fundefdec->RetType)
 #define FUNDEFDEC_ID( n) ((n)->attribs.N_fundefdec->Id)
 extern node *TBmakeFundefdec (bool Export, basictype RetType, char *Id,
-			      node * Param, node * Body);
+			      node * Param, node * Body, node * SymbolTable);
 
 /*****************************************************************************
  * macros and functions for N_funbody
@@ -99,35 +108,36 @@ extern node *TBmakeGlobaldef (basictype Type, bool Export, char *Id,
 extern node *TBmakeParam (basictype Type, char *Id, node * Next);
 
 /*****************************************************************************
- * macros and functions for N_id
+ * macros and functions for N_var
  *****************************************************************************/
 
-#define ID_NAME( n) ((n)->attribs.N_id->Name)
-extern node *TBmakeId (char *Name);
+#define VAR_NAME( n) ((n)->attribs.N_var->Name)
+#define VAR_LINK( n) ((n)->attribs.N_var->Link)
+extern node *TBmakeVar (char *Name);
 
 /*****************************************************************************
- * macros and functions for N_stmts
+ * macros and functions for N_statements
  *****************************************************************************/
 
-#define STMTS_FIRST( n) ((n)->sons.N_stmts->First)
-#define STMTS_NEXT( n) ((n)->sons.N_stmts->Next)
-extern node *TBmakeStmts (node * First, node * Next);
+#define STATEMENTS_FIRST( n) ((n)->sons.N_statements->First)
+#define STATEMENTS_NEXT( n) ((n)->sons.N_statements->Next)
+extern node *TBmakeStatements (node * First, node * Next);
 
 /*****************************************************************************
  * macros and functions for N_assign
  *****************************************************************************/
 
-#define ASSIGN_ID( n) ((n)->sons.N_assign->Id)
+#define ASSIGN_VAR( n) ((n)->sons.N_assign->Var)
 #define ASSIGN_EXPR( n) ((n)->sons.N_assign->Expr)
-extern node *TBmakeAssign (node * Id, node * Expr);
+extern node *TBmakeAssign (node * Var, node * Expr);
 
 /*****************************************************************************
  * macros and functions for N_funcall
  *****************************************************************************/
 
-#define FUNCALL_ID( n) ((n)->sons.N_funcall->Id)
+#define FUNCALL_VAR( n) ((n)->sons.N_funcall->Var)
 #define FUNCALL_EXPRS( n) ((n)->sons.N_funcall->Exprs)
-extern node *TBmakeFuncall (node * Id, node * Exprs);
+extern node *TBmakeFuncall (node * Var, node * Exprs);
 
 /*****************************************************************************
  * macros and functions for N_if
@@ -158,12 +168,12 @@ extern node *TBmakeDowhile (node * Expr, node * Block);
  * macros and functions for N_for
  *****************************************************************************/
 
-#define FOR_ID( n) ((n)->sons.N_for->Id)
+#define FOR_VAR( n) ((n)->sons.N_for->Var)
 #define FOR_EXPRSTART( n) ((n)->sons.N_for->ExprStart)
 #define FOR_EXPRSTOP( n) ((n)->sons.N_for->ExprStop)
 #define FOR_EXPRINCR( n) ((n)->sons.N_for->ExprIncr)
 #define FOR_BLOCK( n) ((n)->sons.N_for->Block)
-extern node *TBmakeFor (node * Id, node * ExprStart, node * ExprStop,
+extern node *TBmakeFor (node * Var, node * ExprStart, node * ExprStop,
 			node * ExprIncr, node * Block);
 
 /*****************************************************************************
@@ -240,13 +250,12 @@ extern node *TBmakeSymboltable (node * Head);
  *****************************************************************************/
 
 #define SYMBOLTABLEENTRY_NEXT( n) ((n)->sons.N_symboltableentry->Next)
-#define SYMBOLTABLEENTRY_FUNTYPES( n) ((n)->sons.N_symboltableentry->FunTypes)
 #define SYMBOLTABLEENTRY_NAME( n) ((n)->attribs.N_symboltableentry->Name)
 #define SYMBOLTABLEENTRY_TYPE( n) ((n)->attribs.N_symboltableentry->Type)
 #define SYMBOLTABLEENTRY_FUNCTION( n) ((n)->attribs.N_symboltableentry->Function)
+#define SYMBOLTABLEENTRY_PARAMS( n) ((n)->attribs.N_symboltableentry->Params)
 extern node *TBmakeSymboltableentry (char *Name, basictype Type,
-				     bool Function, node * Next,
-				     node * FunTypes);
+				     bool Function, node * Next);
 
 /*****************************************************************************
  * macros and functions for N_error

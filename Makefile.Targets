@@ -53,7 +53,7 @@
 #
 
 
-src = global scanparse print codegen framework dproject
+src = global scanparse print codegen framework codeanalysis codetransform
 
 
 
@@ -79,4 +79,6 @@ print       = print.o
 
 codegen     = gen_byte_code.o
 
-dproject    = make_st.o
+codeanalysis = make_st.o print_st.o
+
+codetransform = var_init_trans_global.o transform_for.o

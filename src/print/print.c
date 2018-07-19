@@ -28,9 +28,11 @@
  */
 struct INFO {
   bool firsterror;
+  int indent;
 };
 
 #define INFO_FIRSTERROR(n) ((n)->firsterror)
+#define INFO_INDENT(n) ((n)->indent)
 
 static info *MakeInfo()
 {
@@ -38,6 +40,7 @@ static info *MakeInfo()
 
   result = MEMmalloc(sizeof(info));
 
+  INFO_INDENT(result) = 0;
   INFO_FIRSTERROR(result) = FALSE;
 
   return result;
@@ -48,6 +51,12 @@ static info *FreeInfo( info *info)
   info = MEMfree( info);
 
   return info;
+}
+
+void printIndent(info *arg_info) {
+  for(int i = 0; i < INFO_INDENT(arg_info); i++) {
+    printf("    ");
+  }
 }
 
 char *type_string(basictype type) {
@@ -66,6 +75,13 @@ char *type_string(basictype type) {
   return " ";
 }
 
+node *PRTprogram(node * arg_node, info * arg_info) {
+  DBUG_ENTER("PRTprogram");
+  PROGRAM_DECLARATIONS(arg_node) = TRAVdo(PROGRAM_DECLARATIONS(arg_node), arg_info);
+  PROGRAM_SYMBOLTABLE(arg_node) = TRAVopt(PROGRAM_SYMBOLTABLE(arg_node), arg_info);
+  DBUG_RETURN(arg_node);
+}
+
 node *PRTdeclarations(node * arg_node, info * arg_info) {
    DBUG_ENTER("PRTdeclarations");
    DECLARATIONS_DECLARATION(arg_node) = TRAVdo(DECLARATIONS_DECLARATION(arg_node), arg_info);
@@ -75,6 +91,8 @@ node *PRTdeclarations(node * arg_node, info * arg_info) {
 
 node *PRTfundefdec(node * arg_node, info * arg_info) {
   DBUG_ENTER("PRTfundefdec");
+  printf("\n");
+  printIndent(arg_info);
 
   if (FUNDEFDEC_EXPORT(arg_node)) {
     printf("export ");
@@ -84,14 +102,22 @@ node *PRTfundefdec(node * arg_node, info * arg_info) {
   }
 
   char* type = type_string(FUNDEFDEC_RETTYPE(arg_node));
-  printf("%s", type);
-  FUNDEFDEC_ID(arg_node) = TRAVdo(FUNDEFDEC_ID(arg_node), arg_info);
+  printf("%s ", type);
+  printf("%s ", FUNDEFDEC_ID(arg_node));
   printf("(");
   FUNDEFDEC_PARAM(arg_node) = TRAVopt(FUNDEFDEC_PARAM(arg_node), arg_info);
-  printf(") {");
-  FUNDEFDEC_BODY(arg_node) = TRAVopt(FUNDEFDEC_BODY(arg_node), arg_info);
-  printf("}");
+  if (FUNDEFDEC_BODY(arg_node)) {
+    printf(") {\n");
+    INFO_INDENT(arg_info) += 1;
+    FUNDEFDEC_BODY(arg_node) = TRAVopt(FUNDEFDEC_BODY(arg_node), arg_info);
+    INFO_INDENT(arg_info) -= 1;
+    printIndent(arg_info);
+    printf("}\n");
+  } else {
+    printf(");\n");
+  }
 
+  printf("\n");
   DBUG_RETURN(arg_node);
 }
 
@@ -106,21 +132,23 @@ node *PRTfunbody(node * arg_node, info * arg_info) {
 node *PRTvardec(node * arg_node, info * arg_info) {
   char* tmp;
   DBUG_ENTER("PRTvardec");
+
+  printIndent(arg_info);
   tmp = type_string(VARDEC_TYPE(arg_node));
   printf("%s ", tmp);
-  VARDEC_ID(arg_node) = TRAVdo(VARDEC_ID(arg_node), arg_info);
+  printf("%s", VARDEC_ID(arg_node));
   if (VARDEC_EXPR(arg_node) != NULL) {
     printf(" = ");
     VARDEC_EXPR(arg_node) = TRAVopt(VARDEC_EXPR(arg_node), arg_info);
   }
-  VARDEC_NEXT(arg_node) = TRAVopt(VARDEC_NEXT(arg_node), arg_info);
   printf(";\n");
-
+  VARDEC_NEXT(arg_node) = TRAVopt(VARDEC_NEXT(arg_node), arg_info);
 
   DBUG_RETURN(arg_node);
 }
 node *PRTlocalfundefs(node * arg_node, info * arg_info) {
   DBUG_ENTER("PRTlocalfundefs");
+  printIndent(arg_info);
   LOCALFUNDEFS_FIRST(arg_node) = TRAVdo(LOCALFUNDEFS_FIRST(arg_node), arg_info);
   LOCALFUNDEFS_NEXT(arg_node) = TRAVopt(LOCALFUNDEFS_NEXT(arg_node), arg_info);
   DBUG_RETURN(arg_node);
@@ -132,7 +160,7 @@ node *PRTglobaldec(node * arg_node, info * arg_info) {
   printf("extern ");
   tmp = type_string(GLOBALDEC_TYPE(arg_node));
   printf("%s ", tmp);
-  GLOBALDEC_ID(arg_node) = TRAVdo(GLOBALDEC_ID(arg_node), arg_info);
+  printf("%s ", GLOBALDEC_ID(arg_node));
   printf(";\n");
   DBUG_RETURN(arg_node);
 }
@@ -145,7 +173,7 @@ node *PRTglobaldef(node * arg_node, info * arg_info) {
   }
   tmp = type_string(GLOBALDEF_TYPE(arg_node));
   printf("%s ", tmp);
-  GLOBALDEF_ID(arg_node) = TRAVdo(GLOBALDEF_ID(arg_node), arg_info);
+  printf("%s", GLOBALDEF_ID(arg_node));
   if (GLOBALDEF_EXPR(arg_node) != NULL) {
     printf(" ");
     GLOBALDEF_EXPR(arg_node) = TRAVopt(GLOBALDEF_EXPR(arg_node), arg_info);
@@ -159,7 +187,7 @@ node *PRTparam(node * arg_node, info * arg_info) {
   DBUG_ENTER("PRTparam");
   tmp = type_string(PARAM_TYPE(arg_node));
   printf("%s", tmp);
-  PARAM_ID(arg_node) = TRAVdo(PARAM_ID(arg_node), arg_info);
+  printf("%s", PARAM_ID(arg_node));
   if(PARAM_NEXT(arg_node)) {
     printf(", ");
     PARAM_NEXT(arg_node) = TRAVopt(PARAM_NEXT(arg_node), arg_info);
@@ -167,22 +195,23 @@ node *PRTparam(node * arg_node, info * arg_info) {
   DBUG_RETURN(arg_node);
 }
 
-node *PRTid(node * arg_node, info * arg_info) {
-  DBUG_ENTER("PRTid");
-  printf("%s", ID_NAME(arg_node));
+node *PRTvar(node * arg_node, info * arg_info) {
+  DBUG_ENTER("PRTvar");
+  printf("%s", VAR_NAME(arg_node));
   DBUG_RETURN(arg_node);
 }
 
-node *PRTstmts(node * arg_node, info * arg_info) {
-  DBUG_ENTER("PRTstmts");
-  STMTS_FIRST(arg_node) = TRAVdo(STMTS_FIRST(arg_node), arg_info);
-  STMTS_NEXT(arg_node) = TRAVopt(STMTS_NEXT(arg_node), arg_info);
+node *PRTstatements(node * arg_node, info * arg_info) {
+  DBUG_ENTER("PRTstatements");
+  printIndent(arg_info);
+  STATEMENTS_FIRST(arg_node) = TRAVdo(STATEMENTS_FIRST(arg_node), arg_info);
+  STATEMENTS_NEXT(arg_node) = TRAVopt(STATEMENTS_NEXT(arg_node), arg_info);
   DBUG_RETURN(arg_node);
 }
 
 node *PRTassign(node * arg_node, info * arg_info) {
   DBUG_ENTER("PRTassign");
-  ASSIGN_ID(arg_node) = TRAVdo(ASSIGN_ID(arg_node), arg_info);
+  ASSIGN_VAR(arg_node) = TRAVdo(ASSIGN_VAR(arg_node), arg_info);
   printf(" = ");
   ASSIGN_EXPR(arg_node) = TRAVdo(ASSIGN_EXPR(arg_node), arg_info);
   printf(";\n");
@@ -191,10 +220,10 @@ node *PRTassign(node * arg_node, info * arg_info) {
 
 node *PRTfuncall(node * arg_node, info * arg_info) {
   DBUG_ENTER("PRTfuncall");
-  FUNCALL_ID(arg_node) = TRAVdo(FUNCALL_ID(arg_node), arg_info);
-  printf(" (");
+  FUNCALL_VAR(arg_node) = TRAVdo(FUNCALL_VAR(arg_node), arg_info);
+  printf("(");
   FUNCALL_EXPRS(arg_node) = TRAVopt(FUNCALL_EXPRS(arg_node), arg_info);
-  printf(");\n");
+  printf(")");
   DBUG_RETURN(arg_node);
 }
 
@@ -203,11 +232,17 @@ node *PRTif(node * arg_node, info * arg_info) {
   printf("if (");
   IF_EXPR(arg_node) = TRAVdo(IF_EXPR(arg_node), arg_info);
   printf(") {\n");
+  INFO_INDENT(arg_info) += 1;
   IF_BLOCK(arg_node) = TRAVdo(IF_BLOCK(arg_node), arg_info);
+  INFO_INDENT(arg_info) -= 1;
   if (IF_ELSEBLOCK(arg_node) != NULL) {
+    printIndent(arg_info);
     printf("} else {\n");
+    INFO_INDENT(arg_info) += 1;
+    IF_ELSEBLOCK(arg_node) = TRAVopt(IF_ELSEBLOCK(arg_node), arg_info);
+    INFO_INDENT(arg_info) -= 1;
   }
-  IF_ELSEBLOCK(arg_node) = TRAVopt(IF_ELSEBLOCK(arg_node), arg_info);
+  printIndent(arg_info);
   printf("}\n");
   DBUG_RETURN(arg_node);
 }
@@ -216,8 +251,12 @@ node *PRTwhile(node * arg_node, info * arg_info) {
   DBUG_ENTER("PRTwhile");
   printf("while (");
   WHILE_EXPR(arg_node) = TRAVdo(WHILE_EXPR(arg_node), arg_info);
+  printIndent(arg_info);
   printf(") {\n");
+  INFO_INDENT(arg_info) += 1;
   WHILE_BLOCK(arg_node) = TRAVdo(WHILE_BLOCK(arg_node), arg_info);
+  INFO_INDENT(arg_info) -= 1;
+  printIndent(arg_info);
   printf("}\n");
   DBUG_RETURN(arg_node);
 }
@@ -225,9 +264,13 @@ node *PRTwhile(node * arg_node, info * arg_info) {
 node *PRTdowhile(node * arg_node, info * arg_info) {
   DBUG_ENTER("PRTdowhile");
   printf("do {\n");
+  INFO_INDENT(arg_info) += 1;
   DOWHILE_BLOCK(arg_node) = TRAVdo(DOWHILE_BLOCK(arg_node), arg_info);
+  INFO_INDENT(arg_info) -= 1;
+  printIndent(arg_info);
   printf("} while (");
   DOWHILE_EXPR(arg_node) = TRAVdo(DOWHILE_EXPR(arg_node), arg_info);
+  printIndent(arg_info);
   printf(");\n");
   DBUG_RETURN(arg_node);
 }
@@ -235,25 +278,29 @@ node *PRTdowhile(node * arg_node, info * arg_info) {
 node *PRTfor(node * arg_node, info * arg_info) {
   DBUG_ENTER("PRTfor");
   printf("for (");
-  FOR_ID(arg_node) = TRAVdo(FOR_ID(arg_node), arg_info);
+  FOR_VAR(arg_node) = TRAVdo(FOR_VAR(arg_node), arg_info);
   printf(" = ");
   FOR_EXPRSTART(arg_node) = TRAVdo(FOR_EXPRSTART(arg_node), arg_info);
-  printf("; ");
+  printf(", ");
   FOR_EXPRSTOP(arg_node) = TRAVdo(FOR_EXPRSTOP(arg_node), arg_info);
   if (FOR_EXPRINCR(arg_node) != NULL) {
-    printf("; ");
+    printf(", ");
     FOR_EXPRINCR(arg_node) = TRAVopt(FOR_EXPRINCR(arg_node), arg_info);
   }
-  printf(") {");
+  printf(") {\n");
+  INFO_INDENT(arg_info) += 1;
   FOR_BLOCK(arg_node) = TRAVdo(FOR_BLOCK(arg_node), arg_info);
+  INFO_INDENT(arg_info) -= 1;
+  printIndent(arg_info);
   printf("}\n");
   DBUG_RETURN(arg_node);
 }
 
 node *PRTreturn(node * arg_node, info * arg_info) {
   DBUG_ENTER("PRTreturn");
-  printf("return \n");
+  printf("return ");
   RETURN_EXPR(arg_node) = TRAVdo(RETURN_EXPR(arg_node), arg_info);
+  printf(";\n");
   DBUG_RETURN(arg_node);
 }
 
@@ -267,7 +314,7 @@ node *PRTexprs(node * arg_node, info * arg_info) {
 node * PRTbinop (node * arg_node, info * arg_info) {
   char *tmp;
   DBUG_ENTER ("PRTbinop");
-  printf( "( ");
+  printf( " ");
   BINOP_LEFT( arg_node) = TRAVdo( BINOP_LEFT( arg_node), arg_info);
   switch (BINOP_OP( arg_node)) {
     case BO_add:
@@ -314,7 +361,7 @@ node * PRTbinop (node * arg_node, info * arg_info) {
   }
   printf( " %s ", tmp);
   BINOP_RIGHT( arg_node) = TRAVdo( BINOP_RIGHT( arg_node), arg_info);
-  printf( ")");
+
   DBUG_RETURN (arg_node);
 }
 
@@ -333,7 +380,6 @@ node *PRTmonop(node * arg_node, info * arg_info) {
   }
   printf("%s ", tmp);
   MONOP_EXPR(arg_node) = TRAVdo(MONOP_EXPR(arg_node), arg_info);
-  printf("\n");
   DBUG_RETURN(arg_node);
 }
 
@@ -407,11 +453,6 @@ node *PRTsymboltableentry (node * arg_node, info * arg_info)
 {
   DBUG_ENTER ("PRTsymboltableentry");
   DBUG_RETURN (arg_node);
-}
-
-node *PRTstefuntype (node * arg_node, info * arg_info) {
-  DBUG_ENTER("PRTstetype");
-  DBUG_RETURN(arg_node);
 }
 
 /** <!--******************************************************************-->
