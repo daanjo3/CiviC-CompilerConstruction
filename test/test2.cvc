@@ -1,4 +1,15 @@
-a = (42 + 
-(13
-                * tutu));
+int i1 = 1;
+int i2 = 5;
+bool b1 = TRUE;
 
+void test() {
+    int i = 0;
+    int k = 1;
+
+    int test1(int change) {
+        change = 2;
+        return change;
+    }
+
+    i = test1(i);
+}

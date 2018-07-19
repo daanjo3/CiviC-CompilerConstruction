@@ -81,10 +81,6 @@ struct ATTRIBS_N_GLOBALDEF
   bool Export;
   char *Id;
 };
-struct ATTRIBS_N_ID
-{
-  char *Name;
-};
 struct ATTRIBS_N_IF
 {
 };
@@ -104,14 +100,13 @@ struct ATTRIBS_N_PARAM
   basictype Type;
   char *Id;
 };
+struct ATTRIBS_N_PROGRAM
+{
+};
 struct ATTRIBS_N_RETURN
 {
 };
-struct ATTRIBS_N_STEFUNTYPE
-{
-  basictype Type;
-};
-struct ATTRIBS_N_STMTS
+struct ATTRIBS_N_STATEMENTS
 {
 };
 struct ATTRIBS_N_SYMBOLTABLE
@@ -123,6 +118,12 @@ struct ATTRIBS_N_SYMBOLTABLEENTRY
   char *Name;
   basictype Type;
   bool Function;
+  node *Params;
+};
+struct ATTRIBS_N_VAR
+{
+  char *Name;
+  node *Link;
 };
 struct ATTRIBS_N_VARDEC
 {
@@ -153,17 +154,17 @@ struct ATTRIBUNION
   struct ATTRIBS_N_FUNDEFDEC *N_fundefdec;
   struct ATTRIBS_N_GLOBALDEC *N_globaldec;
   struct ATTRIBS_N_GLOBALDEF *N_globaldef;
-  struct ATTRIBS_N_ID *N_id;
   struct ATTRIBS_N_IF *N_if;
   struct ATTRIBS_N_LOCALFUNDEFS *N_localfundefs;
   struct ATTRIBS_N_MONOP *N_monop;
   struct ATTRIBS_N_NUM *N_num;
   struct ATTRIBS_N_PARAM *N_param;
+  struct ATTRIBS_N_PROGRAM *N_program;
   struct ATTRIBS_N_RETURN *N_return;
-  struct ATTRIBS_N_STEFUNTYPE *N_stefuntype;
-  struct ATTRIBS_N_STMTS *N_stmts;
+  struct ATTRIBS_N_STATEMENTS *N_statements;
   struct ATTRIBS_N_SYMBOLTABLE *N_symboltable;
   struct ATTRIBS_N_SYMBOLTABLEENTRY *N_symboltableentry;
+  struct ATTRIBS_N_VAR *N_var;
   struct ATTRIBS_N_VARDEC *N_vardec;
   struct ATTRIBS_N_WHILE *N_while;
 };

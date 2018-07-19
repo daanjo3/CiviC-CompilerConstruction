@@ -42,9 +42,9 @@ static int yyerror( char *errname);
 %token <cflt> FLOAT
 %token <id> ID
 
-%type <node> declarations declaration fundefdec globaldec globaldef
-%type <node> param id binop monop cast funcall
-%type <node> funbody vardecs localfundefs stmts stmt for if block
+%type <node> program declarations declaration fundefdec globaldec globaldef
+%type <node> param var binop monop cast funcall
+%type <node> funbody vardecs localfundefs statements stmt for if block
 %type <node> exprs expr
 
 %type <basictype> type
@@ -58,11 +58,11 @@ static int yyerror( char *errname);
 %%
 
 program:  declarations
-          { parseresult = $1; }
+          { parseresult = TBmakeProgram($1, NULL); }
           ;
 
-declarations: declarations declaration
-              { $$ = TBmakeDeclarations($2, $1); }
+declarations: declaration declarations
+              { $$ = TBmakeDeclarations($1, $2); }
               | declaration
               { $$ = TBmakeDeclarations($1, NULL); }
               ;
@@ -76,17 +76,17 @@ declaration:  fundefdec
               ;
 
 fundefdec:  EXPORT type ID BRACKET_L BRACKET_R BRACE_L funbody BRACE_R
-            { $$ = TBmakeFundefdec(TRUE, $2, $3, NULL, $7); }
+            { $$ = TBmakeFundefdec(TRUE, $2, $3, NULL, $7, NULL); }
             | EXPORT type ID BRACKET_L BRACKET_R param BRACE_L funbody BRACE_R
-            { $$ = TBmakeFundefdec(TRUE, $2, $3, $6, $8); }
+            { $$ = TBmakeFundefdec(TRUE, $2, $3, $6, $8, NULL); }
             | type ID BRACKET_L BRACKET_R BRACE_L funbody BRACE_R
-            { $$ = TBmakeFundefdec(FALSE, $1, $2, NULL, $6); }
-            | type ID BRACKET_L BRACKET_R param BRACE_L funbody BRACE_R
-            { $$ = TBmakeFundefdec(FALSE, $1, $2, $5, $7); }
+            { $$ = TBmakeFundefdec(FALSE, $1, $2, NULL, $6, NULL); }
+            | type ID BRACKET_L param BRACKET_R BRACE_L funbody BRACE_R
+            { $$ = TBmakeFundefdec(FALSE, $1, $2, $4, $7, NULL); }
             | EXTERN type ID BRACKET_L BRACKET_R SEMICOLON
-            { $$ = TBmakeFundefdec(FALSE, $2, $3, NULL, NULL); }
+            { $$ = TBmakeFundefdec(FALSE, $2, $3, NULL, NULL, NULL); }
             | EXTERN type ID BRACKET_L param BRACKET_R SEMICOLON
-            { $$ = TBmakeFundefdec(FALSE, $2, $3, $5, NULL); }
+            { $$ = TBmakeFundefdec(FALSE, $2, $3, $5, NULL, NULL); }
             ;
 
 globaldec:  EXTERN type ID SEMICOLON
@@ -119,19 +119,19 @@ type:     TYPE_INT
           { $$ = RT_void; }
           ;
 
-funbody:  vardecs localfundefs stmts
+funbody:  vardecs localfundefs statements
           { $$ = TBmakeFunbody($1, $2, $3); }
           | vardecs localfundefs
           { $$ = TBmakeFunbody($1, $2, NULL); }
-          | vardecs stmts
+          | vardecs statements
           { $$ = TBmakeFunbody($1, NULL, $2); }
-          | localfundefs stmts
+          | localfundefs statements
           { $$ = TBmakeFunbody(NULL, $1, $2); }
           | vardecs
           { $$ = TBmakeFunbody($1, NULL, NULL); }
           | localfundefs
           { $$ = TBmakeFunbody(NULL, $1, NULL); }
-          | stmts
+          | statements
           { $$ = TBmakeFunbody(NULL, NULL, $1); }
           ;
 
@@ -151,13 +151,14 @@ localfundefs: fundefdec localfundefs
           { $$ = TBmakeLocalfundefs($1, NULL); }
           ;
 
-stmts:    stmt stmts
-          { $$ = TBmakeStmts( $1, $2); }
+// TODO Stellen dat funbody empty mag zijn.
+statements:    stmt statements
+          { $$ = TBmakeStatements( $1, $2); }
           | stmt
-          { $$ = TBmakeStmts( $1, NULL); }
+          { $$ = TBmakeStatements( $1, NULL); }
           ;
 
-stmt:  id LET expr SEMICOLON
+stmt:  var LET expr SEMICOLON
        { $$ = TBmakeAssign($1, $3); }
        | funcall SEMICOLON
        { $$ = $1; }
@@ -173,9 +174,9 @@ stmt:  id LET expr SEMICOLON
        { $$ = TBmakeReturn($2); }
        ;
 
-for:      FOR BRACKET_L TYPE_INT id LET expr COMMA expr COMMA expr BRACKET_R block
+for:      FOR BRACKET_L TYPE_INT var LET expr COMMA expr COMMA expr BRACKET_R block
           { $$ = TBmakeFor($4, $6, $8, $10, $12); }
-          | FOR BRACKET_L TYPE_INT id LET expr COMMA expr BRACKET_R block
+          | FOR BRACKET_L TYPE_INT var LET expr COMMA expr BRACKET_R block
           { $$ = TBmakeFor($4, $6, $8, NULL, $10); }
           ;
 
@@ -185,7 +186,7 @@ if:       IF BRACKET_L expr BRACKET_R block ELSE block
           { $$ = TBmakeIf($3, $5, NULL); }
           ;
 
-block:    BRACE_L stmts BRACE_R
+block:    BRACE_L statements BRACE_R
           { $$ = $2; }
           | stmt
           { $$ = $1; }
@@ -200,12 +201,12 @@ exprs:  expr COMMA exprs
 expr:   BRACKET_L expr BRACKET_R
         { $$ = $2; }
         | binop
-        { $$ =  $1; }
+        { $$ = $1; }
         | monop
         { $$ = $1; }
         | cast
         { $$ = $1; }
-        | id
+        | var
         { $$ = $1; }
         | funcall
         { $$ = $1; }
@@ -223,7 +224,7 @@ cast:   BRACKET_L type BRACKET_R expr
         { $$ = TBmakeCast($2, $4); }
         ;
 
-funcall: id BRACKET_L exprs BRACKET_R
+funcall: var BRACKET_L exprs BRACKET_R
         { $$ = TBmakeFuncall($1, $3); }
         ;
 
@@ -246,8 +247,8 @@ binop:  expr PLUS expr       { $$ = TBmakeBinop(BO_add, $1, $3); }
        | expr AND expr       { $$ = TBmakeBinop(BO_and, $1, $3); }
        ;
 
-id:    ID 
-      { $$ = TBmakeId($1); }
+var:  ID 
+      { $$ = TBmakeVar($1); }
       ;
 %%
 

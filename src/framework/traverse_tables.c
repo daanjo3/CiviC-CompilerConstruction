@@ -18,7 +18,10 @@
 #include "copy_node.h"
 #include "free_node.h"
 #include "check.h"
+#include "transform_for.h"
 #include "make_st.h"
+#include "print_st.h"
+#include "var_init_trans_global.h"
 
 
 travtables_t travtables = {
@@ -30,53 +33,74 @@ travtables_t travtables = {
    &TRAVerror, &TRAVerror, &TRAVerror, &TRAVerror, &TRAVerror}
 
   /* TR_prt */
-  , {&TRAVerror, &PRTdeclarations, &PRTfundefdec, &PRTfunbody, &PRTvardec,
-     &PRTlocalfundefs, &PRTglobaldec, &PRTglobaldef, &PRTparam, &PRTid,
-     &PRTstmts, &PRTassign, &PRTfuncall, &PRTif, &PRTwhile, &PRTdowhile,
-     &PRTfor, &PRTreturn, &PRTexprs, &PRTbinop, &PRTmonop, &PRTcast, &PRTnum,
-     &PRTfloat, &PRTbool, &PRTsymboltable, &PRTsymboltableentry,
-     &PRTstefuntype, &PRTerror}
+  , {&TRAVerror, &PRTprogram, &PRTdeclarations, &PRTfundefdec, &PRTfunbody,
+     &PRTvardec, &PRTlocalfundefs, &PRTglobaldec, &PRTglobaldef, &PRTparam,
+     &PRTvar, &PRTstatements, &PRTassign, &PRTfuncall, &PRTif, &PRTwhile,
+     &PRTdowhile, &PRTfor, &PRTreturn, &PRTexprs, &PRTbinop, &PRTmonop,
+     &PRTcast, &PRTnum, &PRTfloat, &PRTbool, &PRTsymboltable,
+     &PRTsymboltableentry, &PRTerror}
 
   /* TR_copy */
-  , {&TRAVerror, &COPYdeclarations, &COPYfundefdec, &COPYfunbody, &COPYvardec,
-     &COPYlocalfundefs, &COPYglobaldec, &COPYglobaldef, &COPYparam, &COPYid,
-     &COPYstmts, &COPYassign, &COPYfuncall, &COPYif, &COPYwhile, &COPYdowhile,
-     &COPYfor, &COPYreturn, &COPYexprs, &COPYbinop, &COPYmonop, &COPYcast,
-     &COPYnum, &COPYfloat, &COPYbool, &COPYsymboltable, &COPYsymboltableentry,
-     &COPYstefuntype, &COPYerror}
+  , {&TRAVerror, &COPYprogram, &COPYdeclarations, &COPYfundefdec,
+     &COPYfunbody, &COPYvardec, &COPYlocalfundefs, &COPYglobaldec,
+     &COPYglobaldef, &COPYparam, &COPYvar, &COPYstatements, &COPYassign,
+     &COPYfuncall, &COPYif, &COPYwhile, &COPYdowhile, &COPYfor, &COPYreturn,
+     &COPYexprs, &COPYbinop, &COPYmonop, &COPYcast, &COPYnum, &COPYfloat,
+     &COPYbool, &COPYsymboltable, &COPYsymboltableentry, &COPYerror}
 
   /* TR_free */
-  , {&TRAVerror, &FREEdeclarations, &FREEfundefdec, &FREEfunbody, &FREEvardec,
-     &FREElocalfundefs, &FREEglobaldec, &FREEglobaldef, &FREEparam, &FREEid,
-     &FREEstmts, &FREEassign, &FREEfuncall, &FREEif, &FREEwhile, &FREEdowhile,
-     &FREEfor, &FREEreturn, &FREEexprs, &FREEbinop, &FREEmonop, &FREEcast,
-     &FREEnum, &FREEfloat, &FREEbool, &FREEsymboltable, &FREEsymboltableentry,
-     &FREEstefuntype, &FREEerror}
+  , {&TRAVerror, &FREEprogram, &FREEdeclarations, &FREEfundefdec,
+     &FREEfunbody, &FREEvardec, &FREElocalfundefs, &FREEglobaldec,
+     &FREEglobaldef, &FREEparam, &FREEvar, &FREEstatements, &FREEassign,
+     &FREEfuncall, &FREEif, &FREEwhile, &FREEdowhile, &FREEfor, &FREEreturn,
+     &FREEexprs, &FREEbinop, &FREEmonop, &FREEcast, &FREEnum, &FREEfloat,
+     &FREEbool, &FREEsymboltable, &FREEsymboltableentry, &FREEerror}
 
   /* TR_chk */
-  , {&TRAVerror, &CHKdeclarations, &CHKfundefdec, &CHKfunbody, &CHKvardec,
-     &CHKlocalfundefs, &CHKglobaldec, &CHKglobaldef, &CHKparam, &CHKid,
-     &CHKstmts, &CHKassign, &CHKfuncall, &CHKif, &CHKwhile, &CHKdowhile,
-     &CHKfor, &CHKreturn, &CHKexprs, &CHKbinop, &CHKmonop, &CHKcast, &CHKnum,
-     &CHKfloat, &CHKbool, &CHKsymboltable, &CHKsymboltableentry,
-     &CHKstefuntype, &CHKerror}
+  , {&TRAVerror, &CHKprogram, &CHKdeclarations, &CHKfundefdec, &CHKfunbody,
+     &CHKvardec, &CHKlocalfundefs, &CHKglobaldec, &CHKglobaldef, &CHKparam,
+     &CHKvar, &CHKstatements, &CHKassign, &CHKfuncall, &CHKif, &CHKwhile,
+     &CHKdowhile, &CHKfor, &CHKreturn, &CHKexprs, &CHKbinop, &CHKmonop,
+     &CHKcast, &CHKnum, &CHKfloat, &CHKbool, &CHKsymboltable,
+     &CHKsymboltableentry, &CHKerror}
 
-  /* TR_ms */
-  , {&TRAVerror, &TRAVsons, &MSfundefdec, &TRAVsons, &TRAVsons, &TRAVsons,
-     &MSglobaldec, &MSglobaldef, &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons,
-     &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons, &MSfor, &TRAVsons, &TRAVsons,
+  /* TR_tf */
+  , {&TRAVerror, &TRAVsons, &TRAVsons, &TFfundefdec, &TRAVsons, &TRAVsons,
+     &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons,
+     &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons, &TFfor, &TRAVsons,
      &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons,
      &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons}
+
+  /* TR_ms */
+  , {&TRAVerror, &MSprogram, &TRAVsons, &MSfundefdec, &TRAVsons, &MSvardec,
+     &TRAVsons, &MSglobaldec, &MSglobaldef, &TRAVsons, &TRAVsons, &TRAVsons,
+     &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons, &MSfor, &TRAVsons,
+     &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons,
+     &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons}
+
+  /* TR_ps */
+  , {&TRAVerror, &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons,
+     &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons,
+     &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons,
+     &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons,
+     &TRAVsons, &TRAVsons, &PSsymboltable, &PSsymboltableentry, &TRAVsons}
+
+  /* TR_tg */
+  , {&TRAVerror, &TGprogram, &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons,
+     &TRAVsons, &TRAVsons, &TGglobaldef, &TRAVsons, &TRAVsons, &TRAVsons,
+     &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons,
+     &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons,
+     &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons}
 };
 
 preposttable_t pretable = {
-  NULL, NULL, NULL, NULL, NULL, NULL
+  NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL
 };
 
 preposttable_t posttable = {
-  NULL, NULL, NULL, NULL, NULL, NULL
+  NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL
 };
 
-const char *travnames[6] = {
-  "unknown", "prt", "copy", "free", "chk", "ms"
+const char *travnames[9] = {
+  "unknown", "prt", "copy", "free", "chk", "tf", "ms", "ps", "tg"
 };

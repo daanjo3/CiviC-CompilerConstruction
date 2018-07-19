@@ -29,17 +29,51 @@ ENDPHASE( ld)
 
 /******************************************************************************/
 
-PHASE ( ca,
+PHASE( ptc,
+        "Pre-transforming the code",
+        ALWAYS)
+
+SUBPHASE( tf,
+        "Transforming For-loops",
+        TFdoTransformFor,
+        ALWAYS,
+        ptc)
+
+ENDPHASE( ptc)
+
+/******************************************************************************/
+
+PHASE( ca,
         "Doing Context Analysis",
         ALWAYS)
 
 SUBPHASE( ms,
-          "Making symboltable",
+          "Making Symboltable",
           MSdoMakeSymbolTable,
           ALWAYS,
           ca)
 
+SUBPHASE( ps,
+         "Printing Symboltable",
+         PSdoPrintSymbolTable,
+         ALWAYS,
+         ca)
+
 ENDPHASE( ca)
+
+/*****************************************************************************/
+
+PHASE ( tc,
+        "Transform Code",
+        ALWAYS)
+
+SUBPHASE ( tg,
+           "Transform global initialisations",
+           TGdoTransformGlobalInit,
+           ALWAYS,
+           tc)
+
+ENDPHASE ( tc)
 
 /*****************************************************************************/
 

@@ -52,7 +52,7 @@ COPYassign (node * arg_node, info * arg_info)
   DBUG_ENTER ("COPYassign");
   LUTinsertIntoLutP (INFO_LUT (arg_info), arg_node, result);
   /* Copy sons */
-  ASSIGN_ID (result) = COPYTRAV (ASSIGN_ID (arg_node), arg_info);
+  ASSIGN_VAR (result) = COPYTRAV (ASSIGN_VAR (arg_node), arg_info);
   ASSIGN_EXPR (result) = COPYTRAV (ASSIGN_EXPR (arg_node), arg_info);
   /* Return value */
   DBUG_RETURN (result);
@@ -282,7 +282,7 @@ COPYfor (node * arg_node, info * arg_info)
   DBUG_ENTER ("COPYfor");
   LUTinsertIntoLutP (INFO_LUT (arg_info), arg_node, result);
   /* Copy sons */
-  FOR_ID (result) = COPYTRAV (FOR_ID (arg_node), arg_info);
+  FOR_VAR (result) = COPYTRAV (FOR_VAR (arg_node), arg_info);
   FOR_EXPRSTART (result) = COPYTRAV (FOR_EXPRSTART (arg_node), arg_info);
   FOR_EXPRSTOP (result) = COPYTRAV (FOR_EXPRSTOP (arg_node), arg_info);
   FOR_EXPRINCR (result) = COPYTRAV (FOR_EXPRINCR (arg_node), arg_info);
@@ -338,7 +338,7 @@ COPYfuncall (node * arg_node, info * arg_info)
   DBUG_ENTER ("COPYfuncall");
   LUTinsertIntoLutP (INFO_LUT (arg_info), arg_node, result);
   /* Copy sons */
-  FUNCALL_ID (result) = COPYTRAV (FUNCALL_ID (arg_node), arg_info);
+  FUNCALL_VAR (result) = COPYTRAV (FUNCALL_VAR (arg_node), arg_info);
   FUNCALL_EXPRS (result) = COPYTRAV (FUNCALL_EXPRS (arg_node), arg_info);
   /* Return value */
   DBUG_RETURN (result);
@@ -359,7 +359,7 @@ COPYfuncall (node * arg_node, info * arg_info)
 node *
 COPYfundefdec (node * arg_node, info * arg_info)
 {
-  node *result = TBmakeFundefdec (FALSE, BT_unknown, NULL, NULL, NULL);
+  node *result = TBmakeFundefdec (FALSE, BT_unknown, NULL, NULL, NULL, NULL);
   DBUG_ENTER ("COPYfundefdec");
   LUTinsertIntoLutP (INFO_LUT (arg_info), arg_node, result);
   /* Copy attributes */
@@ -369,6 +369,8 @@ COPYfundefdec (node * arg_node, info * arg_info)
   /* Copy sons */
   FUNDEFDEC_PARAM (result) = COPYTRAV (FUNDEFDEC_PARAM (arg_node), arg_info);
   FUNDEFDEC_BODY (result) = COPYTRAV (FUNDEFDEC_BODY (arg_node), arg_info);
+  FUNDEFDEC_SYMBOLTABLE (result) =
+    COPYTRAV (FUNDEFDEC_SYMBOLTABLE (arg_node), arg_info);
   /* Return value */
   DBUG_RETURN (result);
 }
@@ -422,30 +424,6 @@ COPYglobaldef (node * arg_node, info * arg_info)
   GLOBALDEF_ID (result) = STRcpy (GLOBALDEF_ID (arg_node));
   /* Copy sons */
   GLOBALDEF_EXPR (result) = COPYTRAV (GLOBALDEF_EXPR (arg_node), arg_info);
-  /* Return value */
-  DBUG_RETURN (result);
-}
-
-/** <!--******************************************************************-->
- *
- * @fn COPYid
- *
- * @brief Copies the node and its sons/attributes
- *
- * @param arg_node Id node to process
- * @param arg_info pointer to info structure
- *
- * @return processed node
- *
- ***************************************************************************/
-node *
-COPYid (node * arg_node, info * arg_info)
-{
-  node *result = TBmakeId (NULL);
-  DBUG_ENTER ("COPYid");
-  LUTinsertIntoLutP (INFO_LUT (arg_info), arg_node, result);
-  /* Copy attributes */
-  ID_NAME (result) = STRcpy (ID_NAME (arg_node));
   /* Return value */
   DBUG_RETURN (result);
 }
@@ -582,6 +560,33 @@ COPYparam (node * arg_node, info * arg_info)
 
 /** <!--******************************************************************-->
  *
+ * @fn COPYprogram
+ *
+ * @brief Copies the node and its sons/attributes
+ *
+ * @param arg_node Program node to process
+ * @param arg_info pointer to info structure
+ *
+ * @return processed node
+ *
+ ***************************************************************************/
+node *
+COPYprogram (node * arg_node, info * arg_info)
+{
+  node *result = TBmakeProgram (NULL, NULL);
+  DBUG_ENTER ("COPYprogram");
+  LUTinsertIntoLutP (INFO_LUT (arg_info), arg_node, result);
+  /* Copy sons */
+  PROGRAM_DECLARATIONS (result) =
+    COPYTRAV (PROGRAM_DECLARATIONS (arg_node), arg_info);
+  PROGRAM_SYMBOLTABLE (result) =
+    COPYTRAV (PROGRAM_SYMBOLTABLE (arg_node), arg_info);
+  /* Return value */
+  DBUG_RETURN (result);
+}
+
+/** <!--******************************************************************-->
+ *
  * @fn COPYreturn
  *
  * @brief Copies the node and its sons/attributes
@@ -606,51 +611,26 @@ COPYreturn (node * arg_node, info * arg_info)
 
 /** <!--******************************************************************-->
  *
- * @fn COPYstefuntype
+ * @fn COPYstatements
  *
  * @brief Copies the node and its sons/attributes
  *
- * @param arg_node STEFunType node to process
+ * @param arg_node Statements node to process
  * @param arg_info pointer to info structure
  *
  * @return processed node
  *
  ***************************************************************************/
 node *
-COPYstefuntype (node * arg_node, info * arg_info)
+COPYstatements (node * arg_node, info * arg_info)
 {
-  node *result = TBmakeStefuntype (BT_unknown, NULL);
-  DBUG_ENTER ("COPYstefuntype");
-  LUTinsertIntoLutP (INFO_LUT (arg_info), arg_node, result);
-  /* Copy attributes */
-  STEFUNTYPE_TYPE (result) = STEFUNTYPE_TYPE (arg_node);
-  /* Copy sons */
-  STEFUNTYPE_NEXT (result) = COPYTRAV (STEFUNTYPE_NEXT (arg_node), arg_info);
-  /* Return value */
-  DBUG_RETURN (result);
-}
-
-/** <!--******************************************************************-->
- *
- * @fn COPYstmts
- *
- * @brief Copies the node and its sons/attributes
- *
- * @param arg_node Stmts node to process
- * @param arg_info pointer to info structure
- *
- * @return processed node
- *
- ***************************************************************************/
-node *
-COPYstmts (node * arg_node, info * arg_info)
-{
-  node *result = TBmakeStmts (NULL, NULL);
-  DBUG_ENTER ("COPYstmts");
+  node *result = TBmakeStatements (NULL, NULL);
+  DBUG_ENTER ("COPYstatements");
   LUTinsertIntoLutP (INFO_LUT (arg_info), arg_node, result);
   /* Copy sons */
-  STMTS_FIRST (result) = COPYTRAV (STMTS_FIRST (arg_node), arg_info);
-  STMTS_NEXT (result) = COPYTRAV (STMTS_NEXT (arg_node), arg_info);
+  STATEMENTS_FIRST (result) =
+    COPYTRAV (STATEMENTS_FIRST (arg_node), arg_info);
+  STATEMENTS_NEXT (result) = COPYTRAV (STATEMENTS_NEXT (arg_node), arg_info);
   /* Return value */
   DBUG_RETURN (result);
 }
@@ -698,18 +678,45 @@ COPYsymboltable (node * arg_node, info * arg_info)
 node *
 COPYsymboltableentry (node * arg_node, info * arg_info)
 {
-  node *result = TBmakeSymboltableentry (NULL, BT_unknown, FALSE, NULL, NULL);
+  node *result = TBmakeSymboltableentry (NULL, BT_unknown, FALSE, NULL);
   DBUG_ENTER ("COPYsymboltableentry");
   LUTinsertIntoLutP (INFO_LUT (arg_info), arg_node, result);
   /* Copy attributes */
   SYMBOLTABLEENTRY_NAME (result) = STRcpy (SYMBOLTABLEENTRY_NAME (arg_node));
   SYMBOLTABLEENTRY_TYPE (result) = SYMBOLTABLEENTRY_TYPE (arg_node);
   SYMBOLTABLEENTRY_FUNCTION (result) = SYMBOLTABLEENTRY_FUNCTION (arg_node);
+  SYMBOLTABLEENTRY_PARAMS (result) =
+    LUTsearchInLutPp (INFO_LUT (arg_info),
+		      SYMBOLTABLEENTRY_PARAMS (arg_node));
   /* Copy sons */
   SYMBOLTABLEENTRY_NEXT (result) =
     COPYTRAV (SYMBOLTABLEENTRY_NEXT (arg_node), arg_info);
-  SYMBOLTABLEENTRY_FUNTYPES (result) =
-    COPYTRAV (SYMBOLTABLEENTRY_FUNTYPES (arg_node), arg_info);
+  /* Return value */
+  DBUG_RETURN (result);
+}
+
+/** <!--******************************************************************-->
+ *
+ * @fn COPYvar
+ *
+ * @brief Copies the node and its sons/attributes
+ *
+ * @param arg_node Var node to process
+ * @param arg_info pointer to info structure
+ *
+ * @return processed node
+ *
+ ***************************************************************************/
+node *
+COPYvar (node * arg_node, info * arg_info)
+{
+  node *result = TBmakeVar (NULL);
+  DBUG_ENTER ("COPYvar");
+  LUTinsertIntoLutP (INFO_LUT (arg_info), arg_node, result);
+  /* Copy attributes */
+  VAR_NAME (result) = STRcpy (VAR_NAME (arg_node));
+  VAR_LINK (result) =
+    LUTsearchInLutPp (INFO_LUT (arg_info), VAR_LINK (arg_node));
   /* Return value */
   DBUG_RETURN (result);
 }

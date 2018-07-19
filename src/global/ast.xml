@@ -44,15 +44,38 @@
       <traversal id="FREE" name="Free Syntax Tree" default="user" include="free_node.h" />
       <traversal id="CHK" name="Check Syntax Tree" default="user" include="check.h" />
 
-      <traversal id="MS" name="Make Symboltable" default="sons" include="make_st.h">
+      <traversal id="TF" name="Transform For-loop" default="sons" include="transform_for.h">
         <travuser>
           <node name="FunDefDec"/>
           <node name="For"/>
-          <node name="Vardec"/>
+        </travuser>
+      </traversal>
+
+      <traversal id="MS" name="Make Symboltable" default="sons" include="make_st.h">
+        <travuser>
+          <node name="Program"/>
+          <node name="FunDefDec"/>
+          <node name="For"/>
+          <node name="VarDec"/>
           <node name="GlobalDef"/>
           <node name="GlobalDec"/>
         </travuser>
       </traversal>
+
+      <traversal id="PS" name="Print Symboltable" default="sons" include="print_st.h">
+        <travuser>
+          <node name="SymbolTable"/>
+          <node name="SymbolTableEntry"/>
+        </travuser>
+      </traversal>
+
+      <traversal id="TG" name="Transform Global Init" default="sons" include="var_init_trans_global.h">
+        <travuser>
+          <node name="Program"/>
+          <node name="GlobalDef"/>
+        </travuser>
+      </traversal>
+
     </general>
   </phases>
 
@@ -68,7 +91,7 @@
         <node name="MonOp"/>
         <node name="Cast"/>
         <node name="FunCall"/>
-        <node name="Id"/>
+        <node name="Var"/>
         <node name="Num"/>
         <node name="Float"/>
         <node name="Bool"/>
@@ -104,6 +127,36 @@
 <!--
   DM-Node Declarations:
  -->
+    <node name="Program">
+      <description>Root node of the ast</description>
+      <sons>
+        <son name="Declarations">
+          <description>Declarations in the program</description>
+          <targets>
+            <target mandatory="yes">
+              <node name="Declarations"/>
+              <phases>
+                <all/>
+              </phases>
+            </target>
+          </targets>
+        </son>
+        <son name="SymbolTable">
+          <description>Global symboltable</description>
+          <targets>
+            <target mandatory="no">
+              <node name="SymbolTable"/>
+              <phases>
+                <all/>
+              </phases>
+            </target>
+          </targets>
+        </son>
+      </sons>
+      <attributes>
+      </attributes>
+    </node>
+
     <node name="Declarations">
       <description>Represents (sequence of) declarations</description>
       <sons>
@@ -151,8 +204,19 @@
         <son name="Body">
           <description>Body of the definition</description>
           <targets>
-            <target mandatory="yes">
+            <target mandatory="no">
               <node name="FunBody"/>
+              <phases>
+                <all/>
+              </phases>
+            </target>
+          </targets>
+        </son>
+        <son name="SymbolTable">
+          <description>Local symboltable of the function</description>
+          <targets>
+            <target mandatory="no">
+              <node name="SymbolTable"/>
               <phases>
                 <all/>
               </phases>
@@ -230,7 +294,7 @@
           <description>Link to a sequence of statements</description>
           <targets>
             <target mandatory="no">
-              <node name="Stmts"/>
+              <node name="Statements"/>
               <phases>
                 <all/>
               </phases>
@@ -460,8 +524,8 @@
       </attributes>
     </node>
 
-    <node name="Id">
-      <description>Node which holds an Id</description>
+    <node name="Var">
+      <description>Node which holds a variable</description>
       <sons>
       </sons>
       <attributes>
@@ -477,12 +541,25 @@
             </targets>
           </type>
         </attribute>
+        <attribute name="Link">
+          <description>Link to a symbol table entry</description>
+          <type name="Link">
+            <targets>
+              <target mandatory="no">
+                <phases>
+                  <all/>
+                </phases>
+              </target>
+            </targets>
+          </type>
+        </attribute>
       </attributes>
     </node>
+
 <!--
- Node Stmts:
+ Node Statements:
 -->
-     <node name="Stmts">
+     <node name="Statements">
       <description>represents (sequence of) statements</description>
       <sons>
         <son name="First">
@@ -500,7 +577,7 @@
           <description>remaining statements in sequence</description>
           <targets>
             <target mandatory="no">
-              <node name="Stmts" />
+              <node name="Statements" />
               <phases>
                 <all />
               </phases>
@@ -517,11 +594,11 @@
      <node name="Assign">
       <description>represents assignment statement</description>
       <sons>
-        <son name="Id">
+        <son name="Var">
           <description>Id of variable of function</description>
           <targets>
             <target mandatory="yes">
-              <node name="Id" />
+              <node name="Var" />
               <phases>
                 <all/>
               </phases>
@@ -547,11 +624,11 @@
     <node name="FunCall">
       <description>Represents a function call</description>
       <sons>
-        <son name="Id">
-          <description>Id of variable of function</description>
+        <son name="Var">
+          <description>Function-variable name</description>
           <targets>
             <target mandatory="yes">
-              <node name="Id" />
+              <node name="Var" />
               <phases>
                 <all/>
               </phases>
@@ -592,7 +669,7 @@
           <description>Block of code in if-statement</description>
           <targets>
             <target mandatory="yes">
-              <node name="Stmts"/>
+              <node name="Statements"/>
               <phases>
                 <all/>
               </phases>
@@ -603,7 +680,7 @@
           <description>Else block of code in if-statement</description>
           <targets>
             <target mandatory="no">
-              <node name="Stmts"/>
+              <node name="Statements"/>
               <phases>
                 <all/>
               </phases>
@@ -633,7 +710,7 @@
           <description>Block of code in while-statement</description>
           <targets>
             <target mandatory="yes">
-              <node name="Stmts"/>
+              <node name="Statements"/>
               <phases>
                 <all/>
               </phases>
@@ -663,7 +740,7 @@
           <description>Block of code in while-statement</description>
           <targets>
             <target mandatory="yes">
-              <node name="Stmts"/>
+              <node name="Statements"/>
               <phases>
                 <all/>
               </phases>
@@ -677,11 +754,11 @@
 
     <node name="For">
       <sons>
-        <son name="Id">
+        <son name="Var">
           <description>Id of variable</description>
           <targets>
             <target mandatory="yes">
-              <node name="Id" />
+              <node name="Var" />
               <phases>
                 <all/>
               </phases>
@@ -725,7 +802,7 @@
           <description>Block of code in for-loop</description>
           <targets>
             <target mandatory="yes">
-              <node name="Stmts"/>
+              <node name="Statements"/>
               <phases>
                 <all/>
               </phases>
@@ -959,7 +1036,7 @@
       </attributes>
     </node>
 <!--
- Node SymbolTableEntry:
+ Node SymbolTable:
 -->
     <node name="SymbolTable">
       <description>The root of a symbol table linked list</description>
@@ -1004,17 +1081,6 @@
             </target>
           </targets>
         </son>
-        <son name="FunTypes">
-          <description>List of function parameter types</description>
-          <targets>
-            <target mandatory="no">
-              <node name="Param"/>
-              <phases>
-                <all/>
-              </phases>
-            </target>
-          </targets>
-        </son>
       </sons>
       <attributes>
         <attribute name="Name">
@@ -1043,6 +1109,17 @@
           <type name="Bool">
             <targets>
               <target mandatory="yes">
+                <phases>
+                  <all/>
+                </phases>
+              </target>
+            </targets>
+          </type>
+        </attribute>
+        <attribute name="Params">
+          <type name="Link">
+            <targets>
+              <target mandatory="no">
                 <phases>
                   <all/>
                 </phases>

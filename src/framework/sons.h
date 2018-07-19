@@ -24,7 +24,7 @@
  *****************************************************************************/
 struct SONS_N_ASSIGN
 {
-  node *Id;
+  node *Var;
   node *Expr;
 };
 struct SONS_N_BINOP
@@ -63,7 +63,7 @@ struct SONS_N_FLOAT
 };
 struct SONS_N_FOR
 {
-  node *Id;
+  node *Var;
   node *ExprStart;
   node *ExprStop;
   node *ExprIncr;
@@ -77,13 +77,14 @@ struct SONS_N_FUNBODY
 };
 struct SONS_N_FUNCALL
 {
-  node *Id;
+  node *Var;
   node *Exprs;
 };
 struct SONS_N_FUNDEFDEC
 {
   node *Param;
   node *Body;
+  node *SymbolTable;
 };
 struct SONS_N_GLOBALDEC
 {
@@ -91,9 +92,6 @@ struct SONS_N_GLOBALDEC
 struct SONS_N_GLOBALDEF
 {
   node *Expr;
-};
-struct SONS_N_ID
-{
 };
 struct SONS_N_IF
 {
@@ -117,15 +115,16 @@ struct SONS_N_PARAM
 {
   node *Next;
 };
+struct SONS_N_PROGRAM
+{
+  node *Declarations;
+  node *SymbolTable;
+};
 struct SONS_N_RETURN
 {
   node *Expr;
 };
-struct SONS_N_STEFUNTYPE
-{
-  node *Next;
-};
-struct SONS_N_STMTS
+struct SONS_N_STATEMENTS
 {
   node *First;
   node *Next;
@@ -137,7 +136,9 @@ struct SONS_N_SYMBOLTABLE
 struct SONS_N_SYMBOLTABLEENTRY
 {
   node *Next;
-  node *FunTypes;
+};
+struct SONS_N_VAR
+{
 };
 struct SONS_N_VARDEC
 {
@@ -170,17 +171,17 @@ struct SONUNION
   struct SONS_N_FUNDEFDEC *N_fundefdec;
   struct SONS_N_GLOBALDEC *N_globaldec;
   struct SONS_N_GLOBALDEF *N_globaldef;
-  struct SONS_N_ID *N_id;
   struct SONS_N_IF *N_if;
   struct SONS_N_LOCALFUNDEFS *N_localfundefs;
   struct SONS_N_MONOP *N_monop;
   struct SONS_N_NUM *N_num;
   struct SONS_N_PARAM *N_param;
+  struct SONS_N_PROGRAM *N_program;
   struct SONS_N_RETURN *N_return;
-  struct SONS_N_STEFUNTYPE *N_stefuntype;
-  struct SONS_N_STMTS *N_stmts;
+  struct SONS_N_STATEMENTS *N_statements;
   struct SONS_N_SYMBOLTABLE *N_symboltable;
   struct SONS_N_SYMBOLTABLEENTRY *N_symboltableentry;
+  struct SONS_N_VAR *N_var;
   struct SONS_N_VARDEC *N_vardec;
   struct SONS_N_WHILE *N_while;
 };

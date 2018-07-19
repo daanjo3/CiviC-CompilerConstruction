@@ -12,6 +12,7 @@
 #include "types.h"
 
 // TODO print statements:
+extern node *PRTprogram(node * arg_node, info * arg_info);
 extern node *PRTdeclarations(node * arg_node, info * arg_info);
 extern node *PRTfundefdec(node * arg_node, info * arg_info);
 extern node *PRTfunbody(node * arg_node, info * arg_info);
@@ -20,8 +21,8 @@ extern node *PRTlocalfundefs(node * arg_node, info * arg_info);
 extern node *PRTglobaldec(node * arg_node, info * arg_info);
 extern node *PRTglobaldef(node * arg_node, info * arg_info);
 extern node *PRTparam(node * arg_node, info * arg_info);
-extern node *PRTid(node * arg_node, info * arg_info);
-extern node *PRTstmts(node * arg_node, info * arg_info);
+extern node *PRTvar(node * arg_node, info * arg_info);
+extern node *PRTstatements(node * arg_node, info * arg_info);
 extern node *PRTassign(node * arg_node, info * arg_info);
 extern node *PRTfuncall(node * arg_node, info * arg_info);
 extern node *PRTif(node * arg_node, info * arg_info);
