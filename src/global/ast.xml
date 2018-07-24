@@ -52,6 +52,13 @@
         </travuser>
       </traversal>
 
+      <traversal id="TG" name="Transform Global Init" default="sons" include="var_init_trans_global.h">
+        <travuser>
+          <node name="Program"/>
+          <node name="GlobalDef"/>
+        </travuser>
+      </traversal>
+
       <traversal id="MS" name="Make Symboltable" default="sons" include="make_st.h">
         <travuser>
           <node name="Program"/>
@@ -70,10 +77,11 @@
         </travuser>
       </traversal>
 
-      <traversal id="TG" name="Transform Global Init" default="sons" include="var_init_trans_global.h">
+      <traversal id="TC" name="Type Check" default="sons" include="type_check.h">
         <travuser>
           <node name="Program"/>
-          <node name="GlobalDef"/>
+          <node name="FunDefDec"/>
+          <node name="Var"/>
         </travuser>
       </traversal>
 
@@ -484,6 +492,17 @@
     <node name="Param">
       <description>A parameter with possible siblings</description>
       <sons>
+        <son name="Id">
+          <description>Name of the variable encapsulated in a Var-node</description>
+          <targets>
+            <target mandatory="yes">
+              <node name="Var"/>
+              <phases>
+                <all/>
+              </phases>
+            </target>
+          </targets>
+        </son>
         <son name="Next">
           <description>Next parameter in the sequence</description>
           <targets>
@@ -505,18 +524,6 @@
                 <any/>
                 <phases>
                   <all />
-                </phases>
-              </target>
-            </targets>
-          </type>
-        </attribute>
-        <attribute name="Id">
-          <description> Name of the identifier</description>
-          <type name="String">
-            <targets>
-              <target mandatory="yes">
-                <phases>
-                  <all/>
                 </phases>
               </target>
             </targets>

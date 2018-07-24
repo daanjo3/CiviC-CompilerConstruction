@@ -187,7 +187,7 @@ node *PRTparam(node * arg_node, info * arg_info) {
   DBUG_ENTER("PRTparam");
   tmp = type_string(PARAM_TYPE(arg_node));
   printf("%s", tmp);
-  printf("%s", PARAM_ID(arg_node));
+  PARAM_ID(arg_node) = TRAVdo(PARAM_ID(arg_node), arg_info);
   if(PARAM_NEXT(arg_node)) {
     printf(", ");
     PARAM_NEXT(arg_node) = TRAVopt(PARAM_NEXT(arg_node), arg_info);

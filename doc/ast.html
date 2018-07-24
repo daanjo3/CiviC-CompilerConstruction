@@ -258,7 +258,7 @@
       Phases
       <ul><li><a href="#GENERALTRAVS">
         General Traversals
-      </a><ul><li><a href="#TR_PRT">Print Syntax Tree</a></li><li><a href="#TR_COPY">Copy Syntax Tree</a></li><li><a href="#TR_FREE">Free Syntax Tree</a></li><li><a href="#TR_CHK">Check Syntax Tree</a></li><li><a href="#TR_TF">Transform For-loop</a></li><li><a href="#TR_MS">Make Symboltable</a></li><li><a href="#TR_PS">Print Symboltable</a></li><li><a href="#TR_TG">Transform Global Init</a></li></ul></li></ul></li>
+      </a><ul><li><a href="#TR_PRT">Print Syntax Tree</a></li><li><a href="#TR_COPY">Copy Syntax Tree</a></li><li><a href="#TR_FREE">Free Syntax Tree</a></li><li><a href="#TR_CHK">Check Syntax Tree</a></li><li><a href="#TR_TF">Transform For-loop</a></li><li><a href="#TR_TG">Transform Global Init</a></li><li><a href="#TR_MS">Make Symboltable</a></li><li><a href="#TR_PS">Print Symboltable</a></li><li><a href="#TR_TC">Type Check</a></li></ul></li></ul></li>
         <li> Nodesets
       <ul><li><a href="#Expr">{Expr}</a></li><li><a href="#Stmt">{Stmt}</a></li><li><a href="#Declaration">{Declaration}</a></li></ul></li>
         <li>
@@ -410,6 +410,13 @@
           <table class="inner">
             <tr>
               <td class="heading">
+                <a name="TR_TG" id="TR_TG">Transform Global Init</a>
+              </td>
+            </tr>
+          </table>
+          <table class="inner">
+            <tr>
+              <td class="heading">
                 <a name="TR_MS" id="TR_MS">Make Symboltable</a>
               </td>
             </tr>
@@ -424,7 +431,7 @@
           <table class="inner">
             <tr>
               <td class="heading">
-                <a name="TR_TG" id="TR_TG">Transform Global Init</a>
+                <a name="TR_TC" id="TR_TC">Type Check</a>
               </td>
             </tr>
           </table>
@@ -1620,7 +1627,7 @@
         </td>
       </tr>
       <tr>
-        <td class="ccode">node *TBmakeParam( basictype Type ,char* Id ,node * Next)</td>
+        <td class="ccode">node *TBmakeParam( basictype Type ,node * Id ,node * Next)</td>
       </tr>
       <tr>
         <td class="heading">Sons</td>
@@ -1633,6 +1640,12 @@
               <td class="subheading">Possible Target Nodes</td>
               <td class="subheading">Default</td>
               <td class="subheading">Comment</td>
+            </tr>
+            <tr>
+              <td>Id</td>
+              <td> <a href="#Var">N_var</a></td>
+              <td class="ccode"></td>
+              <td>Name of the variable encapsulated in a Var-node</td>
             </tr>
             <tr>
               <td>Next</td>
@@ -1662,14 +1675,6 @@
               </td>
               <td class="ccode"></td>
               <td></td>
-            </tr>
-            <tr>
-              <td>Id</td>
-              <td>
-                <div class="type"><a href="#atype_String">String</a> (  ) </div>
-              </td>
-              <td class="ccode"></td>
-              <td> Name of the identifier</td>
             </tr>
           </table>
         </td>

@@ -1487,6 +1487,29 @@ CHKparam (node * arg_node, info * arg_info)
   DBUG_ENTER ("CHKparam");
 
 /*
+ * Son check: PARAM_ID 
+ */
+  if ((FALSE) || (TRUE))
+    {
+      CHKexistSon (PARAM_ID (arg_node), arg_node,
+		   "mandatory son PARAM_ID is NULL");
+      if (PARAM_ID (arg_node) != NULL)
+	{
+	  if (!((FALSE) || (NODE_TYPE (PARAM_ID (arg_node)) == N_var)))
+	    {
+	      CHKcorrectTypeInsertError (arg_node,
+					 "PARAM_ID hasnt the right type."
+					 " It should be: " "N_var");
+	    }
+	}
+    }
+  else
+    {
+      CHKnotExist (PARAM_ID (arg_node), arg_node,
+		   "attribute PARAM_ID must be NULL");
+    }
+
+/*
  * Son check: PARAM_NEXT 
  */
   if ((FALSE) || (TRUE))
@@ -1508,17 +1531,11 @@ CHKparam (node * arg_node, info * arg_info)
     }
 
 /*
- * Attribute check: PARAM_ID
+ * trav functions: to get all sons
  */
-  if ((FALSE) || (TRUE))
+  if (PARAM_ID (arg_node) != NULL)
     {
-      CHKexistAttribute (PARAM_ID (arg_node), arg_node,
-			 "mandatory attribute PARAM_ID is NULL");
-    }
-  else
-    {
-      CHKnotExist (PARAM_ID (arg_node), arg_node,
-		   "attribute PARAM_ID must be NULL");
+      PARAM_ID (arg_node) = TRAVdo (PARAM_ID (arg_node), arg_info);
     }
 
 /*

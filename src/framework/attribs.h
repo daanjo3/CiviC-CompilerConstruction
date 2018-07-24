@@ -101,7 +101,6 @@ struct ATTRIBS_N_NUM
 struct ATTRIBS_N_PARAM
 {
   basictype Type;
-  char *Id;
 };
 struct ATTRIBS_N_PROGRAM
 {

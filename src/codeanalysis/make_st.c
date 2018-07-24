@@ -46,7 +46,7 @@ void printEntry(node *entry) {
     if(function) {
         node *params = SYMBOLTABLEENTRY_PARAMS(entry);
         while(params) {
-            char *paramname = PARAM_ID(params);
+            char *paramname = VAR_NAME(PARAM_ID(params));
             printf("Param: %s\n", paramname);
             params = PARAM_NEXT(params);
         }
@@ -121,7 +121,7 @@ node *MSfundefdec(node *arg_node, info *arg_info) {
         // Add the params to the block symbol table
         if (param) {
             do {
-                name = PARAM_ID(param);
+                name = VAR_NAME(PARAM_ID(param));
                 type = PARAM_TYPE(param);
                 addSymbolTableEntry(arg_info, name, type, FALSE, NULL);
                 param = PARAM_NEXT(param);

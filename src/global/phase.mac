@@ -39,12 +39,18 @@ SUBPHASE( tf,
         ALWAYS,
         ptc)
 
+SUBPHASE ( tg,
+           "Transform global initialisations",
+           TGdoTransformGlobalInit,
+           ALWAYS,
+           ptc)
+
 ENDPHASE( ptc)
 
 /******************************************************************************/
 
 PHASE( ca,
-        "Doing Context Analysis",
+        "Doing Code Analysis",
         ALWAYS)
 
 SUBPHASE( ms,
@@ -59,6 +65,12 @@ SUBPHASE( ps,
          ALWAYS,
          ca)
 
+SUBPHASE( tc,
+         "Perform Typechecking",
+         TCdoTypeCheck,
+         ALWAYS,
+         ca)
+
 ENDPHASE( ca)
 
 /*****************************************************************************/
@@ -66,12 +78,6 @@ ENDPHASE( ca)
 PHASE ( tc,
         "Transform Code",
         ALWAYS)
-
-SUBPHASE ( tg,
-           "Transform global initialisations",
-           TGdoTransformGlobalInit,
-           ALWAYS,
-           tc)
 
 ENDPHASE ( tc)
 

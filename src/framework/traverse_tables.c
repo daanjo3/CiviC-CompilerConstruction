@@ -19,9 +19,10 @@
 #include "free_node.h"
 #include "check.h"
 #include "transform_for.h"
+#include "var_init_trans_global.h"
 #include "make_st.h"
 #include "print_st.h"
-#include "var_init_trans_global.h"
+#include "type_check.h"
 
 
 travtables_t travtables = {
@@ -71,6 +72,13 @@ travtables_t travtables = {
      &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons,
      &TRAVsons, &TRAVsons, &TRAVsons}
 
+  /* TR_tg */
+  , {&TRAVerror, &TGprogram, &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons,
+     &TRAVsons, &TRAVsons, &TGglobaldef, &TRAVsons, &TRAVsons, &TRAVsons,
+     &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons,
+     &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons,
+     &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons}
+
   /* TR_ms */
   , {&TRAVerror, &MSprogram, &TRAVsons, &MSfundefdec, &TRAVsons, &MSvardec,
      &TRAVsons, &MSglobaldec, &MSglobaldef, &TRAVsons, &TRAVsons, &TRAVsons,
@@ -85,22 +93,22 @@ travtables_t travtables = {
      &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons,
      &TRAVsons, &TRAVsons, &PSsymboltable, &PSsymboltableentry, &TRAVsons}
 
-  /* TR_tg */
-  , {&TRAVerror, &TGprogram, &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons,
-     &TRAVsons, &TRAVsons, &TGglobaldef, &TRAVsons, &TRAVsons, &TRAVsons,
+  /* TR_tc */
+  , {&TRAVerror, &TCprogram, &TRAVsons, &TCfundefdec, &TRAVsons, &TRAVsons,
+     &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons, &TCvar, &TRAVsons, &TRAVsons,
      &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons,
      &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons,
-     &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons}
+     &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons}
 };
 
 preposttable_t pretable = {
-  NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL
+  NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL
 };
 
 preposttable_t posttable = {
-  NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL
+  NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL
 };
 
-const char *travnames[9] = {
-  "unknown", "prt", "copy", "free", "chk", "tf", "ms", "ps", "tg"
+const char *travnames[10] = {
+  "unknown", "prt", "copy", "free", "chk", "tf", "tg", "ms", "ps", "tc"
 };

@@ -554,8 +554,8 @@ COPYparam (node * arg_node, info * arg_info)
   LUTinsertIntoLutP (INFO_LUT (arg_info), arg_node, result);
   /* Copy attributes */
   PARAM_TYPE (result) = PARAM_TYPE (arg_node);
-  PARAM_ID (result) = STRcpy (PARAM_ID (arg_node));
   /* Copy sons */
+  PARAM_ID (result) = COPYTRAV (PARAM_ID (arg_node), arg_info);
   PARAM_NEXT (result) = COPYTRAV (PARAM_NEXT (arg_node), arg_info);
   /* Return value */
   DBUG_RETURN (result);

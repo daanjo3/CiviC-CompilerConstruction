@@ -71,6 +71,7 @@ TRAVsons (node * arg_node, info * arg_info)
       TRAV (GLOBALDEF_EXPR (arg_node), arg_info);
       break;
     case N_param:
+      TRAV (PARAM_ID (arg_node), arg_info);
       TRAV (PARAM_NEXT (arg_node), arg_info);
       break;
     case N_var:
@@ -178,7 +179,7 @@ TRAVnumSons (node * node)
       result = 1;
       break;
     case N_param:
-      result = 1;
+      result = 2;
       break;
     case N_var:
       result = 0;
@@ -367,6 +368,9 @@ TRAVgetSon (int no, node * parent)
       switch (no)
 	{
 	case 0:
+	  result = PARAM_ID (parent);
+	  break;
+	case 1:
 	  result = PARAM_NEXT (parent);
 	  break;
 	default:

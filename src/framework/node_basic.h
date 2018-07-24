@@ -102,10 +102,10 @@ extern node *TBmakeGlobaldef (basictype Type, bool Export, char *Id,
  * macros and functions for N_param
  *****************************************************************************/
 
+#define PARAM_ID( n) ((n)->sons.N_param->Id)
 #define PARAM_NEXT( n) ((n)->sons.N_param->Next)
 #define PARAM_TYPE( n) ((n)->attribs.N_param->Type)
-#define PARAM_ID( n) ((n)->attribs.N_param->Id)
-extern node *TBmakeParam (basictype Type, char *Id, node * Next);
+extern node *TBmakeParam (basictype Type, node * Id, node * Next);
 
 /*****************************************************************************
  * macros and functions for N_var

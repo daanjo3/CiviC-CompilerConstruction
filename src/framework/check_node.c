@@ -495,7 +495,7 @@ CHKMparam (node * arg_node, info * arg_info)
   DBUG_ENTER ("CHKMparam");
   NODE_ERROR (arg_node) = CHKMTRAV (NODE_ERROR (arg_node), arg_info);
   PARAM_NEXT (arg_node) = CHKMTRAV (PARAM_NEXT (arg_node), arg_info);
-  PARAM_ID (arg_node) = CHKMattribString (PARAM_ID (arg_node), arg_info);
+  PARAM_ID (arg_node) = CHKMTRAV (PARAM_ID (arg_node), arg_info);
   DBUG_RETURN (arg_node);
 }
 

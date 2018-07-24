@@ -393,7 +393,7 @@ TBmakeGlobaldef (basictype Type, bool Export, char *Id, node * Expr)
  *****************************************************************************/
 
 node *
-TBmakeParam (basictype Type, char *Id, node * Next)
+TBmakeParam (basictype Type, node * Id, node * Next)
 {
   node *this;
   DBUG_ENTER ("TBmakeParam");
@@ -407,12 +407,17 @@ TBmakeParam (basictype Type, char *Id, node * Next)
   this->attribs.N_param = MEMmalloc (sizeof (struct ATTRIBS_N_PARAM));
   DBUG_PRINT ("MAKE", ("setting node type"));
   NODE_TYPE (this) = N_param;
+  DBUG_PRINT ("MAKE", ("assigning son Id initial value: %s ", Id));
+  PARAM_ID (this) = Id;
   DBUG_PRINT ("MAKE", ("assigning son Next initial value: %s ", Next));
   PARAM_NEXT (this) = Next;
   PARAM_TYPE (this) = Type;
-  PARAM_ID (this) = Id;
 #ifndef DBUG_OFF
   DBUG_PRINT ("MAKE", ("doing son target checks"));
+  if ((PARAM_ID (this) != NULL) && (NODE_TYPE (PARAM_ID (this)) != N_var))
+    {
+      CTIwarn ("Field Id of node N_Param has non-allowed target node.");
+    }
   if ((PARAM_NEXT (this) != NULL)
       && (NODE_TYPE (PARAM_NEXT (this)) != N_param))
     {

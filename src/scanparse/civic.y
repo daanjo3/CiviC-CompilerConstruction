@@ -103,9 +103,9 @@ globaldef:  EXPORT type ID LET expr SEMICOLON
             { $$ = TBmakeGlobaldef($1, FALSE, $2, NULL); }
           ;
 
-param:     type ID COMMA param
+param:     type var COMMA param
           { $$ = TBmakeParam($1, $2, $4); }
-          | type ID
+          | type var
           { $$ = TBmakeParam($1, $2, NULL); }
           ;
 

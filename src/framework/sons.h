@@ -110,6 +110,7 @@ struct SONS_N_NUM
 };
 struct SONS_N_PARAM
 {
+  node *Id;
   node *Next;
 };
 struct SONS_N_PROGRAM

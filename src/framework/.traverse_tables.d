@@ -18,5 +18,5 @@ src/framework/traverse_tables.o src/framework/.traverse_tables.d: $(PROJECT_ROOT
  src/framework/traverse_helper.h src/print/print.h src/framework/types.h \
  src/framework/copy_node.h src/framework/free_node.h \
  src/framework/check.h src/codetransform/transform_for.h \
- src/codeanalysis/make_st.h src/codeanalysis/print_st.h \
- src/codetransform/var_init_trans_global.h
+ src/codetransform/var_init_trans_global.h src/codeanalysis/make_st.h \
+ src/codeanalysis/print_st.h src/codeanalysis/type_check.h

@@ -33,6 +33,8 @@ node *PSsymboltable(node *arg_node, info *arg_info) {
         node *parent = SYMBOLTABLE_PARENT(arg_node);
         char* head_id = SYMBOLTABLEENTRY_NAME(SYMBOLTABLE_HEAD(parent));
         printf("Parent: %s", head_id);
+    } else {
+        printf("Global");
     }
     printf("\n");
     SYMBOLTABLE_HEAD(arg_node) = TRAVopt(SYMBOLTABLE_HEAD(arg_node), arg_info);
@@ -53,7 +55,9 @@ node *PSsymboltableentry(node *arg_node, info *arg_info) {
         char *paramtype;
         while(param) {
             paramtype = type_to_string(PARAM_TYPE(param));
-            printf("%s %s", paramtype, PARAM_ID(param));
+            node *var = PARAM_ID(param);
+            char *name = VAR_NAME(var);
+            printf("%s %s", paramtype, name);
             param = PARAM_NEXT(param);
         }
         printf(")");

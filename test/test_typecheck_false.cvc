@@ -1,0 +1,14 @@
+void main() {
+    int a;
+    bool b;
+
+    float b = 8.5;
+    a = b + 5;
+    
+    b = 5;
+}
+
+int testfunction() {
+    bool ret = TRUE;
+    return ret;
+}

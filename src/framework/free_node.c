@@ -601,7 +601,7 @@ FREEparam (node * arg_node, info * arg_info)
   DBUG_ENTER ("FREEparam");
   DBUG_PRINT ("FREE", ("Processing node N_param at " F_PTR, arg_node));
   PARAM_NEXT (arg_node) = FREECOND (PARAM_NEXT (arg_node), arg_info);
-  PARAM_ID (arg_node) = FREEattribString (PARAM_ID (arg_node), arg_node);
+  PARAM_ID (arg_node) = FREETRAV (PARAM_ID (arg_node), arg_info);
   result = PARAM_NEXT (arg_node);
   arg_node->sons.N_param = MEMfree (arg_node->sons.N_param);
   arg_node->attribs.N_param = MEMfree (arg_node->attribs.N_param);
