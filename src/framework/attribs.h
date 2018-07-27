@@ -29,6 +29,7 @@ struct ATTRIBS_N_ASSIGN
 struct ATTRIBS_N_BINOP
 {
   binop Op;
+  basictype ExpressionType;
 };
 struct ATTRIBS_N_BOOL
 {
@@ -93,6 +94,7 @@ struct ATTRIBS_N_LOCALFUNDEFS
 struct ATTRIBS_N_MONOP
 {
   monop Op;
+  basictype ExpressionType;
 };
 struct ATTRIBS_N_NUM
 {

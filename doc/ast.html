@@ -258,7 +258,7 @@
       Phases
       <ul><li><a href="#GENERALTRAVS">
         General Traversals
-      </a><ul><li><a href="#TR_PRT">Print Syntax Tree</a></li><li><a href="#TR_COPY">Copy Syntax Tree</a></li><li><a href="#TR_FREE">Free Syntax Tree</a></li><li><a href="#TR_CHK">Check Syntax Tree</a></li><li><a href="#TR_TF">Transform For-loop</a></li><li><a href="#TR_TG">Transform Global Init</a></li><li><a href="#TR_MS">Make Symboltable</a></li><li><a href="#TR_PS">Print Symboltable</a></li><li><a href="#TR_TC">Type Check</a></li></ul></li></ul></li>
+      </a><ul><li><a href="#TR_PRT">Print Syntax Tree</a></li><li><a href="#TR_COPY">Copy Syntax Tree</a></li><li><a href="#TR_FREE">Free Syntax Tree</a></li><li><a href="#TR_CHK">Check Syntax Tree</a></li><li><a href="#TR_TF">Transform For-loop</a></li><li><a href="#TR_TG">Transform Global Init</a></li><li><a href="#TR_MS">Make Symboltable</a></li><li><a href="#TR_PS">Print Symboltable</a></li><li><a href="#TR_TCI">TypeCheck Inference</a></li><li><a href="#TR_TCM">TypeCheck Matching</a></li></ul></li></ul></li>
         <li> Nodesets
       <ul><li><a href="#Expr">{Expr}</a></li><li><a href="#Stmt">{Stmt}</a></li><li><a href="#Declaration">{Declaration}</a></li></ul></li>
         <li>
@@ -307,6 +307,12 @@
         <td><a name="atype_BinOp" id="atype_BinOp"></a>BinOp</td>
         <td>binop</td>
         <td>BO_unknown</td>
+        <td>literal<a class="footnote" href="#xpln_cp">*</a></td>
+      </tr>
+      <tr>
+        <td><a name="atype_BinOpCat" id="atype_BinOpCat"></a>BinOpCat</td>
+        <td>binopcat</td>
+        <td>BC_unknown</td>
         <td>literal<a class="footnote" href="#xpln_cp">*</a></td>
       </tr>
       <tr>
@@ -431,7 +437,14 @@
           <table class="inner">
             <tr>
               <td class="heading">
-                <a name="TR_TC" id="TR_TC">Type Check</a>
+                <a name="TR_TCI" id="TR_TCI">TypeCheck Inference</a>
+              </td>
+            </tr>
+          </table>
+          <table class="inner">
+            <tr>
+              <td class="heading">
+                <a name="TR_TCM" id="TR_TCM">TypeCheck Matching</a>
               </td>
             </tr>
           </table>
@@ -611,6 +624,14 @@
               </td>
               <td class="ccode"></td>
               <td></td>
+            </tr>
+            <tr>
+              <td>ExpressionType</td>
+              <td>
+                <div class="type"><a href="#atype_BasicType">BasicType</a> (  ) </div>
+              </td>
+              <td class="ccode"></td>
+              <td>Inferred type of the expression</td>
             </tr>
           </table>
         </td>
@@ -1564,6 +1585,14 @@
               </td>
               <td class="ccode"></td>
               <td></td>
+            </tr>
+            <tr>
+              <td>ExpressionType</td>
+              <td>
+                <div class="type"><a href="#atype_BasicType">BasicType</a> (  ) </div>
+              </td>
+              <td class="ccode"></td>
+              <td>Inferred type of the expression</td>
             </tr>
           </table>
         </td>

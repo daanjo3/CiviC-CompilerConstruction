@@ -296,7 +296,7 @@ node *PRTfor(node * arg_node, info * arg_info) {
 node *PRTreturn(node * arg_node, info * arg_info) {
   DBUG_ENTER("PRTreturn");
   printf("return ");
-  RETURN_EXPR(arg_node) = TRAVdo(RETURN_EXPR(arg_node), arg_info);
+  RETURN_EXPR(arg_node) = TRAVopt(RETURN_EXPR(arg_node), arg_info);
   printf(";\n");
   DBUG_RETURN(arg_node);
 }
@@ -385,7 +385,7 @@ node *PRTcast(node * arg_node, info * arg_info) {
   DBUG_ENTER("PRTcast");
   switch (CAST_CASTTYPE(arg_node)) {
     case BT_bool:
-      tmp = "(boolean) ";
+      tmp = "(bool) ";
       break;
     case BT_int:
       tmp = "(int) ";

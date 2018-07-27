@@ -65,11 +65,17 @@ SUBPHASE( ps,
          ALWAYS,
          ca)
 
-SUBPHASE( tc,
-         "Perform Typechecking",
-         TCdoTypeCheck,
+SUBPHASE( tci,
+         "Perform Type Inference",
+         TCIdoTypeCheckInference,
          ALWAYS,
          ca)
+
+SUBPHASE( tcm,
+         "Perform Type Matching",
+         TCMdoTypeCheckMatch,
+         ALWAYS,
+         ca)         
 
 ENDPHASE( ca)
 

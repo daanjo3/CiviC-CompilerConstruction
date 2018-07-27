@@ -198,6 +198,7 @@ extern node *TBmakeExprs (node * First, node * Next);
 #define BINOP_LEFT( n) ((n)->sons.N_binop->Left)
 #define BINOP_RIGHT( n) ((n)->sons.N_binop->Right)
 #define BINOP_OP( n) ((n)->attribs.N_binop->Op)
+#define BINOP_EXPRESSIONTYPE( n) ((n)->attribs.N_binop->ExpressionType)
 extern node *TBmakeBinop (binop Op, node * Left, node * Right);
 
 /*****************************************************************************
@@ -206,6 +207,7 @@ extern node *TBmakeBinop (binop Op, node * Left, node * Right);
 
 #define MONOP_EXPR( n) ((n)->sons.N_monop->Expr)
 #define MONOP_OP( n) ((n)->attribs.N_monop->Op)
+#define MONOP_EXPRESSIONTYPE( n) ((n)->attribs.N_monop->ExpressionType)
 extern node *TBmakeMonop (monop Op, node * Expr);
 
 /*****************************************************************************

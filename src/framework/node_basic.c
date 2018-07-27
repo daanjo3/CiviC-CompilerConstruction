@@ -908,6 +908,7 @@ TBmakeBinop (binop Op, node * Left, node * Right)
   DBUG_PRINT ("MAKE", ("assigning son Right initial value: %s ", Right));
   BINOP_RIGHT (this) = Right;
   BINOP_OP (this) = Op;
+  BINOP_EXPRESSIONTYPE (this) = BT_unknown;
 #ifndef DBUG_OFF
   DBUG_PRINT ("MAKE", ("doing son target checks"));
   if ((BINOP_LEFT (this) != NULL)
@@ -960,6 +961,7 @@ TBmakeMonop (monop Op, node * Expr)
   DBUG_PRINT ("MAKE", ("assigning son Expr initial value: %s ", Expr));
   MONOP_EXPR (this) = Expr;
   MONOP_OP (this) = Op;
+  MONOP_EXPRESSIONTYPE (this) = BT_unknown;
 #ifndef DBUG_OFF
   DBUG_PRINT ("MAKE", ("doing son target checks"));
   if ((MONOP_EXPR (this) != NULL)

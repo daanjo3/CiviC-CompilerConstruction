@@ -172,6 +172,8 @@ stmt:  ID LET expr SEMICOLON
        { $$ = $1; }
        | RETURN expr SEMICOLON
        { $$ = TBmakeReturn($2); }
+       | RETURN SEMICOLON
+       { $$ = TBmakeReturn(NULL); }
        ;
 
 for:      FOR BRACKET_L TYPE_INT ID LET expr COMMA expr COMMA expr BRACKET_R block
@@ -224,7 +226,9 @@ cast:   BRACKET_L type BRACKET_R expr
         { $$ = TBmakeCast($2, $4); }
         ;
 
-funcall: ID BRACKET_L exprs BRACKET_R
+funcall:  ID BRACKET_L BRACKET_R
+        { $$ = TBmakeFuncall($1, NULL); }
+        | ID BRACKET_L exprs BRACKET_R
         { $$ = TBmakeFuncall($1, $3); }
         ;
 

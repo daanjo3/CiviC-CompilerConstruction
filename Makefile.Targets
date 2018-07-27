@@ -79,6 +79,7 @@ print       = print.o
 
 codegen     = gen_byte_code.o
 
-codeanalysis = make_st.o print_st.o type_check.o
+codeanalysis = make_st.o print_st.o typecheck_inference.o typecheck_match.o \
+                 codeanalysis_helper.o
 
 codetransform = var_init_trans_global.o transform_for.o

@@ -79,6 +79,7 @@ COPYbinop (node * arg_node, info * arg_info)
   LUTinsertIntoLutP (INFO_LUT (arg_info), arg_node, result);
   /* Copy attributes */
   BINOP_OP (result) = BINOP_OP (arg_node);
+  BINOP_EXPRESSIONTYPE (result) = BINOP_EXPRESSIONTYPE (arg_node);
   /* Copy sons */
   BINOP_LEFT (result) = COPYTRAV (BINOP_LEFT (arg_node), arg_info);
   BINOP_RIGHT (result) = COPYTRAV (BINOP_RIGHT (arg_node), arg_info);
@@ -504,6 +505,7 @@ COPYmonop (node * arg_node, info * arg_info)
   LUTinsertIntoLutP (INFO_LUT (arg_info), arg_node, result);
   /* Copy attributes */
   MONOP_OP (result) = MONOP_OP (arg_node);
+  MONOP_EXPRESSIONTYPE (result) = MONOP_EXPRESSIONTYPE (arg_node);
   /* Copy sons */
   MONOP_EXPR (result) = COPYTRAV (MONOP_EXPR (arg_node), arg_info);
   /* Return value */

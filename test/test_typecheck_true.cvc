@@ -1,14 +1,15 @@
 void main() {
     int a;
+    int x;
     bool b;
 
-    int b = 8;
-    a = b + 5;
-    
-    b = TRUE;
+    x = testfunction();
+
+    a = x + 5;
+    b = true;
 }
 
 int testfunction() {
-    int ret = 18;
+    int ret = 10;
     return ret;
 }
