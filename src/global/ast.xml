@@ -17,6 +17,7 @@
     <type name="Bool" ctype="bool" init="FALSE" copy="literal" />
     <type name="Float" ctype="float" init="0.0" copy="literal" />
     <type name="BinOp" ctype="binop" init="BO_unknown" copy="literal" />
+    <type name="BinOpCat" ctype="binopcat" init="BC_unknown" copy="literal"/>
     <type name="MonOp" ctype="monop" init="MO_unknown" copy="literal" />
     <type name="Link" ctype="node*" init="NULL" copy="lookup" />
     <type name="CompilerPhase" ctype="compiler_phase_t" init="PH_initial" copy="literal" />
@@ -77,11 +78,32 @@
         </travuser>
       </traversal>
 
-      <traversal id="TC" name="Type Check" default="sons" include="type_check.h">
+      <traversal id="TCI" name="TypeCheck Inference" default="sons" include="typecheck_inference.h">
         <travuser>
           <node name="Program"/>
           <node name="FunDefDec"/>
           <node name="Var"/>
+          <node name="BinOp"/>
+          <node name="MonOp"/>
+          <node name="FunCall"/>
+          <node name="Num"/>
+          <node name="Float"/>
+          <node name="Bool"/>
+        </travuser>
+      </traversal>
+
+      <traversal id="TCM" name="TypeCheck Matching" default="sons" include="typecheck_match.h">
+        <travuser>
+          <node name="Program"/>
+          <node name="FunDefDec"/>
+          <node name="GlobalDef"/>
+          <node name="Assign"/>
+          <node name="FunCall"/>
+          <node name="If"/>
+          <node name="While"/>
+          <node name="DoWhile"/>
+          <node name="For"/>
+          <node name="Return"/>
         </travuser>
       </traversal>
 
@@ -918,6 +940,19 @@
             </targets>
           </type>
         </attribute>
+        <attribute name="ExpressionType">
+          <description>Inferred type of the expression</description>
+          <type name="BasicType">
+            <targets>
+              <target mandatory="no">
+                <any/>
+                <phases>
+                  <all/>
+                </phases>
+              </target>
+            </targets>
+          </type>
+        </attribute>
       </attributes>
     </node>
 
@@ -942,6 +977,19 @@
           <type name="MonOp">
             <targets>
               <target mandatory="yes">
+                <any/>
+                <phases>
+                  <all/>
+                </phases>
+              </target>
+            </targets>
+          </type>
+        </attribute>
+        <attribute name="ExpressionType">
+          <description>Inferred type of the expression</description>
+          <type name="BasicType">
+            <targets>
+              <target mandatory="no">
                 <any/>
                 <phases>
                   <all/>

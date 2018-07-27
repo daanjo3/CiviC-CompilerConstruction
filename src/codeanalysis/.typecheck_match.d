@@ -1,6 +1,7 @@
-src/codeanalysis/type_check.o src/codeanalysis/.type_check.d: $(PROJECT_ROOT)/Makefile.Config src/codeanalysis/type_check.c /usr/include/stdc-predef.h \
- src/codeanalysis/type_check.h src/framework/types.h /usr/include/stdio.h \
- /usr/include/features.h /usr/include/x86_64-linux-gnu/sys/cdefs.h \
+src/codeanalysis/typecheck_match.o src/codeanalysis/.typecheck_match.d: $(PROJECT_ROOT)/Makefile.Config src/codeanalysis/typecheck_match.c \
+ /usr/include/stdc-predef.h src/codeanalysis/typecheck_match.h \
+ src/framework/types.h /usr/include/stdio.h /usr/include/features.h \
+ /usr/include/x86_64-linux-gnu/sys/cdefs.h \
  /usr/include/x86_64-linux-gnu/bits/wordsize.h \
  /usr/include/x86_64-linux-gnu/gnu/stubs.h \
  /usr/include/x86_64-linux-gnu/gnu/stubs-64.h \
@@ -29,4 +30,6 @@ src/codeanalysis/type_check.o src/codeanalysis/.type_check.d: $(PROJECT_ROOT)/Ma
  /usr/include/x86_64-linux-gnu/bits/time.h \
  /usr/include/x86_64-linux-gnu/sys/sysmacros.h \
  /usr/include/x86_64-linux-gnu/bits/pthreadtypes.h /usr/include/alloca.h \
- /usr/include/x86_64-linux-gnu/bits/stdlib-float.h src/framework/memory.h
+ /usr/include/x86_64-linux-gnu/bits/stdlib-float.h src/framework/memory.h \
+ src/framework/ctinfo.h src/framework/str.h \
+ src/codeanalysis/codeanalysis_helper.h

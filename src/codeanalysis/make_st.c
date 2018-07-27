@@ -76,7 +76,9 @@ bool checkEntry(info *arg_info, char* name, bool is_function) {
 // Add a symbol to the symboltable
 void addSymbolTableEntry(info *arg_info, char* name, basictype type, bool isfunction, node *params) {
     if(checkEntry(arg_info, name, isfunction)) {
-        node *new_entry = TBmakeSymboltableentry(name, type, isfunction, NULL);
+
+        node *new_entry = TBmakeSymboltableentry(STRcpy(name), type, isfunction, NULL);
+
         if(isfunction) {
             SYMBOLTABLEENTRY_PARAMS(new_entry) = params;
         }

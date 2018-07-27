@@ -22,7 +22,8 @@
 #include "var_init_trans_global.h"
 #include "make_st.h"
 #include "print_st.h"
-#include "type_check.h"
+#include "typecheck_inference.h"
+#include "typecheck_match.h"
 
 
 travtables_t travtables = {
@@ -93,22 +94,30 @@ travtables_t travtables = {
      &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons,
      &TRAVsons, &TRAVsons, &PSsymboltable, &PSsymboltableentry, &TRAVsons}
 
-  /* TR_tc */
-  , {&TRAVerror, &TCprogram, &TRAVsons, &TCfundefdec, &TRAVsons, &TRAVsons,
-     &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons, &TCvar, &TRAVsons, &TRAVsons,
-     &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons,
-     &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons,
-     &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons}
+  /* TR_tci */
+  , {&TRAVerror, &TCIprogram, &TRAVsons, &TCIfundefdec, &TRAVsons, &TRAVsons,
+     &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons, &TCIvar, &TRAVsons,
+     &TRAVsons, &TCIfuncall, &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons,
+     &TRAVsons, &TRAVsons, &TCIbinop, &TCImonop, &TRAVsons, &TCInum,
+     &TCIfloat, &TCIbool, &TRAVsons, &TRAVsons, &TRAVsons}
+
+  /* TR_tcm */
+  , {&TRAVerror, &TCMprogram, &TRAVsons, &TCMfundefdec, &TRAVsons, &TRAVsons,
+     &TRAVsons, &TRAVsons, &TCMglobaldef, &TRAVsons, &TRAVsons, &TRAVsons,
+     &TCMassign, &TCMfuncall, &TCMif, &TCMwhile, &TCMdowhile, &TCMfor,
+     &TCMreturn, &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons,
+     &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons, &TRAVsons}
 };
 
 preposttable_t pretable = {
-  NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL
+  NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL
 };
 
 preposttable_t posttable = {
-  NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL
+  NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL
 };
 
-const char *travnames[10] = {
-  "unknown", "prt", "copy", "free", "chk", "tf", "tg", "ms", "ps", "tc"
+const char *travnames[11] = {
+  "unknown", "prt", "copy", "free", "chk", "tf", "tg", "ms", "ps", "tci",
+    "tcm"
 };
