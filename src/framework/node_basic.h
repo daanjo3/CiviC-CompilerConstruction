@@ -211,6 +211,15 @@ extern node *TBmakeBinop (binop Op, node * Left, node * Right);
 extern node *TBmakeMonop (monop Op, node * Expr);
 
 /*****************************************************************************
+ * macros and functions for N_condexpr
+ *****************************************************************************/
+
+#define CONDEXPR_PRED( n) ((n)->sons.N_condexpr->Pred)
+#define CONDEXPR_THEN( n) ((n)->sons.N_condexpr->Then)
+#define CONDEXPR_ELSE( n) ((n)->sons.N_condexpr->Else)
+extern node *TBmakeCondexpr (node * Pred, node * Then, node * Else);
+
+/*****************************************************************************
  * macros and functions for N_cast
  *****************************************************************************/
 

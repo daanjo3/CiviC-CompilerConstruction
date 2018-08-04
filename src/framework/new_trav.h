@@ -21,6 +21,7 @@ extern node *EVALassign (node * arg_node, info * arg_info);
 extern node *EVALbinop (node * arg_node, info * arg_info);
 extern node *EVALbool (node * arg_node, info * arg_info);
 extern node *EVALcast (node * arg_node, info * arg_info);
+extern node *EVALcondexpr (node * arg_node, info * arg_info);
 extern node *EVALdeclarations (node * arg_node, info * arg_info);
 extern node *EVALdowhile (node * arg_node, info * arg_info);
 extern node *EVALerror (node * arg_node, info * arg_info);

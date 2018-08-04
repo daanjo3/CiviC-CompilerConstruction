@@ -39,6 +39,9 @@ struct ATTRIBS_N_CAST
 {
   basictype CastType;
 };
+struct ATTRIBS_N_CONDEXPR
+{
+};
 struct ATTRIBS_N_DECLARATIONS
 {
 };
@@ -147,6 +150,7 @@ struct ATTRIBUNION
   struct ATTRIBS_N_BINOP *N_binop;
   struct ATTRIBS_N_BOOL *N_bool;
   struct ATTRIBS_N_CAST *N_cast;
+  struct ATTRIBS_N_CONDEXPR *N_condexpr;
   struct ATTRIBS_N_DECLARATIONS *N_declarations;
   struct ATTRIBS_N_DOWHILE *N_dowhile;
   struct ATTRIBS_N_ERROR *N_error;

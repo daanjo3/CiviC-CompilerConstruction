@@ -37,58 +37,6 @@ static info *FreeInfo(info *info) {
     DBUG_RETURN(info);
 }
 
-// --------------------------  Helper Functions  ----------------------------------
-
-// // Return the corresponding symboltable entry
-// node *getSymboltableEntry(char *name, bool isfunction, info *arg_info) {
-//     node *symboltable = INFO_SYMBOLTABLE_CURRENT(arg_info);
-//     node *entry = SYMBOLTABLE_HEAD(symboltable);
-
-//     while(entry) {
-//         while(entry) {
-//         char *entryname = SYMBOLTABLEENTRY_NAME(entry);
-//         if(STReq(name, entryname) && SYMBOLTABLEENTRY_FUNCTION(entry) == isfunction) {
-//             return entry;
-//         }
-//         entry = SYMBOLTABLEENTRY_NEXT(entry);
-//         }
-//         symboltable = SYMBOLTABLE_PARENT(symboltable);
-//         if(symboltable) {
-//             entry = SYMBOLTABLE_HEAD(symboltable);
-//         }
-//     }
-//     CTIerror("SymbolError: entry not present in symboltable");
-//     return NULL;
-// }
-
-// Returns the type belonging to the expression
-// basictype getExpressionType(node *expr, node *symboltable) {
-//     node *entry;
-//     switch(NODE_TYPE(expr)) {
-//         case N_binop:
-//             return BINOP_EXPRESSIONTYPE(expr);
-//         case N_monop:
-//             return MONOP_EXPRESSIONTYPE(expr);
-//         case N_cast:
-//             return CAST_CASTTYPE(expr);
-//         case N_funcall:
-//             entry = getSymboltableEntry(FUNCALL_ID(expr), TRUE, symboltable);
-//             return SYMBOLTABLEENTRY_TYPE(entry);
-//         case N_var:
-//             entry = getSymboltableEntry(VAR_NAME(expr), FALSE, symboltable);
-//             return SYMBOLTABLEENTRY_TYPE(entry);
-//         case N_num:
-//             return BT_int;
-//         case N_float:
-//             return BT_float;
-//         case N_bool:
-//             return BT_bool;
-//         default:
-//             CTInote("getExpressionType: undefined node");
-//             return BT_unknown;   
-//     }
-// }
-
 // ------------------------- Symboltable Managing Nodes --------------------------------
 
 node *TCMprogram(node *arg_node, info *arg_info) {
@@ -209,17 +157,24 @@ node *TCMfor(node *arg_node, info *arg_info) {
     DBUG_ENTER("TCMfor");
 
     if(getExpressionType(FOR_EXPRSTART(arg_node), INFO_SYMBOLTABLE_CURRENT(arg_info)) != BT_int) {
-        CTIerror("TypeError; Expression must return an integer");
+        int line = NODE_LINE(arg_node);
+            int col = NODE_COL(arg_node);
+            CTIerror("TypeError ExprStart l:%d c:%d; Expression must return an integer", line, col);
     }
 
     if(FOR_EXPRINCR(arg_node)) {
         if(getExpressionType(FOR_EXPRINCR(arg_node), INFO_SYMBOLTABLE_CURRENT(arg_info)) != BT_int) {
-            CTIerror("TypeError; Expression must return an integer");
+            int line = NODE_LINE(arg_node);
+            int col = NODE_COL(arg_node);
+            CTIerror("TypeError ExprIncr l:%d c:%d; Expression must return an integer", line, col);
         }
     }
 
     if(getExpressionType(FOR_EXPRSTOP(arg_node), INFO_SYMBOLTABLE_CURRENT(arg_info)) != BT_int) {
-        CTIerror("TypeError; Expression must return an integer");
+            int line = NODE_LINE(arg_node);
+            int col = NODE_COL(arg_node);
+            CTInote(getTypeChar(getExpressionType(FOR_EXPRSTOP(arg_node), INFO_SYMBOLTABLE_CURRENT(arg_info))));
+            CTIerror("TypeError ExprStop l:%d c:%d; Expression must return an integer", line, col);
     }
 
     DBUG_RETURN(arg_node);

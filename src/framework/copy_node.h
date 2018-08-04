@@ -21,6 +21,7 @@ extern node *COPYassign (node * arg_node, info * arg_info);
 extern node *COPYbinop (node * arg_node, info * arg_info);
 extern node *COPYbool (node * arg_node, info * arg_info);
 extern node *COPYcast (node * arg_node, info * arg_info);
+extern node *COPYcondexpr (node * arg_node, info * arg_info);
 extern node *COPYdeclarations (node * arg_node, info * arg_info);
 extern node *COPYdowhile (node * arg_node, info * arg_info);
 extern node *COPYerror (node * arg_node, info * arg_info);

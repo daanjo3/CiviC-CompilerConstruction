@@ -23,6 +23,7 @@ extern node *CHKMassign (node * arg_node, info * arg_info);
 extern node *CHKMbinop (node * arg_node, info * arg_info);
 extern node *CHKMbool (node * arg_node, info * arg_info);
 extern node *CHKMcast (node * arg_node, info * arg_info);
+extern node *CHKMcondexpr (node * arg_node, info * arg_info);
 extern node *CHKMdeclarations (node * arg_node, info * arg_info);
 extern node *CHKMdowhile (node * arg_node, info * arg_info);
 extern node *CHKMerror (node * arg_node, info * arg_info);

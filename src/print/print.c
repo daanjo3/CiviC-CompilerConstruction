@@ -146,6 +146,7 @@ node *PRTvardec(node * arg_node, info * arg_info) {
 
   DBUG_RETURN(arg_node);
 }
+
 node *PRTlocalfundefs(node * arg_node, info * arg_info) {
   DBUG_ENTER("PRTlocalfundefs");
   printIndent(arg_info);
@@ -377,6 +378,18 @@ node *PRTmonop(node * arg_node, info * arg_info) {
   }
   printf("%s ", tmp);
   MONOP_EXPR(arg_node) = TRAVdo(MONOP_EXPR(arg_node), arg_info);
+  DBUG_RETURN(arg_node);
+}
+
+node *PRTcondexpr(node *arg_node, info *arg_info) {
+  DBUG_ENTER("PRTcondexpr");
+
+  CONDEXPR_PRED(arg_node) = TRAVdo(CONDEXPR_PRED(arg_node), arg_info);
+  printf(" ? ");
+  CONDEXPR_THEN(arg_node) = TRAVdo(CONDEXPR_THEN(arg_node), arg_info);
+  printf(" : ");
+  CONDEXPR_ELSE(arg_node) = TRAVdo(CONDEXPR_ELSE(arg_node), arg_info);
+
   DBUG_RETURN(arg_node);
 }
 

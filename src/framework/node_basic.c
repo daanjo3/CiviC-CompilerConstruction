@@ -259,6 +259,7 @@ TBmakeVardec (basictype Type, char *Id, node * Expr, node * Next)
   if ((VARDEC_EXPR (this) != NULL)
       && (NODE_TYPE (VARDEC_EXPR (this)) != N_binop)
       && (NODE_TYPE (VARDEC_EXPR (this)) != N_monop)
+      && (NODE_TYPE (VARDEC_EXPR (this)) != N_condexpr)
       && (NODE_TYPE (VARDEC_EXPR (this)) != N_cast)
       && (NODE_TYPE (VARDEC_EXPR (this)) != N_funcall)
       && (NODE_TYPE (VARDEC_EXPR (this)) != N_var)
@@ -375,6 +376,7 @@ TBmakeGlobaldef (basictype Type, bool Export, char *Id, node * Expr)
   if ((GLOBALDEF_EXPR (this) != NULL)
       && (NODE_TYPE (GLOBALDEF_EXPR (this)) != N_binop)
       && (NODE_TYPE (GLOBALDEF_EXPR (this)) != N_monop)
+      && (NODE_TYPE (GLOBALDEF_EXPR (this)) != N_condexpr)
       && (NODE_TYPE (GLOBALDEF_EXPR (this)) != N_cast)
       && (NODE_TYPE (GLOBALDEF_EXPR (this)) != N_funcall)
       && (NODE_TYPE (GLOBALDEF_EXPR (this)) != N_var)
@@ -529,6 +531,7 @@ TBmakeAssign (char *Id, node * Expr)
   if ((ASSIGN_EXPR (this) != NULL)
       && (NODE_TYPE (ASSIGN_EXPR (this)) != N_binop)
       && (NODE_TYPE (ASSIGN_EXPR (this)) != N_monop)
+      && (NODE_TYPE (ASSIGN_EXPR (this)) != N_condexpr)
       && (NODE_TYPE (ASSIGN_EXPR (this)) != N_cast)
       && (NODE_TYPE (ASSIGN_EXPR (this)) != N_funcall)
       && (NODE_TYPE (ASSIGN_EXPR (this)) != N_var)
@@ -605,6 +608,7 @@ TBmakeIf (node * Expr, node * Block, node * ElseBlock)
   DBUG_PRINT ("MAKE", ("doing son target checks"));
   if ((IF_EXPR (this) != NULL) && (NODE_TYPE (IF_EXPR (this)) != N_binop)
       && (NODE_TYPE (IF_EXPR (this)) != N_monop)
+      && (NODE_TYPE (IF_EXPR (this)) != N_condexpr)
       && (NODE_TYPE (IF_EXPR (this)) != N_cast)
       && (NODE_TYPE (IF_EXPR (this)) != N_funcall)
       && (NODE_TYPE (IF_EXPR (this)) != N_var)
@@ -656,6 +660,7 @@ TBmakeWhile (node * Expr, node * Block)
   if ((WHILE_EXPR (this) != NULL)
       && (NODE_TYPE (WHILE_EXPR (this)) != N_binop)
       && (NODE_TYPE (WHILE_EXPR (this)) != N_monop)
+      && (NODE_TYPE (WHILE_EXPR (this)) != N_condexpr)
       && (NODE_TYPE (WHILE_EXPR (this)) != N_cast)
       && (NODE_TYPE (WHILE_EXPR (this)) != N_funcall)
       && (NODE_TYPE (WHILE_EXPR (this)) != N_var)
@@ -702,6 +707,7 @@ TBmakeDowhile (node * Expr, node * Block)
   if ((DOWHILE_EXPR (this) != NULL)
       && (NODE_TYPE (DOWHILE_EXPR (this)) != N_binop)
       && (NODE_TYPE (DOWHILE_EXPR (this)) != N_monop)
+      && (NODE_TYPE (DOWHILE_EXPR (this)) != N_condexpr)
       && (NODE_TYPE (DOWHILE_EXPR (this)) != N_cast)
       && (NODE_TYPE (DOWHILE_EXPR (this)) != N_funcall)
       && (NODE_TYPE (DOWHILE_EXPR (this)) != N_var)
@@ -757,6 +763,7 @@ TBmakeFor (char *Id, node * ExprStart, node * ExprStop, node * ExprIncr,
   if ((FOR_EXPRSTART (this) != NULL)
       && (NODE_TYPE (FOR_EXPRSTART (this)) != N_binop)
       && (NODE_TYPE (FOR_EXPRSTART (this)) != N_monop)
+      && (NODE_TYPE (FOR_EXPRSTART (this)) != N_condexpr)
       && (NODE_TYPE (FOR_EXPRSTART (this)) != N_cast)
       && (NODE_TYPE (FOR_EXPRSTART (this)) != N_funcall)
       && (NODE_TYPE (FOR_EXPRSTART (this)) != N_var)
@@ -769,6 +776,7 @@ TBmakeFor (char *Id, node * ExprStart, node * ExprStop, node * ExprIncr,
   if ((FOR_EXPRSTOP (this) != NULL)
       && (NODE_TYPE (FOR_EXPRSTOP (this)) != N_binop)
       && (NODE_TYPE (FOR_EXPRSTOP (this)) != N_monop)
+      && (NODE_TYPE (FOR_EXPRSTOP (this)) != N_condexpr)
       && (NODE_TYPE (FOR_EXPRSTOP (this)) != N_cast)
       && (NODE_TYPE (FOR_EXPRSTOP (this)) != N_funcall)
       && (NODE_TYPE (FOR_EXPRSTOP (this)) != N_var)
@@ -781,6 +789,7 @@ TBmakeFor (char *Id, node * ExprStart, node * ExprStop, node * ExprIncr,
   if ((FOR_EXPRINCR (this) != NULL)
       && (NODE_TYPE (FOR_EXPRINCR (this)) != N_binop)
       && (NODE_TYPE (FOR_EXPRINCR (this)) != N_monop)
+      && (NODE_TYPE (FOR_EXPRINCR (this)) != N_condexpr)
       && (NODE_TYPE (FOR_EXPRINCR (this)) != N_cast)
       && (NODE_TYPE (FOR_EXPRINCR (this)) != N_funcall)
       && (NODE_TYPE (FOR_EXPRINCR (this)) != N_var)
@@ -825,6 +834,7 @@ TBmakeReturn (node * Expr)
   if ((RETURN_EXPR (this) != NULL)
       && (NODE_TYPE (RETURN_EXPR (this)) != N_binop)
       && (NODE_TYPE (RETURN_EXPR (this)) != N_monop)
+      && (NODE_TYPE (RETURN_EXPR (this)) != N_condexpr)
       && (NODE_TYPE (RETURN_EXPR (this)) != N_cast)
       && (NODE_TYPE (RETURN_EXPR (this)) != N_funcall)
       && (NODE_TYPE (RETURN_EXPR (this)) != N_var)
@@ -866,6 +876,7 @@ TBmakeExprs (node * First, node * Next)
   if ((EXPRS_FIRST (this) != NULL)
       && (NODE_TYPE (EXPRS_FIRST (this)) != N_binop)
       && (NODE_TYPE (EXPRS_FIRST (this)) != N_monop)
+      && (NODE_TYPE (EXPRS_FIRST (this)) != N_condexpr)
       && (NODE_TYPE (EXPRS_FIRST (this)) != N_cast)
       && (NODE_TYPE (EXPRS_FIRST (this)) != N_funcall)
       && (NODE_TYPE (EXPRS_FIRST (this)) != N_var)
@@ -914,6 +925,7 @@ TBmakeBinop (binop Op, node * Left, node * Right)
   if ((BINOP_LEFT (this) != NULL)
       && (NODE_TYPE (BINOP_LEFT (this)) != N_binop)
       && (NODE_TYPE (BINOP_LEFT (this)) != N_monop)
+      && (NODE_TYPE (BINOP_LEFT (this)) != N_condexpr)
       && (NODE_TYPE (BINOP_LEFT (this)) != N_cast)
       && (NODE_TYPE (BINOP_LEFT (this)) != N_funcall)
       && (NODE_TYPE (BINOP_LEFT (this)) != N_var)
@@ -926,6 +938,7 @@ TBmakeBinop (binop Op, node * Left, node * Right)
   if ((BINOP_RIGHT (this) != NULL)
       && (NODE_TYPE (BINOP_RIGHT (this)) != N_binop)
       && (NODE_TYPE (BINOP_RIGHT (this)) != N_monop)
+      && (NODE_TYPE (BINOP_RIGHT (this)) != N_condexpr)
       && (NODE_TYPE (BINOP_RIGHT (this)) != N_cast)
       && (NODE_TYPE (BINOP_RIGHT (this)) != N_funcall)
       && (NODE_TYPE (BINOP_RIGHT (this)) != N_var)
@@ -967,6 +980,7 @@ TBmakeMonop (monop Op, node * Expr)
   if ((MONOP_EXPR (this) != NULL)
       && (NODE_TYPE (MONOP_EXPR (this)) != N_binop)
       && (NODE_TYPE (MONOP_EXPR (this)) != N_monop)
+      && (NODE_TYPE (MONOP_EXPR (this)) != N_condexpr)
       && (NODE_TYPE (MONOP_EXPR (this)) != N_cast)
       && (NODE_TYPE (MONOP_EXPR (this)) != N_funcall)
       && (NODE_TYPE (MONOP_EXPR (this)) != N_var)
@@ -975,6 +989,76 @@ TBmakeMonop (monop Op, node * Expr)
       && (NODE_TYPE (MONOP_EXPR (this)) != N_bool))
     {
       CTIwarn ("Field Expr of node N_MonOp has non-allowed target node.");
+    }
+#endif /* DBUG_OFF */
+  DBUG_RETURN (this);
+}
+
+/*****************************************************************************
+ * N_CondExpr :
+ *****************************************************************************/
+
+node *
+TBmakeCondexpr (node * Pred, node * Then, node * Else)
+{
+  node *this;
+  DBUG_ENTER ("TBmakeCondexpr");
+  DBUG_PRINT ("MAKE", ("allocating node structure"));
+  this = MakeEmptyNode ();
+  NODE_TYPE (this) = N_condexpr;
+  DBUG_PRINT ("MAKE", ("address: %s ", this));
+  DBUG_PRINT ("MAKE", ("allocating sons structure"));
+  this->sons.N_condexpr = MEMmalloc (sizeof (struct SONS_N_CONDEXPR));
+  DBUG_PRINT ("MAKE", ("allocating attrib structure"));
+  this->attribs.N_condexpr = MEMmalloc (sizeof (struct ATTRIBS_N_CONDEXPR));
+  DBUG_PRINT ("MAKE", ("setting node type"));
+  NODE_TYPE (this) = N_condexpr;
+  DBUG_PRINT ("MAKE", ("assigning son Pred initial value: %s ", Pred));
+  CONDEXPR_PRED (this) = Pred;
+  DBUG_PRINT ("MAKE", ("assigning son Then initial value: %s ", Then));
+  CONDEXPR_THEN (this) = Then;
+  DBUG_PRINT ("MAKE", ("assigning son Else initial value: %s ", Else));
+  CONDEXPR_ELSE (this) = Else;
+#ifndef DBUG_OFF
+  DBUG_PRINT ("MAKE", ("doing son target checks"));
+  if ((CONDEXPR_PRED (this) != NULL)
+      && (NODE_TYPE (CONDEXPR_PRED (this)) != N_binop)
+      && (NODE_TYPE (CONDEXPR_PRED (this)) != N_monop)
+      && (NODE_TYPE (CONDEXPR_PRED (this)) != N_condexpr)
+      && (NODE_TYPE (CONDEXPR_PRED (this)) != N_cast)
+      && (NODE_TYPE (CONDEXPR_PRED (this)) != N_funcall)
+      && (NODE_TYPE (CONDEXPR_PRED (this)) != N_var)
+      && (NODE_TYPE (CONDEXPR_PRED (this)) != N_num)
+      && (NODE_TYPE (CONDEXPR_PRED (this)) != N_float)
+      && (NODE_TYPE (CONDEXPR_PRED (this)) != N_bool))
+    {
+      CTIwarn ("Field Pred of node N_CondExpr has non-allowed target node.");
+    }
+  if ((CONDEXPR_THEN (this) != NULL)
+      && (NODE_TYPE (CONDEXPR_THEN (this)) != N_binop)
+      && (NODE_TYPE (CONDEXPR_THEN (this)) != N_monop)
+      && (NODE_TYPE (CONDEXPR_THEN (this)) != N_condexpr)
+      && (NODE_TYPE (CONDEXPR_THEN (this)) != N_cast)
+      && (NODE_TYPE (CONDEXPR_THEN (this)) != N_funcall)
+      && (NODE_TYPE (CONDEXPR_THEN (this)) != N_var)
+      && (NODE_TYPE (CONDEXPR_THEN (this)) != N_num)
+      && (NODE_TYPE (CONDEXPR_THEN (this)) != N_float)
+      && (NODE_TYPE (CONDEXPR_THEN (this)) != N_bool))
+    {
+      CTIwarn ("Field Then of node N_CondExpr has non-allowed target node.");
+    }
+  if ((CONDEXPR_ELSE (this) != NULL)
+      && (NODE_TYPE (CONDEXPR_ELSE (this)) != N_binop)
+      && (NODE_TYPE (CONDEXPR_ELSE (this)) != N_monop)
+      && (NODE_TYPE (CONDEXPR_ELSE (this)) != N_condexpr)
+      && (NODE_TYPE (CONDEXPR_ELSE (this)) != N_cast)
+      && (NODE_TYPE (CONDEXPR_ELSE (this)) != N_funcall)
+      && (NODE_TYPE (CONDEXPR_ELSE (this)) != N_var)
+      && (NODE_TYPE (CONDEXPR_ELSE (this)) != N_num)
+      && (NODE_TYPE (CONDEXPR_ELSE (this)) != N_float)
+      && (NODE_TYPE (CONDEXPR_ELSE (this)) != N_bool))
+    {
+      CTIwarn ("Field Else of node N_CondExpr has non-allowed target node.");
     }
 #endif /* DBUG_OFF */
   DBUG_RETURN (this);
@@ -1006,6 +1090,7 @@ TBmakeCast (basictype CastType, node * Expr)
   DBUG_PRINT ("MAKE", ("doing son target checks"));
   if ((CAST_EXPR (this) != NULL) && (NODE_TYPE (CAST_EXPR (this)) != N_binop)
       && (NODE_TYPE (CAST_EXPR (this)) != N_monop)
+      && (NODE_TYPE (CAST_EXPR (this)) != N_condexpr)
       && (NODE_TYPE (CAST_EXPR (this)) != N_cast)
       && (NODE_TYPE (CAST_EXPR (this)) != N_funcall)
       && (NODE_TYPE (CAST_EXPR (this)) != N_var)

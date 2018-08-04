@@ -108,6 +108,26 @@ EVALcast (node * arg_node, info * arg_info)
 
 /** <!--******************************************************************-->
  *
+ * @fn EVALcondexpr
+ *
+ * @brief Frees the node and its sons/attributes
+ *
+ * @param arg_node CondExpr node to process
+ * @param arg_info pointer to info structure
+ *
+ * @return processed node
+ *
+ ***************************************************************************/
+node *
+EVALcondexpr (node * arg_node, info * arg_info)
+{
+  DBUG_ENTER ("EVALcondexpr");
+  arg_node = TRAVcont (arg_node, arg_info);
+  DBUG_RETURN (arg_node);
+}
+
+/** <!--******************************************************************-->
+ *
  * @fn EVALdeclarations
  *
  * @brief Frees the node and its sons/attributes

@@ -68,6 +68,7 @@ isExpr (node * arg_node)
   bool res = ((NODE_TYPE (arg_node) == N_binop) ||
 	      (NODE_TYPE (arg_node) == N_bool) ||
 	      (NODE_TYPE (arg_node) == N_cast) ||
+	      (NODE_TYPE (arg_node) == N_condexpr) ||
 	      (NODE_TYPE (arg_node) == N_float) ||
 	      (NODE_TYPE (arg_node) == N_funcall) ||
 	      (NODE_TYPE (arg_node) == N_monop) ||
@@ -307,6 +308,118 @@ CHKcast (node * arg_node, info * arg_info)
   if (CAST_EXPR (arg_node) != NULL)
     {
       CAST_EXPR (arg_node) = TRAVdo (CAST_EXPR (arg_node), arg_info);
+    }
+  DBUG_RETURN (arg_node);
+}
+
+/** <!--******************************************************************-->
+ *
+ * @fn CHKcondexpr
+ *
+ * @brief Check the node and its sons/attributes
+ *
+ * @param arg_node CondExpr node to process
+ * @param arg_info pointer to info structure
+ *
+ * @return processed node
+ *
+ ***************************************************************************/
+node *
+CHKcondexpr (node * arg_node, info * arg_info)
+{
+  DBUG_ENTER ("CHKcondexpr");
+
+/*
+ * Son check: CONDEXPR_ELSE 
+ */
+  if ((FALSE) || (TRUE))
+    {
+      CHKexistSon (CONDEXPR_ELSE (arg_node), arg_node,
+		   "mandatory son CONDEXPR_ELSE is NULL");
+      if (CONDEXPR_ELSE (arg_node) != NULL)
+	{
+	  if (!((FALSE) || (isExpr (CONDEXPR_ELSE (arg_node)))))
+	    {
+	      CHKcorrectTypeInsertError (arg_node,
+					 "CONDEXPR_ELSE hasnt the right type."
+					 " It should be: " "Nodeset: Expr");
+	    }
+	}
+    }
+  else
+    {
+      CHKnotExist (CONDEXPR_ELSE (arg_node), arg_node,
+		   "attribute CONDEXPR_ELSE must be NULL");
+    }
+
+/*
+ * Son check: CONDEXPR_PRED 
+ */
+  if ((FALSE) || (TRUE))
+    {
+      CHKexistSon (CONDEXPR_PRED (arg_node), arg_node,
+		   "mandatory son CONDEXPR_PRED is NULL");
+      if (CONDEXPR_PRED (arg_node) != NULL)
+	{
+	  if (!((FALSE) || (isExpr (CONDEXPR_PRED (arg_node)))))
+	    {
+	      CHKcorrectTypeInsertError (arg_node,
+					 "CONDEXPR_PRED hasnt the right type."
+					 " It should be: " "Nodeset: Expr");
+	    }
+	}
+    }
+  else
+    {
+      CHKnotExist (CONDEXPR_PRED (arg_node), arg_node,
+		   "attribute CONDEXPR_PRED must be NULL");
+    }
+
+/*
+ * Son check: CONDEXPR_THEN 
+ */
+  if ((FALSE) || (TRUE))
+    {
+      CHKexistSon (CONDEXPR_THEN (arg_node), arg_node,
+		   "mandatory son CONDEXPR_THEN is NULL");
+      if (CONDEXPR_THEN (arg_node) != NULL)
+	{
+	  if (!((FALSE) || (isExpr (CONDEXPR_THEN (arg_node)))))
+	    {
+	      CHKcorrectTypeInsertError (arg_node,
+					 "CONDEXPR_THEN hasnt the right type."
+					 " It should be: " "Nodeset: Expr");
+	    }
+	}
+    }
+  else
+    {
+      CHKnotExist (CONDEXPR_THEN (arg_node), arg_node,
+		   "attribute CONDEXPR_THEN must be NULL");
+    }
+
+/*
+ * trav functions: to get all sons
+ */
+  if (CONDEXPR_ELSE (arg_node) != NULL)
+    {
+      CONDEXPR_ELSE (arg_node) = TRAVdo (CONDEXPR_ELSE (arg_node), arg_info);
+    }
+
+/*
+ * trav functions: to get all sons
+ */
+  if (CONDEXPR_PRED (arg_node) != NULL)
+    {
+      CONDEXPR_PRED (arg_node) = TRAVdo (CONDEXPR_PRED (arg_node), arg_info);
+    }
+
+/*
+ * trav functions: to get all sons
+ */
+  if (CONDEXPR_THEN (arg_node) != NULL)
+    {
+      CONDEXPR_THEN (arg_node) = TRAVdo (CONDEXPR_THEN (arg_node), arg_info);
     }
   DBUG_RETURN (arg_node);
 }

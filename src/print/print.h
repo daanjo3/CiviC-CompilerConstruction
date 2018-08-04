@@ -33,6 +33,7 @@ extern node *PRTreturn(node * arg_node, info * arg_info);
 extern node *PRTexprs(node * arg_node, info * arg_info);
 extern node *PRTbinop(node * arg_node, info * arg_info);
 extern node *PRTmonop(node * arg_node, info * arg_info);
+extern node *PRTcondexpr(node *arg_node, info *arg_info);
 extern node *PRTcast(node * arg_node, info * arg_info);
 extern node *PRTnum(node * arg_node, info * arg_info);
 extern node *PRTfloat(node * arg_node, info * arg_info);

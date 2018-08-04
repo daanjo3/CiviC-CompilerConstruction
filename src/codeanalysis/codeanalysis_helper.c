@@ -21,8 +21,24 @@ node *getSymboltableEntry(char *name, bool isfunction, node *symboltable) {
             entry = SYMBOLTABLE_HEAD(symboltable);
         }
     }
-    CTIerror("SymbolError: entry not present in symboltable");
+    CTIerror("codeanalysis_helper: getSymbolableEntry: entry not present in symboltable");
     return NULL;
+}
+
+char *getTypeChar(basictype type) {
+    switch (type) {
+    case BT_bool:
+      return "boolean ";
+    case BT_int:
+      return "int ";
+    case BT_float:
+      return "float ";
+    case RT_void:
+      return "void ";
+    case BT_unknown:
+      CTIerror("codeanalysis_helper: getTypeChar: Unknown Type");
+  }
+  return " ";
 }
 
 // Returns the type belonging to the expression
@@ -47,8 +63,10 @@ basictype getExpressionType(node *expr, node *symboltable) {
             return BT_float;
         case N_bool:
             return BT_bool;
+        case N_condexpr:
+            return getExpressionType(CONDEXPR_THEN(expr), symboltable);
         default:
-            CTInote("getExpressionType: undefined node");
+            CTIerror("codeanalysis_helper: getExpressionType: undefined node");
             return BT_unknown;   
     }
 }
@@ -83,7 +101,7 @@ binopcat getBinopCat(binop op) {
     case BO_and:
       return BC_logic;
     default:
-        CTInote("Warning; Unknown BinOp");
+        CTIerror("codeanalysis_helper: getBinopCat: Unknown BinOp");
         return BC_unknown;
     }
 }

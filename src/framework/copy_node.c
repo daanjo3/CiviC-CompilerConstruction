@@ -139,6 +139,32 @@ COPYcast (node * arg_node, info * arg_info)
 
 /** <!--******************************************************************-->
  *
+ * @fn COPYcondexpr
+ *
+ * @brief Copies the node and its sons/attributes
+ *
+ * @param arg_node CondExpr node to process
+ * @param arg_info pointer to info structure
+ *
+ * @return processed node
+ *
+ ***************************************************************************/
+node *
+COPYcondexpr (node * arg_node, info * arg_info)
+{
+  node *result = TBmakeCondexpr (NULL, NULL, NULL);
+  DBUG_ENTER ("COPYcondexpr");
+  LUTinsertIntoLutP (INFO_LUT (arg_info), arg_node, result);
+  /* Copy sons */
+  CONDEXPR_PRED (result) = COPYTRAV (CONDEXPR_PRED (arg_node), arg_info);
+  CONDEXPR_THEN (result) = COPYTRAV (CONDEXPR_THEN (arg_node), arg_info);
+  CONDEXPR_ELSE (result) = COPYTRAV (CONDEXPR_ELSE (arg_node), arg_info);
+  /* Return value */
+  DBUG_RETURN (result);
+}
+
+/** <!--******************************************************************-->
+ *
  * @fn COPYdeclarations
  *
  * @brief Copies the node and its sons/attributes

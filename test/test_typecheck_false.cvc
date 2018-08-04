@@ -10,6 +10,10 @@ void hello() {
 
 void main() {
     int a;
+    bool t1 = true;
+    bool t2 = false;
     
-    a = world();
+    if(t1 && t2) {
+        a = hello();
+    }
 }

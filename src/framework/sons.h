@@ -38,6 +38,12 @@ struct SONS_N_CAST
 {
   node *Expr;
 };
+struct SONS_N_CONDEXPR
+{
+  node *Pred;
+  node *Then;
+  node *Else;
+};
 struct SONS_N_DECLARATIONS
 {
   node *Declaration;
@@ -158,6 +164,7 @@ struct SONUNION
   struct SONS_N_BINOP *N_binop;
   struct SONS_N_BOOL *N_bool;
   struct SONS_N_CAST *N_cast;
+  struct SONS_N_CONDEXPR *N_condexpr;
   struct SONS_N_DECLARATIONS *N_declarations;
   struct SONS_N_DOWHILE *N_dowhile;
   struct SONS_N_ERROR *N_error;

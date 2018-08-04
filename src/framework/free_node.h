@@ -21,6 +21,7 @@ extern node *FREEassign (node * arg_node, info * arg_info);
 extern node *FREEbinop (node * arg_node, info * arg_info);
 extern node *FREEbool (node * arg_node, info * arg_info);
 extern node *FREEcast (node * arg_node, info * arg_info);
+extern node *FREEcondexpr (node * arg_node, info * arg_info);
 extern node *FREEdeclarations (node * arg_node, info * arg_info);
 extern node *FREEdowhile (node * arg_node, info * arg_info);
 extern node *FREEerror (node * arg_node, info * arg_info);

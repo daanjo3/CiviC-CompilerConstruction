@@ -107,6 +107,50 @@
         </travuser>
       </traversal>
 
+      <traversal id="TBJ" name="Transform Boolean Junctions" default="sons" include="transform_bool_junction.h">
+        <travuser>
+          <node name="BinOp"/>
+        </travuser>
+      </traversal>
+
+      <traversal id="TBC" name="Transform Boolean Cast" default="sons" include="transform_bool_cast.h">
+        <travuser>
+          <node name="Program"/>
+          <node name="FunDefDec"/>
+          <node name="Cast"/>
+        </travuser>
+      </traversal>
+
+      <traversal id="GBC" name="Generate Byte Code" default="sons" include="gen_byte_code.h">
+        <travuser>
+          <node name="Program"/>
+          <node name="Declarations"/>
+          <node name="FunDefDec"/>
+          <node name="FunBody"/>
+          <node name="LocalFunDefs"/>
+          <node name="VarDec"/>
+          <node name="GlobalDec"/>
+          <node name="GlobalDef"/>
+          <node name="Param"/>
+          <node name="Var"/>
+          <node name="Statements"/>
+          <node name="Assign"/>
+          <node name="FunCall"/>
+          <node name="If"/>
+          <node name="While"/>
+          <node name="DoWhile"/>
+          <node name="For"/>
+          <node name="Return"/>
+          <node name="Exprs"/>
+          <node name="BinOp"/>
+          <node name="MonOp"/>
+          <node name="Cast"/>
+          <node name="Num"/>
+          <node name="Float"/>
+          <node name="Bool"/>
+        </travuser>
+      </traversal>
+
     </general>
   </phases>
 
@@ -120,6 +164,7 @@
       <target>
         <node name="BinOp"/>
         <node name="MonOp"/>
+        <node name="CondExpr"/>
         <node name="Cast"/>
         <node name="FunCall"/>
         <node name="Var"/>
@@ -998,6 +1043,47 @@
             </targets>
           </type>
         </attribute>
+      </attributes>
+    </node>
+
+    <node name="CondExpr">
+      <description>Conditional Expression</description>
+      <sons>
+        <son name="Pred">
+          <description>Expression on which to perform the operator</description>
+          <targets>
+            <target mandatory="yes">
+              <set name="Expr"/>
+              <phases>
+                <all/>
+              </phases>
+            </target>
+          </targets>
+        </son>
+        <son name="Then">
+          <description>Expression if the predicate evaluates true</description>
+          <targets>
+            <target mandatory="yes">
+              <set name="Expr"/>
+              <phases>
+                <all/>
+              </phases>
+            </target>
+          </targets>
+        </son>
+        <son name="Else">
+          <description>Expression if the predicate evaluates false</description>
+          <targets>
+            <target mandatory="yes">
+              <set name="Expr"/>
+              <phases>
+                <all/>
+              </phases>
+            </target>
+          </targets>
+        </son>
+      </sons>
+      <attributes>
       </attributes>
     </node>
 

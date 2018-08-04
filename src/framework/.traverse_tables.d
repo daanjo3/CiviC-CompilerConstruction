@@ -20,4 +20,6 @@ src/framework/traverse_tables.o src/framework/.traverse_tables.d: $(PROJECT_ROOT
  src/framework/check.h src/codetransform/transform_for.h \
  src/codetransform/var_init_trans_global.h src/codeanalysis/make_st.h \
  src/codeanalysis/print_st.h src/codeanalysis/typecheck_inference.h \
- src/codeanalysis/typecheck_match.h
+ src/codeanalysis/typecheck_match.h \
+ src/codetransform/transform_bool_junction.h \
+ src/codetransform/transform_bool_cast.h src/codegen/gen_byte_code.h

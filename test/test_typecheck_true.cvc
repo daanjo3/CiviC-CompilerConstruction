@@ -3,13 +3,13 @@ void main() {
     int x;
     bool b;
 
-    x = testfunction();
+    x = testfunction(6);
 
     a = x + 5;
     b = true;
 }
 
-int testfunction() {
-    int ret = 10;
+int testfunction(int t) {
+    int ret = 10 + t;
     return ret;
 }

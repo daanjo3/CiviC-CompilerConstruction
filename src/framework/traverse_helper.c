@@ -119,6 +119,11 @@ TRAVsons (node * arg_node, info * arg_info)
     case N_monop:
       TRAV (MONOP_EXPR (arg_node), arg_info);
       break;
+    case N_condexpr:
+      TRAV (CONDEXPR_PRED (arg_node), arg_info);
+      TRAV (CONDEXPR_THEN (arg_node), arg_info);
+      TRAV (CONDEXPR_ELSE (arg_node), arg_info);
+      break;
     case N_cast:
       TRAV (CAST_EXPR (arg_node), arg_info);
       break;
@@ -216,6 +221,9 @@ TRAVnumSons (node * node)
       break;
     case N_monop:
       result = 1;
+      break;
+    case N_condexpr:
+      result = 3;
       break;
     case N_cast:
       result = 1;
@@ -531,6 +539,23 @@ TRAVgetSon (int no, node * parent)
 	{
 	case 0:
 	  result = MONOP_EXPR (parent);
+	  break;
+	default:
+	  DBUG_ASSERT ((FALSE), "index out of range!");
+	  break;
+	}
+      break;
+    case N_condexpr:
+      switch (no)
+	{
+	case 0:
+	  result = CONDEXPR_PRED (parent);
+	  break;
+	case 1:
+	  result = CONDEXPR_THEN (parent);
+	  break;
+	case 2:
+	  result = CONDEXPR_ELSE (parent);
 	  break;
 	default:
 	  DBUG_ASSERT ((FALSE), "index out of range!");

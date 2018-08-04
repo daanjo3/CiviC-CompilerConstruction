@@ -136,6 +136,29 @@ CHKMcast (node * arg_node, info * arg_info)
 
 /** <!--******************************************************************-->
  *
+ * @fn CHKMcondexpr
+ *
+ * @brief Touched the node and its sons/attributes
+ *
+ * @param arg_node CondExpr node to process
+ * @param arg_info pointer to info structure
+ *
+ * @return processed node
+ *
+ ***************************************************************************/
+node *
+CHKMcondexpr (node * arg_node, info * arg_info)
+{
+  DBUG_ENTER ("CHKMcondexpr");
+  NODE_ERROR (arg_node) = CHKMTRAV (NODE_ERROR (arg_node), arg_info);
+  CONDEXPR_PRED (arg_node) = CHKMTRAV (CONDEXPR_PRED (arg_node), arg_info);
+  CONDEXPR_THEN (arg_node) = CHKMTRAV (CONDEXPR_THEN (arg_node), arg_info);
+  CONDEXPR_ELSE (arg_node) = CHKMTRAV (CONDEXPR_ELSE (arg_node), arg_info);
+  DBUG_RETURN (arg_node);
+}
+
+/** <!--******************************************************************-->
+ *
  * @fn CHKMdeclarations
  *
  * @brief Touched the node and its sons/attributes

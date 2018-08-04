@@ -29,4 +29,5 @@ src/codegen/gen_byte_code.o src/codegen/.gen_byte_code.d: $(PROJECT_ROOT)/Makefi
  /usr/include/x86_64-linux-gnu/bits/time.h \
  /usr/include/x86_64-linux-gnu/sys/sysmacros.h \
  /usr/include/x86_64-linux-gnu/bits/pthreadtypes.h /usr/include/alloca.h \
- /usr/include/x86_64-linux-gnu/bits/stdlib-float.h
+ /usr/include/x86_64-linux-gnu/bits/stdlib-float.h src/framework/memory.h \
+ src/framework/lookup_table.h src/codegen/codegen_helper.h

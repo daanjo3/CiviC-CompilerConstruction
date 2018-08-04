@@ -17,15 +17,15 @@
 
 #include "types.h"
 
-typedef travfun_p travfunarray_t[29];
+typedef travfun_p travfunarray_t[30];
 
-typedef travfunarray_t travtables_t[11];
+typedef travfunarray_t travtables_t[14];
 
-typedef travfun_p preposttable_t[11];
+typedef travfun_p preposttable_t[14];
 
 extern travtables_t travtables;
 extern preposttable_t pretable;
 extern preposttable_t posttable;
-extern const char *travnames[11];
+extern const char *travnames[14];
 
 #endif /* _SAC_TRAVERSE_TABLES_H_ */

@@ -149,6 +149,35 @@ FREEcast (node * arg_node, info * arg_info)
 
 /** <!--******************************************************************-->
  *
+ * @fn FREEcondexpr
+ *
+ * @brief Frees the node and its sons/attributes
+ *
+ * @param arg_node CondExpr node to process
+ * @param arg_info pointer to info structure
+ *
+ * @return processed node
+ *
+ ***************************************************************************/
+node *
+FREEcondexpr (node * arg_node, info * arg_info)
+{
+  node *result = NULL;
+  DBUG_ENTER ("FREEcondexpr");
+  DBUG_PRINT ("FREE", ("Processing node N_condexpr at " F_PTR, arg_node));
+  CONDEXPR_PRED (arg_node) = FREETRAV (CONDEXPR_PRED (arg_node), arg_info);
+  CONDEXPR_THEN (arg_node) = FREETRAV (CONDEXPR_THEN (arg_node), arg_info);
+  CONDEXPR_ELSE (arg_node) = FREETRAV (CONDEXPR_ELSE (arg_node), arg_info);
+  result = NULL;
+  arg_node->sons.N_condexpr = MEMfree (arg_node->sons.N_condexpr);
+  arg_node->attribs.N_condexpr = MEMfree (arg_node->attribs.N_condexpr);
+  DBUG_PRINT ("FREE", ("Processing node N_condexpr at " F_PTR, arg_node));
+  result = MEMfree (arg_node);
+  DBUG_RETURN (result);
+}
+
+/** <!--******************************************************************-->
+ *
  * @fn FREEdeclarations
  *
  * @brief Frees the node and its sons/attributes

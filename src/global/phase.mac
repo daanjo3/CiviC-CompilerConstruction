@@ -85,6 +85,18 @@ PHASE ( tc,
         "Transform Code",
         ALWAYS)
 
+SUBPHASE( tbj,
+         "Transform Boolean Junctions",
+          TBJdoTransformBooleanJunctions,
+          ALWAYS,
+          tc)
+
+SUBPHASE( tbc,
+         "Transform Boolean Cast",
+         TBCdoTransformBooleanCast,
+         ALWAYS,
+         tc)
+
 ENDPHASE ( tc)
 
 /*****************************************************************************/
@@ -93,8 +105,17 @@ PHASE( cg,
        "Generating Code",
        ALWAYS)
 
-SUBPHASE( prt, "Generating byte code", GBCdoGenByteCode, ALWAYS, cg)
-SUBPHASE( prt_ast, "Print ast", PRTdoPrint, ALWAYS, cg)
+SUBPHASE( gbc,
+          "Generating byte code",
+          GBCdoGenByteCode,
+          ALWAYS,
+          cg)
+
+SUBPHASE( prt_ast,
+          "Print ast",
+          PRTdoPrint,
+          ALWAYS,
+          cg)
 
 SUBPHASE( frtr,
           "De-allocating syntax tree representation",

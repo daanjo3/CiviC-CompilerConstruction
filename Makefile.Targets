@@ -77,9 +77,10 @@ scanparse   = civic.tab.o civic.lex.o
 
 print       = print.o
 
-codegen     = gen_byte_code.o
+codegen     = gen_byte_code.o codegen_helper.o
 
 codeanalysis = make_st.o print_st.o typecheck_inference.o typecheck_match.o \
                  codeanalysis_helper.o
 
-codetransform = var_init_trans_global.o transform_for.o
+codetransform = var_init_trans_global.o transform_for.o transform_bool_junction.o \
+                transform_bool_cast.o

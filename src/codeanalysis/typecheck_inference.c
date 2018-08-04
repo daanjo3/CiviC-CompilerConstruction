@@ -95,9 +95,12 @@ node *TCIbinop(node *arg_node, info *arg_info) {
                 if(op != BO_eq && op != BO_ne) {
                     CTIerror("TypeError; boolean values with RelOp can only be used with == or !=");
                 }
+                INFO_TYPE_CURRENT(arg_info) = BT_bool;
+                BINOP_EXPRESSIONTYPE(arg_node) = BT_bool;
+            } else {
+                INFO_TYPE_CURRENT(arg_info) = left;
+                BINOP_EXPRESSIONTYPE(arg_node) = left;
             }
-            INFO_TYPE_CURRENT(arg_info) = BT_bool;
-            BINOP_EXPRESSIONTYPE(arg_node) = BT_bool;
         // Check if the rules of logical operators are followed
         } else if(category == BC_logic) {
             if(left != BT_bool) {
